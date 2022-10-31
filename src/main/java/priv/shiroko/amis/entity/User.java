@@ -1,5 +1,7 @@
 package priv.shiroko.amis.entity;
 
+import lombok.NonNull;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,7 +12,11 @@ import java.util.Date;
 public class User implements Serializable {
     private Integer id;
 
+    @NonNull
     private String username;
+
+    @NonNull
+    private byte[] password;
 
     private String passwordQuestion;
 
@@ -29,8 +35,6 @@ public class User implements Serializable {
     private Integer enabled;
 
     private Object role;
-
-    private byte[] password;
 
     private static final long serialVersionUID = 1L;
 
@@ -196,5 +200,10 @@ public class User implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public User(String username, byte[] password) {
+        this.setUsername(username);
+        this.setPassword(password);
     }
 }

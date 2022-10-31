@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "amis.defaults.admin-username",
+      "type": "java.lang.String",
+      "description": "Default value for admin username."
+    },
+    {
+      "name": "amis.defaults.admin-password",
+      "type": "java.lang.String",
+      "description": "Default value for admin password."
+    },
+    {
+      "name": "amis.bcrypt-cost",
+      "type": "java.lang.String",
+      "description": "BCrypt cost.",
+      "defaultValue": 12
+    }
+  ] }

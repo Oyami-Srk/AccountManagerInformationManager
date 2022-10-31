@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/amis
+    username: root
+    password: dbpasswd
+  sql:
+    init:
+      schema-locations: classpath:resources/db/schema.sql
+      mode: always
+
+mybatis:
+  type-aliases-package: priv.shiroko.amis.entity
+
+amis:
+  bcrypt-cost: 12
+  defaults:
+    admin-username: admin
+    admin-password: 123456

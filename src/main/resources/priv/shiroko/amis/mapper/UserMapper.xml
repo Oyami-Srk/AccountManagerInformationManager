@@ -18,10 +18,33 @@
             <result property="role" column="role" jdbcType="OTHER"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,username,password_question,
-        password_answer,ic_num,nickname,
-        email,registration_time,last_login_time,
-        enabled,role,password
+    <sql id="BaseColumnNames">
+        password,
+        password_question,
+        password_answer,
+        ic_num,
+        nickname,
+        email,
+        <if test="enabled != null">enabled,</if>
+        <if test="role != null">role,</if>
+        username
     </sql>
+    <sql id="BaseColumnValues">
+        #{password},
+        #{passwordQuestion},
+        #{passwordAnswer},
+        #{icNum},
+        #{nickname},
+        #{email},
+        <if test="enabled != null">#{enabled},</if>
+        <if test="role != null">#{role},</if>
+        #{username}
+    </sql>
+    <insert id="createNewUser" parameterType="User">
+        INSERT INTO user (
+            <include refid="BaseColumnNames"/>
+        ) VALUES (
+            <include refid="BaseColumnValues"/>
+        );
+    </insert>
 </mapper>
