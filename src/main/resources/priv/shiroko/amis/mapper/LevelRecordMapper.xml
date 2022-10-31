@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.shiroko.amis.mapper.LevelRecordMapper">
+
+    <resultMap id="BaseResultMap" type="priv.shiroko.amis.entity.LevelRecord">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="managerId" column="manager_id" jdbcType="INTEGER"/>
+            <result property="date" column="date" jdbcType="DATE"/>
+            <result property="level" column="level" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="attachment" column="attachment" jdbcType="VARCHAR"/>
+            <result property="lastUpdate" column="last_update" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,manager_id,date,
+        level,type,attachment,
+        last_update
+    </sql>
+</mapper>
