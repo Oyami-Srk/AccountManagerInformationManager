@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".click").click(function(){
+  $(".tip").fadeIn(200);
+  });
+  
+  $(".tiptop a").click(function(){
+  $(".tip").fadeOut(200);
+});
+
+  $(".sure").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+  $(".cancel").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+});
+</script>
+
+
+</head>
+
+
+<body>
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="workMgr.html">工作管理</a></li>
+    <li><a href="workMgrUpdate.html">修改</a></li>
+    </ul>
+    </div>
+    
+    <form action="" method="post">
+    <div class="formbody">
+    <div class="formtitle"><span>工作记录</span></div>
+    
+    <ul class="forminfo">
+    <li><label>客户维护</label><textarea name="" cols="" rows="" class="textinput">新增加一个客户</textarea></li>
+    <li><label>产品信息</label><textarea name="" cols="" rows="" class="textinput">购买基金</textarea></li>
+    <li><label>货后管理</label><textarea name="" cols="" rows="" class="textinput">继续跟踪</textarea></li>
+    <li><label>风险预警</label><textarea name="" cols="" rows="" class="textinput">低风险</textarea></li>
+    <li><label>发现问题</label><textarea name="" cols="" rows="" class="textinput"></textarea></li>
+    <li><label>工作建议及感悟</label><textarea name="" cols="" rows="" class="textinput">真诚对待每个客户</textarea></li>
+    <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="修改"/>&nbsp;&nbsp;&nbsp;&nbsp;<input name="" type="reset" class="btn" value="重置"/></li>
+    </ul>
+    
+    </div>
+    </form>
+    
+
+</body>
+
+</html>

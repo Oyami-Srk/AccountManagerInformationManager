@@ -8,6 +8,10 @@ spring:
     init:
       schema-locations: classpath:resources/db/schema.sql
       mode: always
+  web:
+    resources:
+      cache:
+        period: 0
 
 mybatis:
   type-aliases-package: priv.shiroko.amis.entity
@@ -17,3 +21,10 @@ amis:
   defaults:
     admin-username: admin
     admin-password: 123456
+
+server:
+  servlet:
+    encoding:
+      force: true
+      enabled: true
+      charset: utf-8

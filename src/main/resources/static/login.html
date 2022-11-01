@@ -1,0 +1,109 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>欢迎登录客户经理信息管理系统</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="css/animate.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/syalert.min.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/cloud.js"></script>
+    <script type="text/javascript" src="js/syalert.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.loginbox').css({'position': 'absolute', 'left': ($(window).width() - 692) / 2});
+            $(window).resize(function () {
+                $('.loginbox').css({'position': 'absolute', 'left': ($(window).width() - 692) / 2});
+            })
+        });
+
+        $(document).ready(() => {
+            if ($.cookie("rem_username") != null) {
+                $(".loginuser").val($.cookie("rem_username"));
+                $(".loginpwd").val($.cookie("rem_password"));
+                $("#rempasswd").prop("checked", true);
+            }
+        });
+
+        function login() {
+            let form = new FormData();
+            let sel_username = $(".loginuser");
+            let sel_passwd = $(".loginpwd");
+            form.append("username", sel_username.val());
+            form.append("password", sel_passwd.val());
+
+            $.ajax(
+                {
+                    "url": "/api/login",
+                    "method": "POST",
+                    "data": form,
+                    processData: false,
+                    contentType: false,
+                }
+            ).done(
+                (resp) => {
+                    $("#alert_text").text(resp.result.message);
+                    syalert.syopen('alert');
+                    if (resp.result.status === "Failed") {
+                        switch (resp.result.reason) {
+                            case "password incorrect":
+                                sel_passwd.val('');
+                                break;
+                            case "user not existed":
+                                sel_passwd.val('');
+                                sel_username.val('');
+                        }
+                    } else {
+                        if ($("#rempasswd").prop('checked')) {
+                            // TODO: Store hashed password
+                            $.cookie("rem_username", sel_username.val(), {
+                                expires: 7 // days
+                            });
+                            $.cookie("rem_password", sel_passwd.val(), {
+                                expires: 7 // days
+                            });
+                        } else {
+                            $.removeCookie("rem_username");
+                            $.removeCookie("rem_password");
+                        }
+                        setTimeout(() => {
+                            window.location.replace("/index.html");
+                        }, 1000);
+                    }
+                }
+            )
+        }
+    </script>
+
+</head>
+
+<body
+        style="background-color:#1c77ac; background-image:url(images/light.png); background-repeat:no-repeat; background-position:center top; overflow:hidden;">
+<div class="sy-alert sy-alert-tips animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="tips" sy-mask="false"
+     id="alert">
+    <div class="sy-content" id="alert_text"></div>
+</div>
+<div id="mainBody">
+    <div id="cloud1" class="cloud"></div>
+    <div id="cloud2" class="cloud"></div>
+</div>
+<div class="loginbody">
+    <span></span>
+    <div class="loginbox">
+        <ul>
+            <li><input name="" type="text" class="loginuser" value="admin" onclick="JavaScript:this.value=''"/>
+            </li>
+            <li><input name="" type="password" class="loginpwd" value="密码" onclick="JavaScript:this.value=''"/></li>
+            <li><input name="" type="button" class="loginbtn" value="登录" onclick="login()"/><label>
+                <input name="" type="checkbox" value="" checked="checked" id="rempasswd"/>记住密码</label>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+
+</html>

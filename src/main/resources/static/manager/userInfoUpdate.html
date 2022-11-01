@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".click").click(function(){
+  $(".tip").fadeIn(200);
+  });
+  
+  $(".tiptop a").click(function(){
+  $(".tip").fadeOut(200);
+});
+
+  $(".sure").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+  $(".cancel").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+});
+</script>
+
+</head>
+
+
+<body>
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="userInfo.html">用户管理</a></li>
+    <li><a href="userInfoUpdate.html">修改</a></li>
+    </ul>
+    </div>
+    
+    <form action="" method="post">
+    <div class="formbody">
+    <div class="formtitle"><span>用户基本信息</span></div>
+    
+    <ul class="forminfo">
+    <li><label>用户编号</label><input name="" type="text" class="dfinput" value="1"/><i>编号不允许修改</i></li>
+    <li><label>姓名</label><input name="" type="text" class="dfinput" value="Admin"/></li>
+    <li><label>性别</label><cite><input name="sex" type="radio" value="" checked="checked" />男&nbsp;&nbsp;&nbsp;&nbsp;<input name="sex" type="radio" value="" />女</cite></li>
+    <li><label>出生日期</label><input name="" type="text" class="dfinput" value="1980-11-11"/></li>
+    <li><label>角色</label><cite><select class="dfselect"><option value="0">请选择</option><option value="1" >管理员</option><option value="2">客户经理</option></select></cite></li>
+    <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="修改"/>&nbsp;&nbsp;&nbsp;&nbsp;<input name="" type="reset" class="btn" value="重置"/></li>
+    </ul>
+    
+    </div>
+    </form>
+</body>
+
+</html>

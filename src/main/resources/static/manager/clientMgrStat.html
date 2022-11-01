@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../css/select.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.idTabs.min.js"></script>
+<script type="text/javascript" src="../js/select-ui.min.js"></script>
+<script type="text/javascript" src="../editor/kindeditor.js"></script>
+
+<script type="text/javascript"> 
+  function exportMsg()
+  {  
+     if(confirm("您确定要导出excel文件吗?"))
+        window.close();
+  } 
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".click").click(function(){
+  $(".tip").fadeIn(200);
+  });
+  
+  $(".tiptop a").click(function(){
+  $(".tip").fadeOut(200);
+});
+
+  $(".sure").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+  $(".cancel").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+});
+</script>
+<script type="text/javascript">
+    KE.show({
+        id : 'content7',
+        cssPath : './index.css'
+    });
+  </script>
+  
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $(".select1").uedSelect({
+		width : 100			  
+	});
+	$(".select2").uedSelect({
+		width : 200 
+	});
+	$(".select3").uedSelect({
+		width : 150
+	});
+});
+</script>
+
+</head>
+
+
+<body>
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">报表管理</a></li>
+    </ul>
+    </div>
+    <form action="" method="post">
+	<div class="formbody">
+		    <ul class="seachform">
+		    <li><label>机构</label><input name="" type="text" class="scinput" /></li>
+		    <li><label>状态</label>  
+		    <div class="vocation">
+		    <select class="select1">
+		    <option value="">请选择</option>
+		    <option value="1">在职</option>
+		    <option value="2">退出</option>
+		    </select>
+		    </div>
+		    </li>
+		    <li><label>性别</label>  
+		    <div class="vocation">
+		    <select class="select1">
+		    <option value="">请选择</option>
+		    <option value="1">男</option>
+		    <option value="2">女</option>
+		    </select>
+		    </div>
+		    </li>
+	        <li><label>学历</label><div class="vocation"><select class="select1"><option value="0">请选择</option><option value="1">小学</option><option value="2">初中</option><option value="3">高中</option><option value="4">中专</option><option value="5">高职</option><option value="6">专科</option><option value="7">本科</option><option value="8" >硕士研究生</option><option value="9">博士研究生</option></select></div></li>
+	        <li><label>专业技术职称</label><div class="vocation">
+				  <select class="select2">
+		            <option value="0">请选择</option>
+		            <option value="1">工程专业技术人员 高级工程师</option>
+		            <option value="2">工程专业技术人员 工程师</option>
+		            <option value="3">工程专业技术人员 助理工程师</option>
+		            <option value="4">经济专业技术人员 高级经济师</option>
+		            <option value="5">经济专业技术人员 经济师</option>
+		            <option value="6">经济专业技术人员 助理经济师</option>
+		            <option value="7">会计专业技术人员 高级会计师</option>
+		            <option value="8">会计专业技术人员 会计师</option>
+		            <option value="9">会计专业技术人员 助理会计师</option>
+		            <option value="10">统计专业技术人员 高级统计师</option>
+		            <option value="11">统计专业技术人员 统计师</option>
+		            <option value="12">统计专业技术人员 助理统计师</option>
+		            <option value="13">审计专业技术人员 高级审计师</option>
+		            <option value="14">审计专业技术人员 审计师</option>
+		            <option value="15">审计专业技术人员 助理审计师</option>
+		            <option value="16">政工专业技术人员 助理政工师</option>
+		            <option value="17">政工专业技术人员 高级政工师</option>
+		            <option value="18">政工专业技术人员 政工师</option>
+		           </select></div></li>
+    		<li><label>客户经理等级</label><div class="vocation"><select class="select3">
+		            <option value="0">请选择</option>
+		            <option value="1">高级专家级客户经理</option>
+		            <option value="2">专家级客户经理</option>
+		            <option value="3">资深客户经理</option>
+		            <option value="4">高级客户经理</option>
+		            <option value="5">客户经理</option>
+		            <option value="6">客户经理助理</option>
+		            <option value="7">无</option>
+		          </select></div></li>
+		
+	        <li><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input name="" type="submit" class="scbtn" value="查询"/> &nbsp;&nbsp;&nbsp;&nbsp;<input name="" type="button" class="scbtn" value="导出excel" onClick="exportMsg()"/></li>
+	   	    </ul>
+	</div>
+	
+    <div class="rightinfo">
+   	    <div class="tools">
+	    	<ul>
+	        <li></li>
+	        </ul>
+	    </div>
+	    <table class="tablelist">
+	    	<thead>
+		    	<tr class="tablehead"><td colspan="14">客户经理信息列表</td></tr>
+		    	</thead>
+		    	<thead>
+		    	<tr>
+		        <th>员工号</th>
+		        <th>姓名</th>
+		        <th>性别</th>
+		        <th>客户经理等级</th>
+		        <th>机构</th>
+		        <th>部门</th>
+		        <th>业务条线</th>
+		        <th>职务</th>
+		        <th>客户经理从业年限</th>
+		        <th>联系电话</th>
+		        <th>在职</th>
+		        <th>年龄</th>
+		        <th>学历</th>
+		        <th>专业职称</th>
+		        </tr>
+	        </thead>
+	        <tbody>
+		        <tr>
+		        <td>000023</td>
+		        <td>Huoo</td>
+		        <td>男</td>
+		        <td>高级客户经理</td>
+		        <td>中国农业银行黔西商分</td>
+		        <td>公司业务部</td>
+		        <td>对公</td>
+		        <td>经理</td>
+		        <td>5</td>
+		        <td>13992348343</td>
+		        <td>在职</td>
+		        <td>33</td>
+		        <td>硕士研究生</td>
+		        <td>工程专业技术人员 助理工程师</td>
+		        </tr> 
+		        <tr>
+		        <td>000001</td>
+		        <td>Tom</td>
+		        <td>男</td>
+		        <td>高级客户经理</td>
+		        <td>中国农业银行黔西商分</td>
+		        <td>公司营销部</td>
+		        <td>对公</td>
+		        <td>经理</td>
+		        <td>3</td>
+		        <td>13992348343</td>
+		        <td>在职</td>
+		        <td>33</td>
+		        <td>硕士研究生</td>
+		        <td>工程专业技术人员 助理工程师</td>
+		        </tr>    
+	        </tbody>
+	    </table>
+    </div>
+    </form>
+    <script type="text/javascript">
+	$('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+
+</body>
+
+</html>

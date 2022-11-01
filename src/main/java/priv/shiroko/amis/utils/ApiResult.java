@@ -12,6 +12,7 @@ public class ApiResult {
     @NonNull
     Status status = Status.Unknown;
     String message;
+    String reason;
     Map<Object, Object> data;
 
     public ApiResult(Status status) {

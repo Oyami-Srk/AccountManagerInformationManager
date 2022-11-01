@@ -17,6 +17,12 @@ public class Interceptors implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // register is manually done by admin
         registry.addInterceptor(authInterceptor())
-                .excludePathPatterns("/api/login");
+                .excludePathPatterns("/api/login")
+                .excludePathPatterns("/login.html")
+                .excludePathPatterns("/css/*")
+                .excludePathPatterns("/editor/*")
+                .excludePathPatterns("/images/*")
+                .excludePathPatterns("/js/*")
+                .excludePathPatterns("/src/*");
     }
 }

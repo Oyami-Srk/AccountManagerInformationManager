@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".click").click(function(){
+  $(".tip").fadeIn(200);
+  });
+  
+  $(".tiptop a").click(function(){
+  $(".tip").fadeOut(200);
+});
+
+  $(".sure").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+  $(".cancel").click(function(){
+  $(".tip").fadeOut(100);
+});
+
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $(".select1").uedSelect({
+		width : 400	;
+	});
+	$(".select2").uedSelect({
+		width : 167  
+	});
+	$(".select3").uedSelect({
+		width : 100
+	});
+});
+</script>
+	<style type="text/css">
+		.input{width:260px; height:20px; line-height:32px; border-top:solid 1px #a7b5bc; border-left:solid 1px #a7b5bc; border-right:solid 1px #ced9df; border-bottom:solid 1px #ced9df; background:url(../images/inputbg.gif) repeat-x; text-indent:10px;}
+		
+	</style>
+
+</head>
+
+
+<body>
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="clientMgr.html">客户经理信息综合管理维护</a></li>
+    <li><a href="clientMgrUpdate.html">修改</a></li>
+    </ul>
+    </div>
+
+    <form action="" method="post">
+    <div class="formbody">
+    <div class="formtitle"><span>客户经理基本信息</span></div>
+    
+    <ul class="forminfo">
+    <li><label>员工号</label><input name="" type="text" class="dfinput" value="000023" readonly="readonly"/><i>员工号不允许修改</i></li>
+    <li><label>姓名</label><input name="" type="text" class="dfinput" value="Huoo"/> </li>
+    <li><label>性别</label><cite><input name="sex" type="radio" value="" checked="checked" />男&nbsp;&nbsp;&nbsp;&nbsp;<input name="sex" type="radio" value="" />女</cite></li>
+    <li><label>身份证号</label><input name="" type="text" class="dfinput" value="371607198506167889"/> </li>
+    <li><label>出生年月</label><input name="" type="text" class="dfinput"  value="1985-06-16"/></li>
+    <li><label>年龄</label><input name="" type="text" class="dfinput"  value="30"/></li>
+    <li><label>民族</label><cite><select class="dfselect"><option value="0">请选择</option><option value="1" selected="selected">汉族</option><option value="2">少数民族</option><option value="3">其他</option></select></cite></li>
+    <li><label>政治面貌</label><cite><select class="dfselect"><option value="0">请选择</option><option value="1" selected="selected">中共党员</option><option value="2">中共预备党员</option><option value="3">共青团员</option><option value="4">群众</option><option value="5">其他</option></select></cite></li>
+    <li><label>籍贯</label><input name="" type="text" class="dfinput"  value="山东济南"/></li>
+    <li><label>照片</label><input name="" type="file" class="dfselect1"/></li>
+    <li><label>学历</label><cite><select class="dfselect1"><option value="0">请选择</option><option value="1">小学</option><option value="2">初中</option><option value="3">高中</option><option value="4">中专</option><option value="5">高职</option><option value="6">专科</option><option value="7">本科</option><option value="8" selected="selected">硕士研究生</option><option value="9">博士研究生</option></select></cite></li>
+    <li><label>学位</label><cite><select class="dfselect"><option value="0">请选择</option><option value="1">学士</option><option value="2" selected="selected">硕士</option><option value="3">博士</option><option value="4">其他</option></select></cite></li>
+    <li><label>毕业院校及专业</label><input name="" type="text" class="dfinput"  value="南京大学计算机科学与技术专业"/></li>
+    <li><label>专业技术职称</label><div class="vocation">
+				  <select class="dfselect1">
+		            <option value="0">请选择</option>
+		            <option value="1"  selected="selected">工程专业技术人员 高级工程师</option>
+		            <option value="2">工程专业技术人员 工程师</option>
+		            <option value="3">工程专业技术人员 助理工程师</option>
+		            <option value="4">经济专业技术人员 高级经济师</option>
+		            <option value="5">经济专业技术人员 经济师</option>
+		            <option value="6">经济专业技术人员 助理经济师</option>
+		            <option value="7">会计专业技术人员 高级会计师</option>
+		            <option value="8">会计专业技术人员 会计师</option>
+		            <option value="9">会计专业技术人员 助理会计师</option>
+		            <option value="10">统计专业技术人员 高级统计师</option>
+		            <option value="11">统计专业技术人员 统计师</option>
+		            <option value="12">统计专业技术人员 助理统计师</option>
+		            <option value="13">审计专业技术人员 高级审计师</option>
+		            <option value="14">审计专业技术人员 审计师</option>
+		            <option value="15">审计专业技术人员 助理审计师</option>
+		            <option value="16">政工专业技术人员 助理政工师</option>
+		            <option value="17">政工专业技术人员 高级政工师</option>
+		            <option value="18">政工专业技术人员 政工师</option>
+		           </select></div></li>
+    <li><label>客户经理等级</label><cite><select class="dfselect1">
+		            <option value="0">请选择</option>
+		            <option value="1">高级专家级客户经理</option>
+		            <option value="2">专家级客户经理</option>
+		            <option value="3">资深客户经理</option>
+		            <option value="4" selected="selected">高级客户经理</option>
+		            <option value="5">客户经理</option>
+		            <option value="6">客户经理助理</option>
+		            <option value="7">无</option>
+		          </select></cite></li>
+		           
+    <li><label>所在单位</label><input name="" type="text" class="dfinput"  value="山东济南"/></li>
+    <li><label>部门</label><input name="" type="text" class="dfinput"  value="公司业务部"/></li>
+    <li><label>职务</label><input name="" type="text" class="dfinput"  value="经理"/></li>
+
+    <li><label>业务条线</label><cite><select class="dfselect"><option value="0">请选择</option><option value="1" selected="selected">对公</option><option value="2">对个人</option></select></cite></li>
+    <li><label>参加工作时间</label><input name="" type="text" class="dfinput"  value="2011-8-2"/></li>
+    <li><label>入行时间</label><input name="" type="text" class="dfinput"  value="2010-11-11"/></li>
+    <li><label>从事金融工作年限</label><input name="" type="text" class="dfinput"  value="8"/></li>
+    <li><label>客户经理从业年限</label><input name="" type="text" class="dfinput"  value="3"/></li>
+    <li><label>退出时间</label><input name="" type="text" class="dfinput"  value="2015-11-30"/></li>
+    <li><label>办公电话</label><input name="" type="text" class="dfinput"  value="0531-81827323"/></li>
+    <li><label>手机</label><input name="" type="text" class="dfinput"  value="13992348343"/></li>
+
+    <li>&nbsp;&nbsp;<input name="" type="submit" class="btn" value="修改"/>&nbsp;&nbsp;&nbsp;&nbsp;<input name="" type="reset" class="btn" value="重置"/></li>
+    </ul>
+    
+    </div>
+    </form>
+</body>
+
+</html>

@@ -4,10 +4,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import priv.shiroko.amis.config.Config;
@@ -33,7 +30,8 @@ public class loginController {
         ApiResult result = new ApiResult();
         if (username == null || password == null) {
             result.setStatus(ApiResult.Status.Failed);
-            result.setMessage("Username or password cannot be null.");
+            result.setMessage("用户名和密码不能为空。");
+            result.setReason("null exception");
         } else {
             User user = userMapper.getUserByUsername(username);
             if (user == null)
@@ -46,18 +44,30 @@ public class loginController {
             }
             if (user == null) {
                 result.setStatus(ApiResult.Status.Failed);
-                result.setMessage("No user found.");
+                result.setMessage("用户不存在。");
+                result.setReason("user not existed");
             } else {
                 if (BCrypt.verifyer().verify(password.getBytes(), user.getPassword()).verified) {
                     result.setStatus(ApiResult.Status.OK);
-                    result.setMessage("Login successful.");
+                    result.setMessage("登录成功！");
                     session.setAttribute("user", user);
                 } else {
                     result.setStatus(ApiResult.Status.Failed);
-                    result.setMessage("Password incorrect.");
+                    result.setMessage("密码错误。");
+                    result.setReason("password incorrect");
                 }
             }
         }
+        mav.addObject("result", result);
+        return mav;
+    }
+
+    @GetMapping("/logout")
+    public ModelAndView doLogout(HttpSession session) {
+        ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
+        session.removeAttribute("user");
+        ApiResult result = new ApiResult(ApiResult.Status.OK);
+        result.setMessage("登出成功。");
         mav.addObject("result", result);
         return mav;
     }
