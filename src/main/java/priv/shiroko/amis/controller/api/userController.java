@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import priv.shiroko.amis.config.Config;
 import priv.shiroko.amis.entity.User;
 import priv.shiroko.amis.mapper.UserMapper;
@@ -17,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -28,8 +27,7 @@ public class userController {
     private Config config;
 
     @PostMapping("/login")
-    public ModelAndView doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) {
-        ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
+    public ApiResult doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) {
         ApiResult result = new ApiResult();
         if (username == null || password == null) {
             result.setStatus(ApiResult.Status.FAILED);
@@ -68,23 +66,19 @@ public class userController {
                 }
             }
         }
-        mav.addObject("result", result);
-        return mav;
+        return result;
     }
 
     @GetMapping("/logout")
-    public ModelAndView doLogout(HttpSession session) {
-        ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
+    public ApiResult doLogout(HttpSession session) {
         session.removeAttribute("user");
         ApiResult result = new ApiResult(ApiResult.Status.OK);
         result.setMessage("登出成功。");
-        mav.addObject("result", result);
-        return mav;
+        return result;
     }
 
     @GetMapping("/user/get")
-    public ModelAndView getUser(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
+    public ApiResult getUser(HttpServletRequest request) {
         ApiResult result = new ApiResult();
         if (request.getParameterMap().containsKey("id") || request.getParameterMap().containsKey("username")) {
             // query single user
@@ -164,26 +158,152 @@ public class userController {
                         }).toList()
                 );
         }
-        mav.addObject("result", result);
-        return mav;
+        return result;
     }
 
     @GetMapping("/user/count")
-    public ModelAndView getUsersCount() {
-        ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
+    public ApiResult getUsersCount() {
         ApiResult result = new ApiResult(ApiResult.Status.OK);
         result.setData(userMapper.getUsersCount());
-        mav.addObject("result", result);
-        return mav;
+        return result;
     }
 
     @PostMapping("/user/add")
-    public ModelAndView addUser() {
-        ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
+    public ApiResult addUser(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            @RequestParam("idcard") String idcard,
+            @RequestParam("email") String email,
+            @RequestParam("enabled") boolean status,
+            @RequestParam("role") User.Role role
+    ) {
         ApiResult result = new ApiResult();
-        // Check if username and id is existed.
-        mav.addObject("result", result);
-        return mav;
+        if (!userMapper.hasUsersWithNameAndId(username, null)) {
+            int cost = config.getBcryptCost();
+            byte[] hashedPasswd = BCrypt.withDefaults().hash(cost, password.getBytes());
+            User user = new User(username, hashedPasswd);
+            user.setEnabled(status);
+            user.setRole(role);
+            // FIXME: No backend validation here
+            if (!idcard.isEmpty()) user.setIcNum(idcard);
+            if (!email.isEmpty()) user.setEmail(email);
+            userMapper.createNewUser(user);
+            user = userMapper.getUserById(user.getId());
+            result.setStatus(ApiResult.Status.OK);
+            result.setData(EntityFilter.filter(user, new String[]{
+                    "password",
+                    "password_answer"
+            }));
+        } else {
+            result.setStatus(ApiResult.Status.FAILED);
+            result.setMessage("用户名已存在！");
+            result.setReason("username existed");
+        }
+        return result;
+    }
+
+    @PostMapping("/user/update")
+    public ApiResult updateUser(
+            @RequestParam("id") int id,
+            @RequestParam("username") String username,
+            @RequestParam("idcard") String idcard,
+            @RequestParam("email") String email,
+            @RequestParam("enabled") boolean status,
+            @RequestParam("role") User.Role role
+    ) {
+        ApiResult result = new ApiResult();
+        if (userMapper.hasUsersWithNameAndId(null, id)) {
+            User user = userMapper.getUserById(id);
+            assert user != null;
+            if (!username.equals(user.getUsername())) {
+                if (userMapper.hasUsersWithNameAndId(username, null)) {
+                    result.setStatus(ApiResult.Status.FAILED);
+                    result.setMessage("用户名已存在！");
+                    result.setReason("username existed");
+                    return result;
+                }
+                user.setUsername(username);
+            }
+            // FIXME: No backend validation here
+            if (idcard.isEmpty()) idcard = null;
+            if (email.isEmpty()) email = null;
+            user.setIcNum(idcard);
+            user.setEmail(email);
+            user.setEnabled(status);
+            user.setRole(role);
+            userMapper.updateUser(user);
+            result.setStatus(ApiResult.Status.OK);
+            result.setData(EntityFilter.filter(user, new String[]{
+                    "password",
+                    "password_answer"
+            }));
+        } else {
+            result.setStatus(ApiResult.Status.FAILED);
+            result.setMessage("用户不存在！");
+            result.setReason("user not existed");
+        }
+        return result;
+    }
+
+    @PostMapping("/user/set_status")
+    public ApiResult setStatus(
+            @RequestParam("id") int id,
+            @RequestParam("enabled") boolean status) {
+        ApiResult result = new ApiResult();
+        if (userMapper.hasUsersWithNameAndId(null, id)) {
+            result.setStatus(ApiResult.Status.OK);
+            userMapper.updateEnabled(id, status);
+        } else {
+            result.setStatus(ApiResult.Status.FAILED);
+            result.setMessage("用户不存在。");
+        }
+        return result;
+    }
+
+    @PostMapping("/user/delete")
+    public ApiResult delUser(@RequestParam("id") int id) {
+        ApiResult result = new ApiResult();
+        if (userMapper.hasUsersWithNameAndId(null, id)) {
+            userMapper.deleteUserById(id);
+            result.setStatus(ApiResult.Status.OK);
+        } else {
+            result.setStatus(ApiResult.Status.FAILED);
+            result.setMessage("用户不存在。");
+        }
+        return result;
+    }
+
+    @PostMapping("/user/reset_password")
+    public ApiResult passwdUser(@RequestParam("id") int id) {
+        ApiResult result = new ApiResult();
+        if (userMapper.hasUsersWithNameAndId(null, id)) {
+            int cost = config.getBcryptCost();
+            byte[] hashedPasswd = BCrypt.withDefaults().hash(cost, config.getDefaults().getPassword().getBytes());
+            userMapper.updatePassword(id, hashedPasswd);
+            result.setStatus(ApiResult.Status.OK);
+        } else {
+            result.setStatus(ApiResult.Status.FAILED);
+            result.setMessage("用户不存在。");
+        }
+        return result;
+    }
+
+    @GetMapping("/user/get_display_name")
+    public ApiResult getDispName(@RequestParam("id") Optional<Integer> id, HttpSession session) {
+        ApiResult result = new ApiResult();
+        if (id.isPresent()) {
+            if (userMapper.hasUsersWithNameAndId(null, id.get())) {
+                result.setStatus(ApiResult.Status.OK);
+                result.setData(userMapper.getDispNameById(id.get()));
+            } else {
+                result.setStatus(ApiResult.Status.FAILED);
+                result.setMessage("用户不存在。");
+            }
+        } else {
+            result.setStatus(ApiResult.Status.OK);
+            result.setData(userMapper.getDispNameById(((User) session.getAttribute("user")).getId()));
+        }
+        return result;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -191,7 +311,6 @@ public class userController {
         if (!userMapper.hasAdminUser()) {
             // Create default admin account if there is none.
             log.info("Create default admin account.");
-            // Hash password twice
             int cost = config.getBcryptCost();
             byte[] hashedPasswd = BCrypt.withDefaults().hash(cost, config.getDefaults().getAdminPassword().getBytes());
             User admin = new User(config.getDefaults().getAdminUsername(), hashedPasswd);

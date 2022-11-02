@@ -1,9 +1,6 @@
 package priv.shiroko.amis.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.lang.Nullable;
 import priv.shiroko.amis.entity.User;
 
@@ -47,7 +44,22 @@ public interface UserMapper {
 
     @Update("UPDATE user SET last_login_time = NOW() WHERE id = #{userId};")
     public void updateLastLogin(int userId);
+
+    @Update("UPDATE user SET enabled = #{status} WHERE id = #{userId};")
+    public void updateEnabled(@Param("userId") int userId, @Param("status") boolean enabled);
+
+    @Update("UPDATE user SET password = #{password} WHERE id = #{userId};")
+    public void updatePassword(@Param("userId") int userId, @Param("password") byte[] password);
+
+    public void updateUser(User user);
+
+    @Delete("DELETE FROM user WHERE id = #{id};")
+    public void deleteUserById(int id);
+
+    @Select("SELECT COALESCE(nickname, username) FROM user WHERE id = #{id};")
+    public String getDispNameById(int id);
 }
+
 
 
 

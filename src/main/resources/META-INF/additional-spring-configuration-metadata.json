@@ -1,6 +1,11 @@
 {
   "properties": [
     {
+      "name": "amis.defaults.password",
+      "type": "java.lang.String",
+      "description": "Default password when reset."
+    },
+    {
       "name": "amis.defaults.admin-username",
       "type": "java.lang.String",
       "description": "Default value for admin username."
@@ -16,4 +21,5 @@
       "description": "BCrypt cost.",
       "defaultValue": 12
     }
-  ] }
+  ]
+}

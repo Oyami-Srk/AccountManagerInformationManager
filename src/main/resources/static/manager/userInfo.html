@@ -6,24 +6,64 @@
     <link href="../css/style.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript">
+        function PostForSelectedUsers(url, data) {
+            let ids = getSelectedIds();
+            let t = ids.length;
+            ids.forEach((id) => {
+                data["id"] = id;
+                $.ajax({
+                    url,
+                    data,
+                    method: "POST"
+                }).done((resp) => {
+                    // TODO: check resp
+                    t--;
+                    if (t === 0) {
+                        window.top.promptAlert("成功。");
+                        fetch_page(page, count);
+                    }
+                })
+            });
+        }
+
         function confirmMsgDel() {
-            if (confirm("删除用户信息,您确定要删除吗?"))
-                window.close();
+            if (confirm("删除用户信息,您确定要删除吗?")) {
+                PostForSelectedUsers("/api/user/delete", {});
+            }
+        }
+
+        function setUserStatus(enabled) {
+            PostForSelectedUsers("/api/user/set_status", {
+                enabled,
+            });
         }
 
         function userOpen() {
-            if (confirm("您确定要启用该用户吗?"))
-                window.close();
+            if (confirm("您确定要启用该用户吗?")) {
+                setUserStatus(true);
+            }
         }
 
         function userClose() {
-            if (confirm("您确定要禁用该用户吗?"))
-                window.close();
+            if (confirm("您确定要禁用该用户吗?")) {
+                setUserStatus(false);
+            }
         }
 
         function resetPass() {
-            if (confirm("重置密码,您确定要恢复初始密码吗?"))
-                window.close();
+            if (confirm("重置密码,您确定要恢复初始密码吗?")) {
+                PostForSelectedUsers("/api/user/reset_password", {});
+            }
+        }
+
+        function userUpdate() {
+            if (getSelectedIds().length === 0) {
+                window.top.promptAlert("请选择要修改的用户。");
+            } else if (getSelectedIds().length > 1) {
+                window.top.promptAlert("一次只能修改一个用户。");
+            } else {
+                window.location.replace("/manager/userInfoUpdate.html?id=" + getSelectedIds()[0].toString());
+            }
         }
     </script>
     <script type="text/javascript">
@@ -58,8 +98,8 @@
                     method: "GET"
                 }
             ).done((resp) => {
-                if (resp.result.status === "OK") {
-                    total = resp.result.data;
+                if (resp.status === "OK") {
+                    total = resp.data;
                     total_pages = Math.floor(total / count) + ((total % count) === 0 ? 0 : 1);
                     $("#count").text(total)
                 }
@@ -107,9 +147,9 @@
                 }
             ).done((resp) => {
                 $("#page").text(page);
-                if (resp.result.status === "OK") {
+                if (resp.status === "OK") {
                     $("#datatable").empty();
-                    for (let user of resp.result.data) {
+                    for (let user of resp.data) {
                         build_record(user.id, user.username, user.enabled, user.registration_time, user.last_login_time);
                     }
                 }
@@ -126,10 +166,10 @@
                 data
             }).done((resp) => {
                 $("#datatable").empty();
-                if (resp.result.status === "OK") {
+                if (resp.status === "OK") {
                     $("#count").text(1);
                     $("#page").text(1);
-                    let user = resp.result.data;
+                    let user = resp.data;
                     build_record(user.id, user.username, user.enabled, user.registration_time, user.last_login_time);
                 }
             });
@@ -204,6 +244,13 @@
             }
         }
 
+        function getSelectedIds() {
+            return Array.from($("#datatable")
+                .find("input[type='checkbox']:checked")
+                .map((_, b) =>
+                    parseInt($(b).parent().parent().prop('id'))));
+        }
+
     </script>
 </head>
 
@@ -226,7 +273,7 @@
     <div class="tools">
         <ul class="toolbar1">
             <li><a href="userInfoAdd.html"><span><img src="../images/t01.png"/></span>添加</a></li>
-            <li><a href="userInfoUpdate.html"><span><img src="../images/t02.png"/></span>修改</a></li>
+            <li><a href="javascript:userUpdate()"><span><img src="../images/t02.png"/></span>修改</a></li>
             <li><a href="javascript:confirmMsgDel()"><span><img src="../images/t03.png"/></span>删除</a></li>
             <li><a href="javascript:userOpen()"><span><img src="../images/t08.png" height="24"
                                                            width="24"/></span>启用</a>
@@ -240,7 +287,7 @@
     <table class="tablelist">
         <thead>
         <tr class="tablehead">
-            <td colspan="11">客户信息列表</td>
+            <td colspan="11">用户列表</td>
         </tr>
         </thead>
         <thead>

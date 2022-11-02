@@ -47,6 +47,17 @@
         <include refid="BaseColumnValues"/>
         );
     </insert>
+    <update id="updateUser">
+        UPDATE user
+        <set>
+            <if test="username != null">username=#{username},</if>
+            <if test="icNum != null">ic_num=#{icNum},</if>
+            <if test="email != null">email=#{email},</if>
+            <if test="enabled != null">enabled=#{enabled},</if>
+            <if test="role != null">role=#{role}</if>
+        </set>
+        WHERE id = #{id};
+    </update>
     <select id="hasUsersWithNameAndId" resultType="java.lang.Boolean">
         SELECT EXISTS(SELECT 1 FROM user
         <where>

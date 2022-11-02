@@ -5,12 +5,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import priv.shiroko.amis.interceptor.AuthInterceptor;
+import priv.shiroko.amis.interceptor.PermissionInterceptor;
 
 @Configuration
 public class Interceptors implements WebMvcConfigurer {
     @Bean
     AuthInterceptor authInterceptor() {
         return new AuthInterceptor();
+    }
+
+    @Bean
+    PermissionInterceptor permissionInterceptor() {
+        return new PermissionInterceptor();
     }
 
     @Override
@@ -23,6 +29,14 @@ public class Interceptors implements WebMvcConfigurer {
                 .excludePathPatterns("/editor/*")
                 .excludePathPatterns("/images/*")
                 .excludePathPatterns("/js/*")
-                .excludePathPatterns("/src/*");
+                .excludePathPatterns("/src/*")
+        ;
+        registry.addInterceptor(permissionInterceptor())
+                .addPathPatterns("/api/user/add")
+                .addPathPatterns("/api/user/update")
+                .addPathPatterns("/api/user/delete")
+                .addPathPatterns("/api/user/set_status")
+                .addPathPatterns("/api/user/reset_password")
+        ;
     }
 }

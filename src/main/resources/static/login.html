@@ -50,10 +50,10 @@
                 }
             ).done(
                 (resp) => {
-                    $("#alert_text").text(resp.result.message);
+                    $("#alert_text").text(resp.message);
                     syalert.syopen('alert');
-                    if (resp.result.status === "Failed") {
-                        switch (resp.result.reason) {
+                    if (resp.status === "Failed") {
+                        switch (resp.reason) {
                             case "password incorrect":
                                 sel_passwd.val('');
                                 break;

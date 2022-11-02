@@ -1,57 +1,164 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<link href="../css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-  $(".click").click(function(){
-  $(".tip").fadeIn(200);
-  });
-  
-  $(".tiptop a").click(function(){
-  $(".tip").fadeOut(200);
-});
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="../css/style.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/idcard.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
 
-  $(".sure").click(function(){
-  $(".tip").fadeOut(100);
-});
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
 
-  $(".cancel").click(function(){
-  $(".tip").fadeOut(100);
-});
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
 
-});
-</script>
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
 
+        });
+    </script>
+    <script type="text/javascript">
+        function checkEmail(str) {
+            const re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+            return !!re.test(str);
+        }
+
+        $(document).ready(() => {
+            /*
+            $("#cpassword").on('input propertychange', () => {
+            })*/
+            $("[name='cpassword'],[name='password']").change(() => {
+                let cp = $("[name='cpassword']").val();
+                let p = $("[name='password']").val();
+                if (cp !== p) {
+                    $("#passwd_ready").prop('style', '');
+                } else {
+                    $("#passwd_ready").prop('style', 'display: none;');
+                }
+            });
+            $("[name='idcard']").change(() => {
+                let ic = $("[name='idcard']").val();
+                if (ic.length === 0 || idcard.validator(ic)) {
+                    $("#idcard_ready").prop('style', 'display: none;');
+                } else {
+                    $("#idcard_ready").prop('style', '');
+                }
+            });
+            $("[name='email']").change(() => {
+                let email = $("[name='email']").val();
+                if (email.length === 0 || checkEmail(email)) {
+                    $("#email_ready").prop('style', 'display: none;');
+                } else {
+                    $("#email_ready").prop('style', '');
+                }
+            });
+
+            $("#userform").submit((e) => {
+                let data = new FormData($("#userform")[0]);
+                if (data.get("username").length === 0) {
+                    window.top.promptAlert("用户名不能为空。");
+                    return false;
+                }
+                if (data.get("password").length === 0) {
+                    window.top.promptAlert("密码不能为空。");
+                    return false;
+                }
+                if (data.get("password") !== data.get("cpassword")) {
+                    window.top.promptAlert("两次输入的密码不一致。");
+                    return false;
+                }
+                if (data.get("idcard").length !== 0 && !idcard.validator(data.get("idcard"))) {
+                    window.top.promptAlert("身份证信息错误。");
+                    return false;
+                }
+                if (data.get("email").length !== 0 && !checkEmail(data.get("email"))) {
+                    window.top.promptAlert("邮箱格式错误。");
+                    return false;
+                }
+                if (data.get("role").length === 0) {
+                    window.top.promptAlert("请选择角色。");
+                    return false;
+                }
+                data.delete("cpassword");
+                if (data.has("enabled"))
+                    data.set("enabled", "true");
+                else
+                    data.set("enabled", "false");
+
+                $.ajax({
+                    url: "/api/user/add",
+                    method: "POST",
+                    data,
+                    processData: false,
+                    contentType: false
+                }).done((resp) => {
+                    if (resp.status === "OK") {
+                        window.parent.promptAlert("添加用户成功！");
+                        setTimeout(() => {
+                            window.location.replace("/manager/userInfo.html");
+                        }, 1000);
+                    } else {
+                        window.parent.promptAlert("添加用户失败！" + resp.message);
+                    }
+                })
+                return false;
+            });
+        });
+    </script>
 </head>
 
 
 <body>
-	<div class="place">
+<div class="place">
     <span>位置：</span>
     <ul class="placeul">
-    <li><a href="userInfo.html">用户管理</a></li>
-    <li><a href="userInfoAdd.html">添加</a></li>
+        <li><a href="userInfo.html">用户管理</a></li>
+        <li><a href="userInfoAdd.html">添加</a></li>
     </ul>
-    </div>
-    
-    <form action="" method="post">
-    <div class="formbody">
+</div>
+
+<div class="formbody">
     <div class="formtitle"><span>用户基本信息</span></div>
-    
+    <span>标为*的为必填项。</span>
+    <br/>
     <ul class="forminfo">
-    <li><label>姓名</label><input name="" type="text" class="dfinput" value=""/></li>
-    <li><label>性别</label><cite><input name="sex" type="radio" value="" checked="checked" />男&nbsp;&nbsp;&nbsp;&nbsp;<input name="sex" type="radio" value="" />女</cite></li>
-    <li><label>出生日期</label><input name="" type="text" class="dfinput" value=""/></li>
-    <li><label>角色</label><cite><select class="dfselect"><option value="0">请选择</option><option value="1" >管理员</option><option value="2">客户经理</option></select></cite></li>
-    <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input name="" type="reset" class="btn" value="重置"/></li>
+        <form id="userform">
+            <li><label>用户名*</label><input name="username" type="text" class="dfinput" value=""/></li>
+            <li><label>初始密码*</label><input name="password" type="password" class="dfinput" value=""/>
+            </li>
+            <li><label>确认初始密码*</label><input name="cpassword" type="password" class="dfinput" value=""/>
+                <span id="passwd_ready" style="display: none;"><span style="color: red">两次密码不一致</span></span>
+            </li>
+            <li><label>身份证号</label><input name="idcard" type="text" class="dfinput" value=""/>
+                <span id="idcard_ready" style="display: none;"><span style="color: red">身份证号有误</span></span>
+            </li>
+            <li><label>邮箱</label><input name="email" type="text" class="dfinput" value="">
+                <span id="email_ready" style="display: none;"><span style="color: red">邮箱格式错误</span></span>
+            </li>
+            <li><label>是否启用*</label><input name="enabled" type="checkbox" checked></li>
+            <li><label>角色*</label><cite><select name="role" class="dfselect">
+                <option value="">请选择</option>
+                <option value="ADMIN">管理员</option>
+                <option value="USER">客户经理</option>
+            </select></cite></li>
+            <li>
+                <label>&nbsp;</label>
+                <input name="" type="submit" class="btn" value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="" type="reset" class="btn" value="重置"/>
+            </li>
+        </form>
     </ul>
-    
-    </div>
-    </form>
+</div>
 </body>
 
 </html>

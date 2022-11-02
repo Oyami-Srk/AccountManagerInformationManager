@@ -29,7 +29,7 @@
             ).done(
                 (resp) => {
                     let alert = $("#alert_text", window.parent.document);
-                    alert.text(resp.result.message);
+                    alert.text(resp.message);
                     window.parent.syalert.syopen("alert");
                     setTimeout(() => {
                         window.parent.location.replace("/login.html");
@@ -37,6 +37,15 @@
                 }
             );
         }
+
+        $(document).ready(() => {
+            $.ajax({
+                url: "/api/user/get_display_name",
+                method: "GET"
+            }).done((resp) => {
+                $("#username").text(`欢迎${resp.data}登录！`);
+            })
+        })
     </script>
 
 
@@ -57,7 +66,7 @@
     </ul>
 
     <div class="user">
-        <span>欢迎admin登录！</span>
+        <span id="username"></span>
     </div>
 </div>
 

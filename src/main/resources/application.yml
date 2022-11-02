@@ -26,6 +26,7 @@ amis:
   defaults:
     admin-username: admin
     admin-password: 123456
+    password: 111111
 
 server:
   servlet:
