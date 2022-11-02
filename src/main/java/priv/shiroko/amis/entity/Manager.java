@@ -1,11 +1,16 @@
 package priv.shiroko.amis.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @TableName manager
  */
+@Getter
+@Setter
 public class Manager implements Serializable {
     private Integer id;
 
@@ -13,31 +18,31 @@ public class Manager implements Serializable {
 
     private String name;
 
-    private Object sex;
+    private Sex sex;
 
     private Date birthday;
 
-    private Object ethnic;
+    private String ethnic;
 
-    private Object politicalStatus;
+    private String politicalStatus;
 
     private String nativePlace;
 
     private String photo;
 
-    private Object education;
+    private String education;
 
-    private Object graduated;
+    private String graduated;
 
-    private Object professionalTitle;
+    private String professionalTitle;
 
-    private Object managerLevel;
+    private String managerLevel;
 
     private String unit;
 
     private String dept;
 
-    private Object businessLine;
+    private BusinessLine businessLine;
 
     private String job;
 
@@ -69,275 +74,11 @@ public class Manager implements Serializable {
 
     private String officeTel;
 
-    private Object managerStatus;
+    private Status managerStatus;
 
     private Date lastUpdate;
 
     private static final long serialVersionUID = 1L;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Object getSex() {
-        return sex;
-    }
-
-    public void setSex(Object sex) {
-        this.sex = sex;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public Object getEthnic() {
-        return ethnic;
-    }
-
-    public void setEthnic(Object ethnic) {
-        this.ethnic = ethnic;
-    }
-
-    public Object getPoliticalStatus() {
-        return politicalStatus;
-    }
-
-    public void setPoliticalStatus(Object politicalStatus) {
-        this.politicalStatus = politicalStatus;
-    }
-
-    public String getNativePlace() {
-        return nativePlace;
-    }
-
-    public void setNativePlace(String nativePlace) {
-        this.nativePlace = nativePlace;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public Object getEducation() {
-        return education;
-    }
-
-    public void setEducation(Object education) {
-        this.education = education;
-    }
-
-    public Object getGraduated() {
-        return graduated;
-    }
-
-    public void setGraduated(Object graduated) {
-        this.graduated = graduated;
-    }
-
-    public Object getProfessionalTitle() {
-        return professionalTitle;
-    }
-
-    public void setProfessionalTitle(Object professionalTitle) {
-        this.professionalTitle = professionalTitle;
-    }
-
-    public Object getManagerLevel() {
-        return managerLevel;
-    }
-
-    public void setManagerLevel(Object managerLevel) {
-        this.managerLevel = managerLevel;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public String getDept() {
-        return dept;
-    }
-
-    public void setDept(String dept) {
-        this.dept = dept;
-    }
-
-    public Object getBusinessLine() {
-        return businessLine;
-    }
-
-    public void setBusinessLine(Object businessLine) {
-        this.businessLine = businessLine;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
-    }
-
-    public Date getHiredDate() {
-        return hiredDate;
-    }
-
-    public void setHiredDate(Date hiredDate) {
-        this.hiredDate = hiredDate;
-    }
-
-    public Date getEnteredDate() {
-        return enteredDate;
-    }
-
-    public void setEnteredDate(Date enteredDate) {
-        this.enteredDate = enteredDate;
-    }
-
-    public Integer getFinancialAgeLimit() {
-        return financialAgeLimit;
-    }
-
-    public void setFinancialAgeLimit(Integer financialAgeLimit) {
-        this.financialAgeLimit = financialAgeLimit;
-    }
-
-    public Integer getManagerAgeLimit() {
-        return managerAgeLimit;
-    }
-
-    public void setManagerAgeLimit(Integer managerAgeLimit) {
-        this.managerAgeLimit = managerAgeLimit;
-    }
-
-    public Double getTotalCredits() {
-        return totalCredits;
-    }
-
-    public void setTotalCredits(Double totalCredits) {
-        this.totalCredits = totalCredits;
-    }
-
-    public Double getYearCredits() {
-        return yearCredits;
-    }
-
-    public void setYearCredits(Double yearCredits) {
-        this.yearCredits = yearCredits;
-    }
-
-    public Date getExitDate() {
-        return exitDate;
-    }
-
-    public void setExitDate(Date exitDate) {
-        this.exitDate = exitDate;
-    }
-
-    public String getLastYearAssessment() {
-        return lastYearAssessment;
-    }
-
-    public void setLastYearAssessment(String lastYearAssessment) {
-        this.lastYearAssessment = lastYearAssessment;
-    }
-
-    public String getQualificationCertId() {
-        return qualificationCertId;
-    }
-
-    public void setQualificationCertId(String qualificationCertId) {
-        this.qualificationCertId = qualificationCertId;
-    }
-
-    public Date getQualificationCertDate() {
-        return qualificationCertDate;
-    }
-
-    public void setQualificationCertDate(Date qualificationCertDate) {
-        this.qualificationCertDate = qualificationCertDate;
-    }
-
-    public String getJobCertId() {
-        return jobCertId;
-    }
-
-    public void setJobCertId(String jobCertId) {
-        this.jobCertId = jobCertId;
-    }
-
-    public Date getJobCertDate() {
-        return jobCertDate;
-    }
-
-    public void setJobCertDate(Date jobCertDate) {
-        this.jobCertDate = jobCertDate;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getOfficeTel() {
-        return officeTel;
-    }
-
-    public void setOfficeTel(String officeTel) {
-        this.officeTel = officeTel;
-    }
-
-    public Object getManagerStatus() {
-        return managerStatus;
-    }
-
-    public void setManagerStatus(Object managerStatus) {
-        this.managerStatus = managerStatus;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 
     @Override
     public boolean equals(Object that) {
@@ -352,38 +93,38 @@ public class Manager implements Serializable {
         }
         Manager other = (Manager) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getSex() == null ? other.getSex() == null : this.getSex().equals(other.getSex()))
-            && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
-            && (this.getEthnic() == null ? other.getEthnic() == null : this.getEthnic().equals(other.getEthnic()))
-            && (this.getPoliticalStatus() == null ? other.getPoliticalStatus() == null : this.getPoliticalStatus().equals(other.getPoliticalStatus()))
-            && (this.getNativePlace() == null ? other.getNativePlace() == null : this.getNativePlace().equals(other.getNativePlace()))
-            && (this.getPhoto() == null ? other.getPhoto() == null : this.getPhoto().equals(other.getPhoto()))
-            && (this.getEducation() == null ? other.getEducation() == null : this.getEducation().equals(other.getEducation()))
-            && (this.getGraduated() == null ? other.getGraduated() == null : this.getGraduated().equals(other.getGraduated()))
-            && (this.getProfessionalTitle() == null ? other.getProfessionalTitle() == null : this.getProfessionalTitle().equals(other.getProfessionalTitle()))
-            && (this.getManagerLevel() == null ? other.getManagerLevel() == null : this.getManagerLevel().equals(other.getManagerLevel()))
-            && (this.getUnit() == null ? other.getUnit() == null : this.getUnit().equals(other.getUnit()))
-            && (this.getDept() == null ? other.getDept() == null : this.getDept().equals(other.getDept()))
-            && (this.getBusinessLine() == null ? other.getBusinessLine() == null : this.getBusinessLine().equals(other.getBusinessLine()))
-            && (this.getJob() == null ? other.getJob() == null : this.getJob().equals(other.getJob()))
-            && (this.getHiredDate() == null ? other.getHiredDate() == null : this.getHiredDate().equals(other.getHiredDate()))
-            && (this.getEnteredDate() == null ? other.getEnteredDate() == null : this.getEnteredDate().equals(other.getEnteredDate()))
-            && (this.getFinancialAgeLimit() == null ? other.getFinancialAgeLimit() == null : this.getFinancialAgeLimit().equals(other.getFinancialAgeLimit()))
-            && (this.getManagerAgeLimit() == null ? other.getManagerAgeLimit() == null : this.getManagerAgeLimit().equals(other.getManagerAgeLimit()))
-            && (this.getTotalCredits() == null ? other.getTotalCredits() == null : this.getTotalCredits().equals(other.getTotalCredits()))
-            && (this.getYearCredits() == null ? other.getYearCredits() == null : this.getYearCredits().equals(other.getYearCredits()))
-            && (this.getExitDate() == null ? other.getExitDate() == null : this.getExitDate().equals(other.getExitDate()))
-            && (this.getLastYearAssessment() == null ? other.getLastYearAssessment() == null : this.getLastYearAssessment().equals(other.getLastYearAssessment()))
-            && (this.getQualificationCertId() == null ? other.getQualificationCertId() == null : this.getQualificationCertId().equals(other.getQualificationCertId()))
-            && (this.getQualificationCertDate() == null ? other.getQualificationCertDate() == null : this.getQualificationCertDate().equals(other.getQualificationCertDate()))
-            && (this.getJobCertId() == null ? other.getJobCertId() == null : this.getJobCertId().equals(other.getJobCertId()))
-            && (this.getJobCertDate() == null ? other.getJobCertDate() == null : this.getJobCertDate().equals(other.getJobCertDate()))
-            && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
-            && (this.getOfficeTel() == null ? other.getOfficeTel() == null : this.getOfficeTel().equals(other.getOfficeTel()))
-            && (this.getManagerStatus() == null ? other.getManagerStatus() == null : this.getManagerStatus().equals(other.getManagerStatus()))
-            && (this.getLastUpdate() == null ? other.getLastUpdate() == null : this.getLastUpdate().equals(other.getLastUpdate()));
+                && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+                && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+                && (this.getSex() == null ? other.getSex() == null : this.getSex().equals(other.getSex()))
+                && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
+                && (this.getEthnic() == null ? other.getEthnic() == null : this.getEthnic().equals(other.getEthnic()))
+                && (this.getPoliticalStatus() == null ? other.getPoliticalStatus() == null : this.getPoliticalStatus().equals(other.getPoliticalStatus()))
+                && (this.getNativePlace() == null ? other.getNativePlace() == null : this.getNativePlace().equals(other.getNativePlace()))
+                && (this.getPhoto() == null ? other.getPhoto() == null : this.getPhoto().equals(other.getPhoto()))
+                && (this.getEducation() == null ? other.getEducation() == null : this.getEducation().equals(other.getEducation()))
+                && (this.getGraduated() == null ? other.getGraduated() == null : this.getGraduated().equals(other.getGraduated()))
+                && (this.getProfessionalTitle() == null ? other.getProfessionalTitle() == null : this.getProfessionalTitle().equals(other.getProfessionalTitle()))
+                && (this.getManagerLevel() == null ? other.getManagerLevel() == null : this.getManagerLevel().equals(other.getManagerLevel()))
+                && (this.getUnit() == null ? other.getUnit() == null : this.getUnit().equals(other.getUnit()))
+                && (this.getDept() == null ? other.getDept() == null : this.getDept().equals(other.getDept()))
+                && (this.getBusinessLine() == null ? other.getBusinessLine() == null : this.getBusinessLine().equals(other.getBusinessLine()))
+                && (this.getJob() == null ? other.getJob() == null : this.getJob().equals(other.getJob()))
+                && (this.getHiredDate() == null ? other.getHiredDate() == null : this.getHiredDate().equals(other.getHiredDate()))
+                && (this.getEnteredDate() == null ? other.getEnteredDate() == null : this.getEnteredDate().equals(other.getEnteredDate()))
+                && (this.getFinancialAgeLimit() == null ? other.getFinancialAgeLimit() == null : this.getFinancialAgeLimit().equals(other.getFinancialAgeLimit()))
+                && (this.getManagerAgeLimit() == null ? other.getManagerAgeLimit() == null : this.getManagerAgeLimit().equals(other.getManagerAgeLimit()))
+                && (this.getTotalCredits() == null ? other.getTotalCredits() == null : this.getTotalCredits().equals(other.getTotalCredits()))
+                && (this.getYearCredits() == null ? other.getYearCredits() == null : this.getYearCredits().equals(other.getYearCredits()))
+                && (this.getExitDate() == null ? other.getExitDate() == null : this.getExitDate().equals(other.getExitDate()))
+                && (this.getLastYearAssessment() == null ? other.getLastYearAssessment() == null : this.getLastYearAssessment().equals(other.getLastYearAssessment()))
+                && (this.getQualificationCertId() == null ? other.getQualificationCertId() == null : this.getQualificationCertId().equals(other.getQualificationCertId()))
+                && (this.getQualificationCertDate() == null ? other.getQualificationCertDate() == null : this.getQualificationCertDate().equals(other.getQualificationCertDate()))
+                && (this.getJobCertId() == null ? other.getJobCertId() == null : this.getJobCertId().equals(other.getJobCertId()))
+                && (this.getJobCertDate() == null ? other.getJobCertDate() == null : this.getJobCertDate().equals(other.getJobCertDate()))
+                && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
+                && (this.getOfficeTel() == null ? other.getOfficeTel() == null : this.getOfficeTel().equals(other.getOfficeTel()))
+                && (this.getManagerStatus() == null ? other.getManagerStatus() == null : this.getManagerStatus().equals(other.getManagerStatus()))
+                && (this.getLastUpdate() == null ? other.getLastUpdate() == null : this.getLastUpdate().equals(other.getLastUpdate()));
     }
 
     @Override
@@ -468,5 +209,41 @@ public class Manager implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    @Getter
+    public enum Sex {
+        MALE("male"),
+        FEMALE("female");
+
+        private final String value;
+
+        Sex(String value) {
+            this.value = value;
+        }
+    }
+
+    @Getter
+    public enum BusinessLine {
+        BUSINESS("business"),
+        PERSONAL("personal");
+
+        private final String value;
+
+        BusinessLine(String value) {
+            this.value = value;
+        }
+    }
+
+    @Getter
+    public enum Status {
+        IN_SERVICE("in-service"),
+        OUT_OF_SERVICE("out-of-service");
+
+        private final String value;
+
+        Status(String value) {
+            this.value = value;
+        }
     }
 }

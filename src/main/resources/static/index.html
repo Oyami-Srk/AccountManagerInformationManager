@@ -12,9 +12,7 @@
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       height: 100%;
-      max-height: 100%;
       min-height: 100%;
     }
 
@@ -27,11 +25,11 @@
     }
 
     #main_container {
+      position: fix;
       height: 100%;
     }
 
     #topFrame {
-      /*position: absolute;*/
       top: 0;
       left: 0;
       height: 88px;
@@ -39,17 +37,17 @@
     }
 
     #leftFrame {
+      display: inline-block;
       left: 0;
       width: 187px;
-      height: 100%;
-      min-height: 100%;
+      height: calc(100% - 88px);
     }
 
     #mainFrame {
-      position: fixed;
-      top: 88px;
-      height: 100%;
-      width: 100%;
+      position: absolute;
+      display: inline-block;
+      height: calc(100% - 88px);
+      width: calc(100% - 187px);
     }
   </style>
   <script type="text/javascript">
@@ -76,7 +74,8 @@
   <iframe src="top.html" id="topFrame" scrolling="no" frameborder="0"></iframe>
   <div id="main_container">
     <iframe src="left.html" id="leftFrame" scrolling="no" frameborder="0"></iframe>
-    <iframe src="greeting.html" id="mainFrame" scrolling="no" frameborder="0"></iframe>
+    <iframe src="greeting.html" id="mainFrame" frameborder="0" scrolling="auto"></iframe>
+    <!-- <iframe src="manager/clientMgr.html" id="mainFrame" frameborder="0" scrolling="auto"></iframe> -->
   </div>
 </div>
 </body>

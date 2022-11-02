@@ -14,6 +14,10 @@
     <script type="text/javascript" src="js/jquery.cookie.min.js"></script>
 
     <script type="text/javascript">
+        // Check if we are're in iframe
+        if (self !== top) {
+            window.top.location.replace("/login.html");
+        }
         $(function () {
             $('.loginbox').css({'position': 'absolute', 'left': ($(window).width() - 692) / 2});
             $(window).resize(function () {

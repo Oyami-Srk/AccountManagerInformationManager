@@ -7,6 +7,7 @@ spring:
   sql:
     init:
       schema-locations: classpath:resources/db/schema.sql
+      data-locations: classpath:resources/db/sample-data.sql
       mode: always
   web:
     resources:
@@ -15,6 +16,10 @@ spring:
 
 mybatis:
   type-aliases-package: priv.shiroko.amis.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    default-enum-type-handler: priv.shiroko.amis.utils.EnumTypeHandler
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 
 amis:
   bcrypt-cost: 12
