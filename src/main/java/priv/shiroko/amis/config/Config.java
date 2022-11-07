@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "amis")
 public class Config {
+    private String cacheFolder;
+    private String uploadFolder;
     private int bcryptCost = 12;
     private Defaults defaults;
 

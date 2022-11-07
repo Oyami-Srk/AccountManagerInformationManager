@@ -5,52 +5,183 @@
 <mapper namespace="priv.shiroko.amis.mapper.ManagerMapper">
 
     <resultMap id="BaseResultMap" type="priv.shiroko.amis.entity.Manager">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="userId" column="user_id" jdbcType="INTEGER"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="sex" column="sex" jdbcType="OTHER"/>
-            <result property="birthday" column="birthday" jdbcType="DATE"/>
-            <result property="ethnic" column="ethnic" jdbcType="OTHER"/>
-            <result property="politicalStatus" column="political_status" jdbcType="OTHER"/>
-            <result property="nativePlace" column="native_place" jdbcType="VARCHAR"/>
-            <result property="photo" column="photo" jdbcType="VARCHAR"/>
-            <result property="education" column="education" jdbcType="OTHER"/>
-            <result property="graduated" column="graduated" jdbcType="OTHER"/>
-            <result property="professionalTitle" column="professional_title" jdbcType="OTHER"/>
-            <result property="managerLevel" column="manager_level" jdbcType="OTHER"/>
-            <result property="unit" column="unit" jdbcType="VARCHAR"/>
-            <result property="dept" column="dept" jdbcType="VARCHAR"/>
-            <result property="businessLine" column="business_line" jdbcType="OTHER"/>
-            <result property="job" column="job" jdbcType="VARCHAR"/>
-            <result property="hiredDate" column="hired_date" jdbcType="DATE"/>
-            <result property="enteredDate" column="entered_date" jdbcType="DATE"/>
-            <result property="financialAgeLimit" column="financial_age_limit" jdbcType="INTEGER"/>
-            <result property="managerAgeLimit" column="manager_age_limit" jdbcType="INTEGER"/>
-            <result property="totalCredits" column="total_credits" jdbcType="DOUBLE"/>
-            <result property="yearCredits" column="year_credits" jdbcType="DOUBLE"/>
-            <result property="exitDate" column="exit_date" jdbcType="DATE"/>
-            <result property="lastYearAssessment" column="last_year_assessment" jdbcType="VARCHAR"/>
-            <result property="qualificationCertId" column="qualification_cert_id" jdbcType="VARCHAR"/>
-            <result property="qualificationCertDate" column="qualification_cert_date" jdbcType="DATE"/>
-            <result property="jobCertId" column="job_cert_id" jdbcType="VARCHAR"/>
-            <result property="jobCertDate" column="job_cert_date" jdbcType="DATE"/>
-            <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
-            <result property="officeTel" column="office_tel" jdbcType="VARCHAR"/>
-            <result property="managerStatus" column="manager_status" jdbcType="OTHER"/>
-            <result property="lastUpdate" column="last_update" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="OTHER"/>
+        <result property="birthday" column="birthday" jdbcType="DATE"/>
+        <result property="ethnic" column="ethnic" jdbcType="VARCHAR"/>
+        <result property="politicalStatus" column="political_status" jdbcType="VARCHAR"/>
+        <result property="nativePlace" column="native_place" jdbcType="VARCHAR"/>
+        <result property="photo" column="photo" jdbcType="CHAR"/>
+        <result property="education" column="education" jdbcType="VARCHAR"/>
+        <result property="graduated" column="graduated" jdbcType="VARCHAR"/>
+        <result property="professionalTitle" column="professional_title" jdbcType="VARCHAR"/>
+        <result property="managerLevel" column="manager_level" jdbcType="VARCHAR"/>
+        <result property="unit" column="unit" jdbcType="VARCHAR"/>
+        <result property="dept" column="dept" jdbcType="VARCHAR"/>
+        <result property="businessLine" column="business_line" jdbcType="OTHER"/>
+        <result property="job" column="job" jdbcType="VARCHAR"/>
+        <result property="hiredDate" column="hired_date" jdbcType="DATE"/>
+        <result property="enteredDate" column="entered_date" jdbcType="DATE"/>
+        <result property="financialAgeLimit" column="financial_age_limit" jdbcType="INTEGER"/>
+        <result property="managerAgeLimit" column="manager_age_limit" jdbcType="INTEGER"/>
+        <result property="totalCredits" column="total_credits" jdbcType="DOUBLE"/>
+        <result property="yearCredits" column="year_credits" jdbcType="DOUBLE"/>
+        <result property="exitDate" column="exit_date" jdbcType="DATE"/>
+        <result property="lastYearAssessment" column="last_year_assessment" jdbcType="VARCHAR"/>
+        <result property="qualificationCertId" column="qualification_cert_id" jdbcType="VARCHAR"/>
+        <result property="qualificationCertDate" column="qualification_cert_date" jdbcType="DATE"/>
+        <result property="jobCertId" column="job_cert_id" jdbcType="VARCHAR"/>
+        <result property="jobCertDate" column="job_cert_date" jdbcType="DATE"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="officeTel" column="office_tel" jdbcType="VARCHAR"/>
+        <result property="managerStatus" column="manager_status" jdbcType="OTHER"/>
+        <result property="lastUpdate" column="last_update" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,user_id,name,
-        sex,birthday,ethnic,
-        political_status,native_place,photo,
-        education,graduated,professional_title,
-        manager_level,unit,dept,
-        business_line,job,hired_date,
-        entered_date,financial_age_limit,manager_age_limit,
-        total_credits,year_credits,exit_date,
-        last_year_assessment,qualification_cert_id,qualification_cert_date,
-        job_cert_id,job_cert_date,mobile,
-        office_tel,manager_status,last_update
+    <!-- @formatter:off -->
+    <sql id="BaseColumnNames">
+        user_id,
+        name,
+        sex,
+        birthday,
+        ic_num,
+        ethnic,
+        political_status,
+        native_place,
+        photo,
+        education,
+        graduated,
+        school,
+        unit,
+        dept,
+        business_line,
+        job,
+        hired_date,
+        entered_date,
+        financial_age_limit,
+        manager_age_limit,
+        total_credits,
+        year_credits,
+        exit_date,
+        last_year_assessment,
+        qualification_cert_id,
+        qualification_cert_date,
+        job_cert_id,
+        job_cert_date,
+        mobile,
+        office_tel,
+        <if test="managerStatus != null">manager_status,</if>
+        <if test="professionalTitle != null">professional_title,</if>
+        <if test="managerLevel != null">manager_level,</if>
+        id
     </sql>
+    <sql id="BaseColumnValues">
+        #{userId},
+        #{name},
+        #{sex},
+        #{birthday},
+        #{icNum},
+        #{ethnic},
+        #{politicalStatus},
+        #{nativePlace},
+        #{photo},
+        #{education},
+        #{graduated},
+        #{school},
+        #{unit},
+        #{dept},
+        #{businessLine},
+        #{job},
+        #{hiredDate},
+        #{enteredDate},
+        #{financialAgeLimit},
+        #{managerAgeLimit},
+        #{totalCredits},
+        #{yearCredits},
+        #{exitDate},
+        #{lastYearAssessment},
+        #{qualificationCertId},
+        #{qualificationCertDate},
+        #{jobCertId},
+        #{jobCertDate},
+        #{mobile},
+        #{officeTel},
+        <if test="managerStatus != null">#{managerStatus},</if>
+        <if test="professionalTitle != null">#{professionalTitle},</if>
+        <if test="managerLevel != null">#{managerLevel},</if>
+        #{id}
+    </sql>
+    <!-- @formatter:on -->
+    <sql id="getManagersWhere">
+        <where>
+            <if test="params.dept != null">
+                dept = #{params.dept}
+            </if>
+            <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+            <if test="params.name != null">
+                AND name = #{params.name}
+            </if>
+            <if test="params.status != null">
+                AND manager_status = #{params.status.value}
+            </if>
+        </where>
+    </sql>
+    <select id="getManagersBy" resultType="priv.shiroko.amis.entity.Manager">
+        SELECT * FROM manager
+        <include refid="getManagersWhere"/>
+        LIMIT #{last}, #{count};
+    </select>
+    <select id="getManagersCountBy" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM manager
+        <include refid="getManagersWhere"/>
+    </select>
+    <insert id="insertManager" parameterType="Manager">
+        INSERT INTO manager (
+        <include refid="BaseColumnNames"/>
+        ) VALUES (
+        <include refid="BaseColumnValues"/>
+        );
+    </insert>
+    <update id="updateManager" parameterType="Manager">
+        UPDATE manager
+        <set>
+            <if test="userId != null">user_id=#{userId},</if>
+            <if test="name != null">name=#{name},</if>
+            <if test="sex != null">sex=#{sex},</if>
+            <if test="birthday != null">birthday=#{birthday},</if>
+            <if test="icNum != null">ic_num=#{icNum},</if>
+            <if test="ethnic != null">ethnic=#{ethnic},</if>
+            <if test="politicalStatus != null">political_status=#{politicalStatus},</if>
+            <if test="nativePlace != null">native_place=#{nativePlace},</if>
+            <if test="photo != null">photo=#{photo},</if>
+            <if test="education != null">education=#{education},</if>
+            <if test="graduated != null">graduated=#{graduated},</if>
+            <if test="school != null">school=#{school},</if>
+            <if test="unit != null">unit=#{unit},</if>
+            <if test="dept != null">dept=#{dept},</if>
+            <if test="businessLine != null">business_line=#{businessLine},</if>
+            <if test="job != null">job=#{job},</if>
+            <if test="hiredDate != null">hired_date=#{hiredDate},</if>
+            <if test="enteredDate != null">entered_date=#{enteredDate},</if>
+            <if test="financialAgeLimit != null">financial_age_limit=#{financialAgeLimit},</if>
+            <if test="managerAgeLimit != null">manager_age_limit=#{managerAgeLimit},</if>
+            <if test="totalCredits != null">total_credits=#{totalCredits},</if>
+            <if test="yearCredits != null">year_credits=#{yearCredits},</if>
+            <if test="exitDate != null">exit_date=#{exitDate},</if>
+            <if test="lastYearAssessment != null">last_year_assessment=#{lastYearAssessment},</if>
+            <if test="qualificationCertId != null">qualification_cert_id=#{qualificationCertId},</if>
+            <if test="qualificationCertDate != null">qualification_cert_date=#{qualificationCertDate},</if>
+            <if test="jobCertId != null">job_cert_id=#{jobCertId},</if>
+            <if test="jobCertDate != null">job_cert_date=#{jobCertDate},</if>
+            <if test="mobile != null">mobile=#{mobile},</if>
+            <if test="officeTel != null">office_tel=#{officeTel},</if>
+            <if test="professionalTitle != null">professional_title=#{professionalTitle},</if>
+            <if test="managerLevel != null">manager_level=#{managerLevel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

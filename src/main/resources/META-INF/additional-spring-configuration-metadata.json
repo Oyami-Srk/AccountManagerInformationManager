@@ -20,6 +20,16 @@
       "type": "java.lang.String",
       "description": "BCrypt cost.",
       "defaultValue": 12
+    },
+    {
+      "name": "amis.cache-folder",
+      "type": "java.lang.String",
+      "description": "Cache folder for Server running."
+    },
+    {
+      "name": "amis.upload-folder",
+      "type": "java.lang.String",
+      "description": "Upload folder for file uploading."
     }
   ]
 }

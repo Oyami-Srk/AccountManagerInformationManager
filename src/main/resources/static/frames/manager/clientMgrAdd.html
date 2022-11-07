@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="../../css/style.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/distpicker.min.js"></script>
+    <script type="text/javascript" src="../../js/idcard.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $("[name='icNum']").change(() => {
+                let ic = $("[name='icNum']").val();
+                if (ic.length === 0 || idcard.validator(ic)) {
+                    $("#idcard_ready").prop('style', 'display: none;');
+                } else {
+                    $("#idcard_ready").prop('style', '');
+                }
+            });
+
+            $("#addform").submit((e) => {
+                let olddata = new FormData($("#addform")[0]);
+                let data = new FormData();
+                let unnullable = {
+                    id: "客户经理编号",
+                    name: "姓名",
+                    icNum: "身份证号",
+                    birthday: "出生年月",
+                    officeTel: "办公电话",
+                    businessLine: "业务条线",
+                    managerLevel: "客户经理等级"
+                };
+                for (let [key, value] of olddata.entries()) {
+                    console.log(key);
+                    console.log(value);
+                    if (key === 'photo' && value.size !== 0) data.append(key, value);
+                    else if (value.length !== 0) data.append(key, value);
+                    else if (key in unnullable) {
+                        window.top.promptAlert(`${unnullable[key]}不能为空！`);
+                        return false;
+                    }
+                }
+
+                if (idcard.validator(data.get('icNum')) === false) {
+                    window.top.promptAlert("身份证号格式错误！");
+                    return false;
+                }
+
+                let native_place = "";
+                if (data.get('province') !== null) {
+                    native_place += data.get('province');
+                    data.delete('province');
+                }
+                if (data.get('city') !== null) {
+                    native_place += data.get('city');
+                    data.delete('city');
+                }
+                if (data.get('area') !== null) {
+                    native_place += data.get('area');
+                    data.delete('area');
+                }
+                if (native_place.length !== 0)
+                    data.set('nativePlace', native_place);
+                let photo = data.get('photo');
+                if (photo.size === 0) {
+                    data.delete('photo');
+                }
+                $.ajax({
+                    url: "/api/manager/add",
+                    method: "POST",
+                    data,
+                    processData: false,
+                    contentType: false
+                }).done((resp) => {
+                    if (resp.status === "OK") {
+                        window.top.promptAlert(resp.message);
+                        setTimeout(() => {
+                            window.location.replace("clientMgr.html");
+                        }, 1000);
+                    } else {
+                        window.top.promptAlert(resp.message);
+                    }
+                });
+
+                return false;
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="clientMgr.html">客户经理信息综合管理维护</a></li>
+        <li><a href="clientMgrAdd.html">添加</a></li>
+    </ul>
+</div>
+
+<form action="" method="post" id="addform">
+    <div class="formbody">
+        <div class="formtitle"><span>客户经理基本信息</span></div>
+        <ul class="forminfo">
+            <li><span>标为*的为必填项。</span></li>
+            <br/>
+            <li><label>客户经理编号*</label><input name="id" type="text" class="dfinput" value=""/></li>
+            <li><label>姓名*</label><input name="name" type="text" class="dfinput" value=""/></li>
+            <li><label>性别*</label><cite><input name="sex" type="radio" value="MALE" checked="checked"/>男&nbsp;&nbsp;&nbsp;&nbsp;<input
+                    name="sex" type="radio" value="FEMALE"/>女</cite></li>
+            <li><label>身份证号*</label><input name="icNum" type="text" class="dfinput" value=""/>
+                <span id="idcard_ready" style="display: none;"><span style="color: red">身份证号有误</span></span>
+            </li>
+            <li><label>出生年月*</label><input name="birthday" type="date" class="dfinput" value=""/></li>
+            <li><label>民族</label><cite><select name="ethnic" class="dfselect">
+                <option value="">请选择</option>
+                <option value="汉族">汉族</option>
+                <option value="蒙古族">蒙古族</option>
+                <option value="回族">回族</option>
+                <option value="藏族">藏族</option>
+                <option value="维吾尔族">维吾尔族</option>
+                <option value="苗族">苗族</option>
+                <option value="彝族">彝族</option>
+                <option value="壮族">壮族</option>
+                <option value="布依族">布依族</option>
+                <option value="朝鲜族">朝鲜族</option>
+                <option value="满族">满族</option>
+                <option value="侗族">侗族</option>
+                <option value="瑶族">瑶族</option>
+                <option value="白族">白族</option>
+                <option value="土家族">土家族</option>
+                <option value="哈尼族">哈尼族</option>
+                <option value="哈萨克族">哈萨克族</option>
+                <option value="傣族">傣族</option>
+                <option value="黎族">黎族</option>
+                <option value="僳僳族">僳僳族</option>
+                <option value="佤族">佤族</option>
+                <option value="畲族">畲族</option>
+                <option value="高山族">高山族</option>
+                <option value="拉祜族">拉祜族</option>
+                <option value="水族">水族</option>
+                <option value="东乡族">东乡族</option>
+                <option value="纳西族">纳西族</option>
+                <option value="景颇族">景颇族</option>
+                <option value="柯尔克孜族">柯尔克孜族</option>
+                <option value="土族">土族</option>
+                <option value="达斡尔族">达斡尔族</option>
+                <option value="仫佬族">仫佬族</option>
+                <option value="羌族">羌族</option>
+                <option value="布朗族">布朗族</option>
+                <option value="撒拉族">撒拉族</option>
+                <option value="毛南族">毛南族</option>
+                <option value="仡佬族">仡佬族</option>
+                <option value="锡伯族">锡伯族</option>
+                <option value="阿昌族">阿昌族</option>
+                <option value="普米族">普米族</option>
+                <option value="塔吉克族">塔吉克族</option>
+                <option value="怒族">怒族</option>
+                <option value="乌孜 别克族">乌孜 别克族</option>
+                <option value="俄罗斯族">俄罗斯族</option>
+                <option value="鄂温克族">鄂温克族</option>
+                <option value="德昂族">德昂族</option>
+                <option value="保安族">保安族</option>
+                <option value="裕固族">裕固族</option>
+                <option value="京族">京族</option>
+                <option value="塔塔尔族">塔塔尔族</option>
+                <option value="独龙族">独龙族</option>
+                <option value="鄂伦春族">鄂伦春族</option>
+                <option value="赫哲族">赫哲族</option>
+                <option value="门巴族">门巴族</option>
+                <option value="珞巴族">珞巴族</option>
+                <option value="基诺族">基诺族</option>
+                <option value="其他">其他</option>
+            </select></cite></li>
+            <li><label>政治面貌</label><cite><select name="politicalStatus" class="dfselect">
+                <option value="">请选择</option>
+                <option value="中共党员">中共党员</option>
+                <option value="中共预备党员">中共预备党员</option>
+                <option value="共青团员">共青团员</option>
+                <option value="民革会员">民革会员</option>
+                <option value="民盟盟员">民盟盟员</option>
+                <option value="民建会员">民建会员</option>
+                <option value="民进会员">民进会员</option>
+                <option value="农工党党员">农工党党员</option>
+                <option value="致公党党员">致公党党员</option>
+                <option value="九三学社社员">九三学社社员</option>
+                <option value="台盟盟员">台盟盟员</option>
+                <option value="无党派民主人士">无党派民主人士</option>
+                <option value="群众">群众</option>
+            </select></cite></li>
+            <li><label>籍贯</label>
+                <div data-toggle="distpicker">
+                    <select name="province" data-province="---省---" class="dfselect1"></select>
+                    <select name="city" data-city="---市---" class="dfselect1"></select>
+                    <select name="area" data-district="---区---" class="dfselect1"></select>
+                </div>
+            </li>
+            <li><label>照片</label><input name="photo" type="file" class="dfselect1"/></li>
+            <li><label>学历</label><cite><select name="education" class="dfselect1">
+                <option value="">请选择</option>
+                <option value="小学">小学</option>
+                <option value="初中">初中</option>
+                <option value="高中">高中</option>
+                <option value="中专">中专</option>
+                <option value="高职">高职</option>
+                <option value="专科">专科</option>
+                <option value="本科">本科</option>
+                <option value="硕士研究生">硕士研究生</option>
+                <option value="博士研究生">博士研究生</option>
+            </select></cite></li>
+            <li><label>学位</label><cite><select name="graduated" class="dfselect">
+                <option value="">请选择</option>
+                <option value="学士">学士</option>
+                <option value="硕士">硕士</option>
+                <option value="博士">博士</option>
+                <option value="其他">其他</option>
+            </select></cite></li>
+            <li><label>毕业院校及专业</label><input name="school" type="text" class="dfinput" value=""/></li>
+            <li><label>专业技术职称</label>
+                <div class="vocation">
+                    <select name="professionalTitle" class="dfselect1">
+                        <option value="">无</option>
+                        <option value="其他">其他</option>
+                        <optgroup label="工程专业技术人员">
+                            <option value="工程师">工程师</option>
+                            <option value="助理工程师">助理工程师</option>
+                            <option value="高级工程师">高级工程师</option>
+                        </optgroup>
+                        <optgroup label="经济专业技术人员">
+                            <option value="经济师">经济师</option>
+                            <option value="助理经济师">助理经济师</option>
+                            <option value="高级经济师">高级经济师</option>
+                        </optgroup>
+                        <optgroup label="会计专业技术人员">
+                            <option value="会计师">会计师</option>
+                            <option value="助理会计师">助理会计师</option>
+                            <option value="高级会计师">高级会计师</option>
+                        </optgroup>
+                        <optgroup label="统计专业技术人员">
+                            <option value="统计师">统计师</option>
+                            <option value="助理统计师">助理统计师</option>
+                            <option value="高级统计师">高级统计师</option>
+                        </optgroup>
+                        <optgroup label="审计专业技术人员">
+                            <option value="审计师">审计师</option>
+                            <option value="助理审计师">助理审计师</option>
+                            <option value="高级审计师">高级审计师</option>
+                        </optgroup>
+                        <optgroup label="政工专业技术人员">
+                            <option value="政工师">政工师</option>
+                            <option value="助理政工师">助理政工师</option>
+                            <option value="高级政工师">高级政工师</option>
+                        </optgroup>
+
+                    </select></div>
+            </li>
+            <li><label>客户经理等级*</label><cite>
+                <select name="managerLevel" class="dfselect1">
+                    <option value="">请选择</option>
+                    <option value="高级专家级客户经理">高级专家级客户经理</option>
+                    <option value="专家级客户经理">专家级客户经理</option>
+                    <option value="资深客户经理">资深客户经理</option>
+                    <option value="高级客户经理">高级客户经理</option>
+                    <option value="客户经理">客户经理</option>
+                    <option value="客户经理助理">客户经理助理</option>
+                    <option value="无">无</option>
+                </select></cite></li>
+
+            <li><label>所在单位</label><input name="dept" type="text" class="dfinput" value=""/></li>
+            <li><label>部门</label><input name="unit" type="text" class="dfinput" value=""/></li>
+            <li><label>职务</label><input name="job" type="text" class="dfinput" value=""/></li>
+
+            <li><label>业务条线*</label><cite>
+                <select name="businessLine" class="dfselect">
+                    <option value="">请选择</option>
+                    <option value="BUSINESS">对公</option>
+                    <option value="PERSONAL">对个人</option>
+                </select></cite></li>
+
+            <li><label>参加工作时间</label><input name="hiredDate" type="date" class="dfinput" value=""/></li>
+            <li><label>入行时间</label><input name="enteredDate" type="date" class="dfinput" value=""/></li>
+            <li><label>退出时间</label><input name="exitDate" type="date" class="dfinput" value=""/></li>
+
+            <li><label>从事金融工作年限</label><input name="financialAgeLimit" type="number" class="dfinput"
+                                                      value=""/></li>
+            <li><label>客户经理从业年限</label><input name="managerAgeLimit" type="number" class="dfinput" value=""/>
+            </li>
+
+            <li><label>办公电话*</label><input name="officeTel" type="text" class="dfinput" value=""/></li>
+            <li><label>手机</label><input name="mobile" type="text" class="dfinput" value=""/></li>
+
+            <li>&nbsp;&nbsp;<input name="" type="submit" class="btn" value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input
+                    name="" type="reset" class="btn" value="重置"/></li>
+        </ul>
+
+    </div>
+</form>
+</body>
+
+</html>

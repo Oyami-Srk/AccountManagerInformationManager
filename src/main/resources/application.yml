@@ -13,6 +13,9 @@ spring:
     resources:
       cache:
         period: 0
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
 
 mybatis:
   type-aliases-package: priv.shiroko.amis.entity
@@ -22,6 +25,8 @@ mybatis:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 
 amis:
+  cache-folder: data/cache
+  upload-folder: data/upload
   bcrypt-cost: 12
   defaults:
     admin-username: admin

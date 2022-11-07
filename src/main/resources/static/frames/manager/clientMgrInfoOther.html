@@ -1,0 +1,859 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="../../css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../../css/select.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        tbody#data td a {
+            color: blue;
+            text-underline: blue;
+            text-decoration: underline;
+        }
+    </style>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="../../js/select-ui.min.js"></script>
+    <script type="text/javascript" src="../../editor/kindeditor.js"></script>
+    <script type="text/javascript" src="../../js/utils.js"></script>
+    <script type="text/javascript">
+        /*
+        KE.show({
+            id: 'content7',
+            cssPath: './index.css'
+        });*/
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 260
+            });
+            $(".select2").uedSelect({
+                width: 167
+            });
+            $(".select3").uedSelect({
+                width: 100
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        let query_params = {};
+
+        function appendRecord(table, fields, data) {
+            let tr = $("<tr/>", {
+                id: data.id
+            }).appendTo(table);
+
+            $("<input/>", {
+                type: "checkbox"
+            }).wrap("<td/>").parent().appendTo(tr);
+            for (let field of fields) {
+                if (data[field] === null) {
+                    $("<td/>", {}).appendTo(tr);
+                    continue;
+                }
+                let text = data[field].toString();
+                // special case
+                if (field.match(/[Dd]ate$/) !== null || field === "lastUpdate")
+                    text = timestamp_to_date_string(data[field]);
+                else if (field === "valid")
+                    text = data[field] ? "有效" : "失效";
+                else if (field === "invalidMark")
+                    text = data[field] ? "已作废" : "未作废";
+                else if (field === "attachment" && data[field].length > 0) {
+                    let a = getAttachment(data[field]);
+                    a.wrap("<td/>").parent().appendTo(tr);
+                    continue;
+                }
+                $("<td/>", {
+                    text
+                }).appendTo(tr);
+            }
+        }
+
+        function initTab(tabname) {
+            let tab = $("#" + tabname);
+            let name = tab.attr('name');
+            console.log(`Setting up Tab for ${name}`);
+            if ($.isEmptyObject(query_params)) {
+                $("#" + tabname + " ul.searchform input[name]").val('');
+            }
+            let checkboxes = tab.find("table input[type='checkbox']");
+            for (let checkbox of checkboxes) {
+                $(checkbox).prop('checked', false);
+            }
+            let fields =
+                Array.from(tab.find('thead th[name]').map((_, e) => $(e).attr('name')));
+            let table = tab.find("tbody[id='data']");
+            table.empty();
+            let data = {
+                count: 999999999
+            };
+            data = Object.assign({}, data, query_params);
+            $.ajax({
+                url: `/api/manager/detail/${name}/get`,
+                data,
+                method: "GET",
+            }).done((resp) => {
+                if (resp.status === "OK") {
+                    let managers = resp.data;
+                    for (let manager of managers) {
+                        appendRecord(table, fields, manager);
+                    }
+                } else {
+                    if (typeof (resp) !== 'object') {
+                        window.top.promptAlert("登录失效！");
+                        setTimeout(() => {
+                            window.top.location.replace("/login.html");
+                        }, 1000);
+                    } else {
+                        window.top.promptAlert("查询失败！" + resp.message);
+                    }
+                }
+            })
+        }
+
+        $(document).ready(() => {
+            $(".itab ul li a").click((e) => {
+                query_params = {};
+                initTab(e.target.href.match(/html#(.*)/)[1]);
+            });
+            initTab("tab1");
+
+            $(".scbtn").click((e) => {
+                let tab = $(e.target).parents("div.tabson[name]");
+                let tabname = tab.prop('id');
+                let params = {};
+                for (let input of tab.find('.searchform input[name]')) {
+                    if (input.value !== null && input.value.length > 0)
+                        params[input.name] = input.value;
+                }
+                query_params = params;
+                initTab(tabname);
+            });
+
+            $(".delete-btn").click((e) => {
+                let tab = $(e.target).parents("div.tabson[name]");
+                let tabname = tab.prop('id');
+                let apiname = tab.attr('name');
+                let ids = getSelectedIds(tab);
+                if (ids.length === 0) {
+                    window.top.promptAlert("没有选中任何记录。");
+                    return;
+                }
+                if (confirm("您确定要删除选中的记录吗？")) {
+                    console.log(ids);
+                    let t = ids.length;
+                    ids.forEach((id) => {
+                        $.ajax({
+                            url: `/api/manager/detail/${apiname}/delete`,
+                            data: {
+                                id
+                            },
+                            method: "POST"
+                        }).done((resp) => {
+                            t--;
+                            if (t === 0) {
+                                window.top.promptAlert("成功。");
+                                initTab(tabname);
+                            }
+                        })
+                    });
+                }
+            });
+
+            $(".selall").click((e) => {
+                let check = $(e.target);
+                let checkboxes = check.parents("table").find("tbody[id='data'] input[type='checkbox']");
+                let checked = check.prop('checked');
+                for (let checkbox of checkboxes) {
+                    $(checkbox).prop('checked', checked);
+                }
+            });
+
+            $(".add-btn").click((e) => {
+                let tab = $(e.target).parents("div.tabson[name]");
+                let tabname = tab.prop('id');
+                let apiname = tab.attr('name');
+                let popup = $("#window-" + apiname);
+                popup.css('display', 'block');
+                let title = popup.find('div.formtitle span');
+                title.text('添加' + popup.attr('name'));
+                popup.find("input[name='managerId']").prop('readonly', false);
+                popup.find("input[name='attachment']").val('');
+                let form = popup.find(".forminfo");
+                form.removeAttr('id');
+            });
+
+            $(".update-btn").click((e) => {
+                let tab = $(e.target).parents("div.tabson[name]");
+                let tabname = tab.prop('id');
+                let apiname = tab.attr('name');
+                let ids = getSelectedIds(tab);
+                if (ids.length === 0) {
+                    window.top.promptAlert("请选择需要修改的记录。");
+                    return;
+                } else if (ids.length > 1) {
+                    window.top.promptAlert("只能修改一条记录。");
+                    return;
+                }
+                let id = ids[0];
+                let popup = $("#window-" + apiname);
+                popup.css('display', 'block');
+                let title = popup.find('div.formtitle span');
+                title.text('修改' + popup.attr('name'));
+                popup.find("input[name='attachment']").val('');
+                /*
+                popup.find("input[name='managerId']").prop('readonly', true).val(id).css({
+                    background: '#eee',
+                    cursor: 'not-allowed'
+                }); */
+                let form = popup.find(".forminfo");
+                form.attr('id', id);
+                $.ajax({
+                    url: `/api/manager/detail/${apiname}/get`,
+                    method: 'GET',
+                    data: {
+                        id
+                    }
+                }).done((resp) => {
+                    if (resp.status === "OK") {
+                        let data = resp.data[0];
+                        for (let input of form.find("input[name]")) {
+                            input = $(input);
+                            let field = input.attr('name');
+                            console.log(input, field);
+                            if (data[field] === undefined || data[field] === null) {
+                                continue;
+                            }
+                            let text = data[field].toString();
+                            // special case
+                            if (field.match(/[Dd]ate$/) !== null || field === "lastUpdate")
+                                text = timestamp_to_date_string(data[field]);
+                            else if (field === "valid")
+                                text = data[field] ? "有效" : "失效";
+                            else if (field === "invalidMark")
+                                text = data[field] ? "已作废" : "未作废";
+                            input.val(text);
+                        }
+                    } else {
+                        window.top.promptAlert("记录查询失败！" + resp.message);
+                    }
+                });
+            });
+
+            $(".close-window-btn").click((e) => {
+                let window = $(e.target).parents("div[id^='window-']");
+                window.css('display', 'none');
+            });
+
+            $("div.firstScan_main form").submit((e) => {
+                e.preventDefault();
+                let form = $(e.target).parents("div[id^='window-']");
+                let apiname = form.attr('id').match(/window-(.*)/)[1];
+                let tabname = $(`div.tabson[name='${apiname}']`).prop('id');
+                let type = "add";
+                let update_id = null;
+                if ((update_id = form.find('ul.forminfo').prop('id'))) {
+                    type = "update";
+                }
+                let old_data = new FormData($(e.target)[0]);
+                let data = new FormData();
+                let file = null;
+                for (let [key, value] of old_data.entries()) {
+                    console.log(key);
+                    console.log(value);
+                    if (key === "attachmentFile" && value.size > 0) {
+                        file = value;
+                    } else if (value.length > 0) {
+                        data.append(key, value);
+                    }
+                }
+
+                if (old_data.get('managerId').length === 0) {
+                    window.top.promptAlert("客户经理编号不能为空。");
+                    return false;
+                }
+
+                let do_post = () => {
+                    console.log(data);
+                    if (type === "update")
+                        data.append('id', update_id);
+                    $.ajax({
+                        url: `/api/manager/detail/${apiname}/${type}`,
+                        method: 'POST',
+                        data,
+                        processData: false,
+                        contentType: false,
+                    }).done((resp) => {
+                        if (resp.status === "OK") {
+                            window.top.promptAlert(resp.message);
+                            form.find("input[type='reset']").click();
+                            initTab(tabname);
+                        } else {
+                            window.top.promptAlert(resp.message);
+                        }
+                        return false;
+                    });
+                }
+
+                if (file !== null) {
+                    let file_data = new FormData();
+                    file_data.append("file", file);
+                    $.ajax({
+                        url: '/api/file/upload',
+                        method: 'POST',
+                        processData: false,
+                        contentType: false,
+                        data: file_data
+                    }).done((resp) => {
+                        if (resp.status === "OK") {
+                            let uuid = resp.data;
+                            data.append("attachment", uuid);
+                            do_post();
+                        } else {
+                            window.top.promptAlert("上传文件失败！" + resp.message);
+                            return false;
+                        }
+                    });
+                } else {
+                    do_post();
+                }
+
+                return false;
+            });
+
+        });
+
+        function getSelectedIds(tab) {
+            return Array.from(tab.find("#data")
+                .find("input[type='checkbox']:checked")
+                .map((_, b) =>
+                    parseInt($(b).parent().parent().prop('id'))));
+        }
+
+        function getAttachment(uuid) {
+            let a = $("<a/>");
+            $.ajax({
+                url: "/api/file/filename",
+                method: "GET",
+                data: {
+                    uuid
+                }
+            }).done((resp) => {
+                if (resp.status === "OK") {
+                    a.text(resp.data);
+                    a.prop('href', "/api/file/download?uuid=" + uuid);
+                }
+            });
+            return a;
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">客户经理辅助信息维护</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+
+
+    <div id="usual1" class="usual">
+
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" class="selected">年度工作业绩</a></li>
+                <li><a href="#tab2">证照列表</a></li>
+                <li><a href="#tab3">奖惩记录</a></li>
+                <li><a href="#tab4">考核记录</a></li>
+                <li><a href="#tab5">学习培训记录</a></li>
+                <li><a href="#tab6">等级认定记录</a></li>
+                <li><a href="#tab7">工作经历</a></li>
+            </ul>
+        </div>
+
+        <!--年度工作业绩  -->
+        <div id="tab1" class="tabson" name="annual_performance">
+            <ul class="searchform">
+                <li><label>客户经理编号</label><input name="managerId" type="text" class="scinput"/></li>
+                <li><label>工作年度</label><input name="year" type="text" class="scinput"/></li>
+                <li><label>&nbsp;</label><input type="button" class="scbtn" value="查询"/></li>
+            </ul>
+            <div class="tools">
+                <ul class="toolbar1">
+                    <li><a class="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+                    <li><a class="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+                    <li><a class="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a>
+                    </li>
+                </ul>
+            </div>
+
+            <table class="tablelist">
+                <thead>
+                <tr class="tablehead">
+                    <td colspan="10">年度工作业绩</td>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th><input class="selall" type="checkbox" value=""/></th>
+                    <th name="name">姓名</th>
+                    <th name="year">工作年度</th>
+                    <th name="performance">工作业绩</th>
+                    <th name="lastUpdate">维护日期</th>
+                    <th name="updateUsername">维护人</th>
+                </tr>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </div>
+        <!--证件列表  -->
+        <div id="tab2" class="tabson" name="certificate">
+            <ul class="searchform">
+                <li><label>客户经理编号</label><input name="managerId" type="text" class="scinput"/></li>
+                <li><label>证书类型</label><input name="type" type="text" class="scinput"/></li>
+                <li><label>&nbsp;</label><input type="button" class="scbtn" value="查询"/></li>
+            </ul>
+            <div class="tools">
+                <ul class="toolbar1">
+                    <li><a class="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+                    <li><a class="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+                    <li><a class="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a>
+                    </li>
+                </ul>
+            </div>
+
+            <table class="tablelist">
+                <thead>
+                <tr class="tablehead">
+                    <td colspan="12">证照列表</td>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th><input class="selall" type="checkbox" value=""/></th>
+                    <th name="name">姓名</th>
+                    <th name="certName">证书名称</th>
+                    <th name="type">证书类型</th>
+                    <th name="certId">证书编号</th>
+                    <th name="issuer">发证单位</th>
+                    <th name="issueDate">发证时间</th>
+                    <th name="endDate">失效时间</th>
+                    <th name="valid">有效性</th>
+                    <th name="invalidMark">作废标识</th>
+                    <th name="lastUpdate">维护日期</th>
+                    <th name="updateUsername">维护人</th>
+                </tr>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </div>
+        <!--奖惩记录  -->
+        <div id="tab3" class="tabson" name="reward_punishment_record">
+            <ul class="searchform">
+                <li><label>客户经理编号</label><input name="managerId" type="text" class="scinput"/></li>
+                <li><label>奖惩分类</label><input name="type" type="text" class="scinput"/></li>
+                <li><label>&nbsp;</label><input type="button" class="scbtn" value="查询"/></li>
+            </ul>
+            <div class="tools">
+                <ul class="toolbar1">
+                    <li><a class="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+                    <li><a class="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+                    <li><a class="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a>
+                    </li>
+                </ul>
+            </div>
+
+            <table class="tablelist">
+                <thead>
+                <tr class="tablehead">
+                    <td colspan="12">奖惩记录</td>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th><input class="selall" type="checkbox" value=""/></th>
+                    <th name="name">姓名</th>
+                    <th name="type">奖惩分类</th>
+                    <th name="context">奖惩内容</th>
+                    <th name="date">生效日期</th>
+                    <th name="unit">审批单位</th>
+                    <th name="person">审批人</th>
+                    <th name="withdrawDate">撤销日期</th>
+                    <th name="withdrawReason">撤销原因</th>
+                    <th name="attachment">附件依据</th>
+                    <th name="lastUpdate">维护日期</th>
+                    <th name="updateUsername">维护人</th>
+                </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+            </table>
+        </div>
+        <!--考核记录  -->
+        <div id="tab4" class="tabson" name="assessment_record">
+            <ul class="searchform">
+                <li><label>客户经理编号</label><input name="managerId" type="text" class="scinput"/></li>
+                <li><label>考核时间</label><input name="date" type="date" class="scinput"/></li>
+                <li><label>&nbsp;</label><input type="button" class="scbtn" value="查询"/></li>
+            </ul>
+            <div class="tools">
+                <ul class="toolbar1">
+                    <li><a class="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+                    <li><a class="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+                    <li><a class="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a>
+                    </li>
+                </ul>
+            </div>
+
+            <table class="tablelist">
+                <thead>
+                <tr class="tablehead">
+                    <td colspan="12">考核记录</td>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th><input class="selall" type="checkbox" value=""/></th>
+                    <th name="name">姓名</th>
+                    <th name="date">考核时间</th>
+                    <th name="context">考核内容</th>
+                    <th name="result">考核结果</th>
+                    <th name="evaluation">考核评价</th>
+                    <th name="unit">考核单位</th>
+                    <th name="lastUpdate">维护日期</th>
+                    <th name="updateUsername">维护人</th>
+                </tr>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </div>
+        <!--学员培训记录  -->
+        <div id="tab5" class="tabson" name="train_record">
+            <ul class="searchform">
+                <li><label>客户经理编号</label><input name="managerId" type="text" class="scinput"/></li>
+                <li><label>培训时间</label><input name="date" type="date" class="scinput"/></li>
+                <li><label>科目</label><input name="subject" type="text" class="scinput"/></li>
+                <li><label>&nbsp;</label><input type="button" class="scbtn" value="查询"/></li>
+            </ul>
+            <div class="tools">
+                <ul class="toolbar1">
+                    <li><a class="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+                    <li><a class="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+                    <li><a class="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a>
+                    </li>
+                </ul>
+            </div>
+
+            <table class="tablelist">
+                <thead>
+                <tr class="tablehead">
+                    <td colspan="14">学员培训记录</td>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th><input class="selall" type="checkbox" value=""/></th>
+                    <th name="name">姓名</th>
+                    <th name="date">培训时间</th>
+                    <th name="subject">科目</th>
+                    <th name="unit">培训单位</th>
+                    <th name="startDate">开始日期</th>
+                    <th name="endDate">结束日期</th>
+                    <th name="hours">学时</th>
+                    <th name="credit">学分</th>
+                    <th name="score">成绩</th>
+                    <th name="attachment">附件依据</th>
+                    <th name="lastUpdate">维护日期</th>
+                    <th name="updateUsername">维护人</th>
+                </tr>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </div>
+        <!--等级认定记录  -->
+        <div id="tab6" class="tabson" name="level_record">
+            <ul class="searchform">
+                <li><label>客户经理编号</label><input name="managerId" type="text" class="scinput"/></li>
+                <li><label>认定时间</label><input name="date" type="date" class="scinput"/></li>
+                <li><label>认定级别</label><input name="level" type="text" class="scinput"/></li>
+                <li><label>&nbsp;</label><input type="button" class="scbtn" value="查询"/></li>
+            </ul>
+            <div class="tools">
+                <ul class="toolbar1">
+                    <li><a class="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+                    <li><a class="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+                    <li><a class="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a>
+                    </li>
+                </ul>
+            </div>
+
+            <table class="tablelist">
+                <thead>
+                <tr class="tablehead">
+                    <td colspan="14">等级认定记录</td>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th><input class="selall" type="checkbox" value=""/></th>
+                    <th name="name">姓名</th>
+                    <th name="date">认定时间</th>
+                    <th name="level">认定级别</th>
+                    <th name="type">认定类型</th>
+                    <th name="attachment">附件依据</th>
+                    <th name="lastUpdate">维护日期</th>
+                    <th name="updateUsername">维护人</th>
+                </tr>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </div>
+        <!--工作经历  -->
+        <div id="tab7" class="tabson" name="work_record">
+            <ul class="searchform">
+                <li><label>客户经理编号</label><input name="managerId" type="text" class="scinput"/></li>
+                <li><label>职务</label><input name="position" type="text" class="scinput"/></li>
+                <li><label>&nbsp;</label><input type="button" class="scbtn" value="查询"/></li>
+            </ul>
+            <div class="tools">
+                <ul class="toolbar1">
+                    <li><a class="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+                    <li><a class="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+                    <li><a class="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a>
+                    </li>
+                </ul>
+            </div>
+
+            <table class="tablelist">
+                <thead>
+                <tr class="tablehead">
+                    <td colspan="14">工作经历</td>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th><input class="selall" type="checkbox" value=""/></th>
+                    <th name="name">姓名</th>
+                    <th name="officeDate">任职日期</th>
+                    <th name="position">职务</th>
+                    <th name="unit">单位</th>
+                    <th name="workDetail">工作经历</th>
+                    <th name="attachment">附件依据</th>
+                    <th name="lastUpdate">维护日期</th>
+                    <th name="updateUsername">维护人</th>
+                </tr>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </div>
+
+        <!-- Windows -->
+
+        <!--年度工作业绩  -->
+        <div id="window-annual_performance" class="firstScan_main" name="年度工作业绩">
+            <form action="" method="post">
+                <div class="formbody">
+                    <div class="formtitle"><span></span></div>
+
+                    <ul class="forminfo">
+                        <li><label>客户经理编号</label><input name="managerId" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>工作年度</label><input name="year" type="text" class="dfinput" value=""/></li>
+                        <li><label>工作业绩</label><input name="performance" type="text" class="dfinput" value=""/></li>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
+                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                            class="btn close-window-btn"
+                                                                                            value="关闭"
+                        />
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <!--证件列表  -->
+        <div id="window-certificate" class="firstScan_main" name="证件">
+            <form action="" method="post">
+                <div class="formbody">
+                    <div class="formtitle"><span></span></div>
+
+                    <ul class="forminfo">
+                        <li><label>客户经理编号</label><input name="managerId" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>证书名称</label><input name="certName" type="text" class="dfinput" value=""/></li>
+                        <li><label>证书类型</label>
+                            <div class="vocation"><select class="select1" name="type">
+                                <option value="">请选择</option>
+                                <option value="从业资格证">从业资格证</option>
+                                <option value="岗位证书">岗位证书</option>
+                            </select></div>
+                        </li>
+                        <li><label>证书编号</label><input name="certId" type="text" class="dfinput" value=""/></li>
+                        <li><label>发证单位</label><input name="issuer" type="text" class="dfinput" value=""/></li>
+                        <li><label>发证时间</label><input name="issueDate" type="date" class="dfinput" value=""/></li>
+                        <li><label>失效时间</label><input name="endDate" type="date" class="dfinput" value=""/></li>
+                        <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
+                        <input name="attachment" type="hidden"/>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
+                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                            class="btn close-window-btn"
+                                                                                            value="关闭"
+                        />
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <!--奖惩记录  -->
+        <div id="window-reward_punishment_record" class="firstScan_main" name="奖惩记录">
+            <form action="" method="post">
+                <div class="formbody">
+                    <div class="formtitle"><span></span></div>
+
+                    <ul class="forminfo">
+                        <li><label>客户经理编号</label><input name="managerId" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>奖惩分类</label><input name="type" type="text" class="dfinput" value=""/></li>
+                        <li><label>奖惩内容</label><input name="context" type="text" class="dfinput" value=""/></li>
+                        <li><label>生效日期</label><input name="date" type="date" class="dfinput" value=""/></li>
+                        <li><label>审批单位</label><input name="unit" type="text" class="dfinput" value=""/></li>
+                        <li><label>审批人</label><input name="person" type="text" class="dfinput" value=""/></li>
+                        <li><label>撤销日期</label><input name="withdrawDate" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>撤销原因</label><input name="withdrawReason" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
+                        <input name="attachment" type="hidden"/>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
+                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                            class="btn close-window-btn"
+                                                                                            value="关闭"
+                        />
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <!--考核记录  -->
+        <div id="window-assessment_record" class="firstScan_main" name="考核记录">
+            <form action="" method="post">
+                <div class="formbody">
+                    <div class="formtitle"><span></span></div>
+
+                    <ul class="forminfo">
+                        <li><label>客户经理编号</label><input name="managerId" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>考核时间</label><input name="date" type="text" class="dfinput" value=""/></li>
+                        <li><label>考核内容</label><input name="context" type="text" class="dfinput" value=""/></li>
+                        <li><label>考核结果</label><input name="result" type="text" class="dfinput" value=""/></li>
+                        <li><label>考核评价</label><input name="evaluation" type="text" class="dfinput" value=""/></li>
+                        <li><label>考核单位</label><input name="unit" type="text" class="dfinput" value=""/></li>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
+                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                            class="btn close-window-btn"
+                                                                                            value="关闭"
+                        />
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <!--学员培训记录  -->
+        <div id="window-train_record" class="firstScan_main" name="学习培训记录">
+            <form action="" method="post">
+                <div class="formbody">
+                    <div class="formtitle"><span></span></div>
+
+                    <ul class="forminfo">
+                        <li><label>客户经理编号</label><input name="managerId" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>培训时间</label><input name="date" type="date" class="dfinput" value=""/></li>
+                        <li><label>科目</label><input name="subject" type="text" class="dfinput" value=""/></li>
+                        <li><label>培训单位</label><input name="unit" type="text" class="dfinput" value=""/></li>
+                        <li><label>开始日期</label><input name="startDate" type="date" class="dfinput" value=""/></li>
+                        <li><label>结束日期</label><input name="endDate" type="date" class="dfinput" value=""/></li>
+                        <li><label>学时</label><input name="hours" type="number" class="dfinput" value=""/></li>
+                        <li><label>学分</label><input name="credit" type="number" class="dfinput" value=""/></li>
+                        <li><label>成绩</label><input name="score" type="number" class="dfinput" value=""/></li>
+                        <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
+                        <input name="attachment" type="hidden"/>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
+                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                            class="btn close-window-btn"
+                                                                                            value="关闭"
+                        />
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <!--等级认定记录  -->
+        <div id="window-level_record" class="firstScan_main" name="等级认定记录">
+            <form action="" method="post">
+                <div class="formbody">
+                    <div class="formtitle"><span></span></div>
+
+                    <ul class="forminfo">
+                        <li><label>客户经理编号</label><input name="managerId" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>认定时间</label><input name="date" type="text" class="dfinput" value=""/></li>
+                        <li><label>认定级别</label><input name="level" type="text" class="dfinput" value=""/></li>
+                        <li><label>认定类型</label><input name="type" type="text" class="dfinput" value=""/></li>
+                        <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
+                        <input name="attachment" type="hidden"/>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
+                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="reset" class="btn close-window-btn" value="关闭"/>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <!--工作经历  -->
+        <div id="window-work_record" class="firstScan_main" name="工作经历">
+            <form action="" method="post">
+                <div class="formbody">
+                    <div class="formtitle"><span></span></div>
+
+                    <ul class="forminfo">
+                        <li><label>客户经理编号</label><input name="managerId" type="text" class="dfinput" value=""/>
+                        </li>
+                        <li><label>任职日期</label><input name="officeDate" type="text" class="dfinput" value=""/></li>
+                        <li><label>职务</label><input name="position" type="text" class="dfinput" value=""/></li>
+                        <li><label>单位</label><input name="unit" type="text" class="dfinput" value=""/></li>
+                        <li><label>工作经历</label><input name="workDetail" type="text" class="dfinput" value=""/></li>
+                        <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
+                        <input name="attachment" type="hidden"/>
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
+                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                            class="btn close-window-btn"
+                                                                                            value="关闭"
+                        />
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+    </script>
+
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+
+</div>
+
+</body>
+
+</html>

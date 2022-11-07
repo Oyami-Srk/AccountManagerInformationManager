@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.shiroko.amis.mapper.detail.TrainRecordMapper">
+    <sql id="where">
+        <where>
+            <if test="param.id != null">id = #{param.id}</if>
+            <if test="param.managerId != null">AND manager_id = #{param.managerId}</if>
+            <if test="param.lastUpdate != null">AND last_update = #{param.lastUpdate}</if>
+            <if test="param.updateUser != null">AND update_user = #{param.updateUser}</if>
+            <if test="param.attachment != null">AND attachment = #{param.attachment}</if>
+
+            <if test="param.date != null">AND date = #{param.date}</if>
+            <if test="param.subject != null">AND subject = #{param.subject}</if>
+            <if test="param.unit != null">AND unit = #{param.unit}</if>
+            <if test="param.startDate != null">AND start_date = #{param.startDate}</if>
+            <if test="param.endDate != null">AND end_date = #{param.endDate}</if>
+            <if test="param.hours != null">AND hours = #{param.hours}</if>
+            <if test="param.credit != null">AND credit = #{param.credit}</if>
+            <if test="param.score != null">AND score = #{param.score}</if>
+        </where>
+    </sql>
+    <insert id="add" parameterType="priv.shiroko.amis.entity.detail.TrainRecord" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO train_record
+        (manager_id, date, subject, unit, start_date, end_date, hours, credit, score, attachment, update_user) VALUE
+            (#{param.managerId}, #{param.date}, #{param.subject}, #{param.unit}, #{param.startDate}, #{param.endDate},
+             #{param.hours}, #{param.credit}, #{param.score}, #{param.attachment}, #{param.updateUser});
+
+    </insert>
+    <select id="get" resultType="priv.shiroko.amis.entity.detail.TrainRecord">
+        SELECT * FROM train_record
+        <include refid="where"/>
+        LIMIT #{last}, #{count};
+    </select>
+    <select id="count" resultType="integer">
+        SELECT count(*) FROM train_record
+        <include refid="where"/>
+    </select>
+    <update id="update">
+        UPDATE train_record
+        <set>
+            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
+            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+
+            <if test="param.date != null">date = #{param.date}</if>
+            <if test="param.subject != null">subject = #{param.subject}</if>
+            <if test="param.unit != null">unit = #{param.unit}</if>
+            <if test="param.startDate != null">start_date = #{param.startDate}</if>
+            <if test="param.endDate != null">end_date = #{param.endDate}</if>
+            <if test="param.hours != null">hours = #{param.hours}</if>
+            <if test="param.credit != null">credit = #{param.credit}</if>
+            <if test="param.score != null">score = #{param.score}</if>
+        </set>
+        WHERE id=#{param.id}
+    </update>
+
+</mapper>

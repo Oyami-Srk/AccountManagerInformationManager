@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.shiroko.amis.mapper.detail.RewardPunishmentRecordMapper">
+    <sql id="where">
+        <where>
+            <if test="param.id != null">id = #{param.id}</if>
+            <if test="param.managerId != null">AND manager_id = #{param.managerId}</if>
+            <if test="param.lastUpdate != null">AND last_update = #{param.lastUpdate}</if>
+            <if test="param.updateUser != null">AND update_user = #{param.updateUser}</if>
+            <if test="param.attachment != null">AND attachment = #{param.attachment}</if>
+
+            <if test="param.date != null">AND date = #{param.date}</if>
+            <if test="param.type != null">AND type = #{param.type}</if>
+            <if test="param.context != null">AND context = #{param.context}</if>
+            <if test="param.unit != null">AND unit = #{param.unit}</if>
+            <if test="param.person != null">AND person = #{param.person}</if>
+            <if test="param.withdrawDate != null">AND withdraw_date = #{param.withdrawDate}</if>
+            <if test="param.withdrawReason != null">AND withdraw_reason = #{param.withdrawReason}</if>
+        </where>
+    </sql>
+    <insert id="add" parameterType="priv.shiroko.amis.entity.detail.RewardPunishmentRecord" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO reward_punishment_record
+        (manager_id, date, type, context, unit, person, withdraw_date, withdraw_reason, attachment, update_user) VALUE
+            (#{param.managerId}, #{param.date}, #{param.type}, #{param.context}, #{param.unit}, #{param.person},
+             #{param.withdrawDate}, #{param.withdrawReason}, #{param.attachment}, #{param.updateUser});
+    </insert>
+    <select id="get" resultType="priv.shiroko.amis.entity.detail.RewardPunishmentRecord">
+        SELECT * FROM reward_punishment_record
+        <include refid="where"/>
+        LIMIT #{last}, #{count};
+    </select>
+    <select id="count" resultType="integer">
+        SELECT count(*) FROM reward_punishment_record
+        <include refid="where"/>
+    </select>
+    <update id="update">
+        UPDATE reward_punishment_record
+        <set>
+            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
+            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+
+            <if test="param.date != null">date = #{param.date}</if>
+            <if test="param.type != null">type = #{param.type}</if>
+            <if test="param.context != null">context = #{param.context}</if>
+            <if test="param.unit != null">unit = #{param.unit}</if>
+            <if test="param.person != null">person = #{param.person}</if>
+            <if test="param.withdrawDate != null">withdraw_date = #{param.withdrawDate}</if>
+            <if test="param.withdrawReason != null">withdraw_reason = #{param.withdrawReason}</if>
+        </set>
+        WHERE id=#{param.id}
+    </update>
+
+</mapper>

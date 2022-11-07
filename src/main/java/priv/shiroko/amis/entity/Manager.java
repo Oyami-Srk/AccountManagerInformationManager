@@ -1,249 +1,196 @@
 package priv.shiroko.amis.entity;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
+import priv.shiroko.amis.utils.ExcelEnumNameConverter;
+import priv.shiroko.amis.utils.JsonEnumNameSerializer;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * @TableName manager
  */
-@Getter
-@Setter
+@Data
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Manager implements Serializable {
+    @ExcelProperty("编号")
     private Integer id;
 
+    @ExcelIgnore
     private Integer userId;
 
+    @ExcelProperty("姓名")
     private String name;
 
+    @ExcelProperty(value = "性别", converter = ExcelEnumNameConverter.class)
+    @JsonSerialize(using = JsonEnumNameSerializer.class)
     private Sex sex;
 
+    @ExcelProperty("出生日期")
     private Date birthday;
 
+    @ExcelProperty("年龄")
+    private Integer age;
+
+    @ExcelProperty("民族")
     private String ethnic;
 
+    @ExcelProperty("身份证号")
+    private String icNum;
+
+    @ExcelProperty("政治面貌")
     private String politicalStatus;
 
+    @ExcelProperty("籍贯")
     private String nativePlace;
 
-    private String photo;
+    @ExcelIgnore
+    private byte[] photo;
 
+    @ExcelProperty("学历")
     private String education;
 
+    @ExcelProperty("学位")
     private String graduated;
 
+    @ExcelProperty("毕业院校")
+    private String school;
+
+    @ExcelProperty("职称")
     private String professionalTitle;
 
+    @ExcelProperty("客户经理等级")
     private String managerLevel;
 
+    @ExcelProperty("单位")
     private String unit;
 
+    @ExcelProperty("部门")
     private String dept;
 
+    @ExcelProperty(value = "业务条线", converter = ExcelEnumNameConverter.class)
+    @JsonSerialize(using = JsonEnumNameSerializer.class)
     private BusinessLine businessLine;
 
+    @ExcelProperty("职务")
     private String job;
 
+    @ExcelProperty("参加工作时间")
     private Date hiredDate;
 
+    @ExcelProperty("入行时间")
     private Date enteredDate;
 
+    @ExcelProperty("金融工作年限")
     private Integer financialAgeLimit;
 
+    @ExcelProperty("客户经理从业年限")
     private Integer managerAgeLimit;
 
+    @ExcelProperty("累计学分")
     private Double totalCredits;
 
+    @ExcelProperty("当年学分")
     private Double yearCredits;
 
+    @ExcelProperty("退出时间")
     private Date exitDate;
 
+    @ExcelProperty("上年度考核结果")
     private String lastYearAssessment;
 
+    @ExcelProperty("从业资格证编号")
     private String qualificationCertId;
 
+    @ExcelProperty("从业资格证发放日期")
     private Date qualificationCertDate;
 
+    @ExcelProperty("岗位证书编号")
     private String jobCertId;
 
+    @ExcelProperty("岗位证书日期")
     private Date jobCertDate;
 
+    @ExcelProperty("手机")
     private String mobile;
 
+    @ExcelProperty("办公电话")
     private String officeTel;
 
+    @ExcelProperty(value = "客户经理状态", converter = ExcelEnumNameConverter.class)
+    @JsonSerialize(using = JsonEnumNameSerializer.class)
     private Status managerStatus;
 
+    @ExcelProperty("上次更新时间")
     private Date lastUpdate;
 
+
+    @ExcelIgnore
     private static final long serialVersionUID = 1L;
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        Manager other = (Manager) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-                && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-                && (this.getSex() == null ? other.getSex() == null : this.getSex().equals(other.getSex()))
-                && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
-                && (this.getEthnic() == null ? other.getEthnic() == null : this.getEthnic().equals(other.getEthnic()))
-                && (this.getPoliticalStatus() == null ? other.getPoliticalStatus() == null : this.getPoliticalStatus().equals(other.getPoliticalStatus()))
-                && (this.getNativePlace() == null ? other.getNativePlace() == null : this.getNativePlace().equals(other.getNativePlace()))
-                && (this.getPhoto() == null ? other.getPhoto() == null : this.getPhoto().equals(other.getPhoto()))
-                && (this.getEducation() == null ? other.getEducation() == null : this.getEducation().equals(other.getEducation()))
-                && (this.getGraduated() == null ? other.getGraduated() == null : this.getGraduated().equals(other.getGraduated()))
-                && (this.getProfessionalTitle() == null ? other.getProfessionalTitle() == null : this.getProfessionalTitle().equals(other.getProfessionalTitle()))
-                && (this.getManagerLevel() == null ? other.getManagerLevel() == null : this.getManagerLevel().equals(other.getManagerLevel()))
-                && (this.getUnit() == null ? other.getUnit() == null : this.getUnit().equals(other.getUnit()))
-                && (this.getDept() == null ? other.getDept() == null : this.getDept().equals(other.getDept()))
-                && (this.getBusinessLine() == null ? other.getBusinessLine() == null : this.getBusinessLine().equals(other.getBusinessLine()))
-                && (this.getJob() == null ? other.getJob() == null : this.getJob().equals(other.getJob()))
-                && (this.getHiredDate() == null ? other.getHiredDate() == null : this.getHiredDate().equals(other.getHiredDate()))
-                && (this.getEnteredDate() == null ? other.getEnteredDate() == null : this.getEnteredDate().equals(other.getEnteredDate()))
-                && (this.getFinancialAgeLimit() == null ? other.getFinancialAgeLimit() == null : this.getFinancialAgeLimit().equals(other.getFinancialAgeLimit()))
-                && (this.getManagerAgeLimit() == null ? other.getManagerAgeLimit() == null : this.getManagerAgeLimit().equals(other.getManagerAgeLimit()))
-                && (this.getTotalCredits() == null ? other.getTotalCredits() == null : this.getTotalCredits().equals(other.getTotalCredits()))
-                && (this.getYearCredits() == null ? other.getYearCredits() == null : this.getYearCredits().equals(other.getYearCredits()))
-                && (this.getExitDate() == null ? other.getExitDate() == null : this.getExitDate().equals(other.getExitDate()))
-                && (this.getLastYearAssessment() == null ? other.getLastYearAssessment() == null : this.getLastYearAssessment().equals(other.getLastYearAssessment()))
-                && (this.getQualificationCertId() == null ? other.getQualificationCertId() == null : this.getQualificationCertId().equals(other.getQualificationCertId()))
-                && (this.getQualificationCertDate() == null ? other.getQualificationCertDate() == null : this.getQualificationCertDate().equals(other.getQualificationCertDate()))
-                && (this.getJobCertId() == null ? other.getJobCertId() == null : this.getJobCertId().equals(other.getJobCertId()))
-                && (this.getJobCertDate() == null ? other.getJobCertDate() == null : this.getJobCertDate().equals(other.getJobCertDate()))
-                && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
-                && (this.getOfficeTel() == null ? other.getOfficeTel() == null : this.getOfficeTel().equals(other.getOfficeTel()))
-                && (this.getManagerStatus() == null ? other.getManagerStatus() == null : this.getManagerStatus().equals(other.getManagerStatus()))
-                && (this.getLastUpdate() == null ? other.getLastUpdate() == null : this.getLastUpdate().equals(other.getLastUpdate()));
-    }
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getSex() == null) ? 0 : getSex().hashCode());
-        result = prime * result + ((getBirthday() == null) ? 0 : getBirthday().hashCode());
-        result = prime * result + ((getEthnic() == null) ? 0 : getEthnic().hashCode());
-        result = prime * result + ((getPoliticalStatus() == null) ? 0 : getPoliticalStatus().hashCode());
-        result = prime * result + ((getNativePlace() == null) ? 0 : getNativePlace().hashCode());
-        result = prime * result + ((getPhoto() == null) ? 0 : getPhoto().hashCode());
-        result = prime * result + ((getEducation() == null) ? 0 : getEducation().hashCode());
-        result = prime * result + ((getGraduated() == null) ? 0 : getGraduated().hashCode());
-        result = prime * result + ((getProfessionalTitle() == null) ? 0 : getProfessionalTitle().hashCode());
-        result = prime * result + ((getManagerLevel() == null) ? 0 : getManagerLevel().hashCode());
-        result = prime * result + ((getUnit() == null) ? 0 : getUnit().hashCode());
-        result = prime * result + ((getDept() == null) ? 0 : getDept().hashCode());
-        result = prime * result + ((getBusinessLine() == null) ? 0 : getBusinessLine().hashCode());
-        result = prime * result + ((getJob() == null) ? 0 : getJob().hashCode());
-        result = prime * result + ((getHiredDate() == null) ? 0 : getHiredDate().hashCode());
-        result = prime * result + ((getEnteredDate() == null) ? 0 : getEnteredDate().hashCode());
-        result = prime * result + ((getFinancialAgeLimit() == null) ? 0 : getFinancialAgeLimit().hashCode());
-        result = prime * result + ((getManagerAgeLimit() == null) ? 0 : getManagerAgeLimit().hashCode());
-        result = prime * result + ((getTotalCredits() == null) ? 0 : getTotalCredits().hashCode());
-        result = prime * result + ((getYearCredits() == null) ? 0 : getYearCredits().hashCode());
-        result = prime * result + ((getExitDate() == null) ? 0 : getExitDate().hashCode());
-        result = prime * result + ((getLastYearAssessment() == null) ? 0 : getLastYearAssessment().hashCode());
-        result = prime * result + ((getQualificationCertId() == null) ? 0 : getQualificationCertId().hashCode());
-        result = prime * result + ((getQualificationCertDate() == null) ? 0 : getQualificationCertDate().hashCode());
-        result = prime * result + ((getJobCertId() == null) ? 0 : getJobCertId().hashCode());
-        result = prime * result + ((getJobCertDate() == null) ? 0 : getJobCertDate().hashCode());
-        result = prime * result + ((getMobile() == null) ? 0 : getMobile().hashCode());
-        result = prime * result + ((getOfficeTel() == null) ? 0 : getOfficeTel().hashCode());
-        result = prime * result + ((getManagerStatus() == null) ? 0 : getManagerStatus().hashCode());
-        result = prime * result + ((getLastUpdate() == null) ? 0 : getLastUpdate().hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", userId=").append(userId);
-        sb.append(", name=").append(name);
-        sb.append(", sex=").append(sex);
-        sb.append(", birthday=").append(birthday);
-        sb.append(", ethnic=").append(ethnic);
-        sb.append(", politicalStatus=").append(politicalStatus);
-        sb.append(", nativePlace=").append(nativePlace);
-        sb.append(", photo=").append(photo);
-        sb.append(", education=").append(education);
-        sb.append(", graduated=").append(graduated);
-        sb.append(", professionalTitle=").append(professionalTitle);
-        sb.append(", managerLevel=").append(managerLevel);
-        sb.append(", unit=").append(unit);
-        sb.append(", dept=").append(dept);
-        sb.append(", businessLine=").append(businessLine);
-        sb.append(", job=").append(job);
-        sb.append(", hiredDate=").append(hiredDate);
-        sb.append(", enteredDate=").append(enteredDate);
-        sb.append(", financialAgeLimit=").append(financialAgeLimit);
-        sb.append(", managerAgeLimit=").append(managerAgeLimit);
-        sb.append(", totalCredits=").append(totalCredits);
-        sb.append(", yearCredits=").append(yearCredits);
-        sb.append(", exitDate=").append(exitDate);
-        sb.append(", lastYearAssessment=").append(lastYearAssessment);
-        sb.append(", qualificationCertId=").append(qualificationCertId);
-        sb.append(", qualificationCertDate=").append(qualificationCertDate);
-        sb.append(", jobCertId=").append(jobCertId);
-        sb.append(", jobCertDate=").append(jobCertDate);
-        sb.append(", mobile=").append(mobile);
-        sb.append(", officeTel=").append(officeTel);
-        sb.append(", managerStatus=").append(managerStatus);
-        sb.append(", lastUpdate=").append(lastUpdate);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        Calendar now = Calendar.getInstance();
+        Calendar born = Calendar.getInstance();
+        now.setTime(new Date());
+        born.setTime(birthday);
+        if (born.after(now)) {
+            this.age = null;
+        }
+        int age = now.get(Calendar.YEAR) - born.get(Calendar.YEAR);
+        if (now.get(Calendar.DAY_OF_YEAR) < born.get(Calendar.DAY_OF_YEAR))
+            age--;
+        this.age = age;
     }
 
     @Getter
     public enum Sex {
-        MALE("male"),
-        FEMALE("female");
+        MALE("male", "男"),
+        FEMALE("female", "女");
 
         private final String value;
+        private final String name;
 
-        Sex(String value) {
+        Sex(String value, String name) {
             this.value = value;
+            this.name = name;
         }
     }
 
     @Getter
     public enum BusinessLine {
-        BUSINESS("business"),
-        PERSONAL("personal");
+        BUSINESS("business", "对公"),
+        PERSONAL("personal", "个人");
 
         private final String value;
+        private final String name;
 
-        BusinessLine(String value) {
+        BusinessLine(String value, String name) {
             this.value = value;
+            this.name = name;
         }
     }
 
     @Getter
     public enum Status {
-        IN_SERVICE("in-service"),
-        OUT_OF_SERVICE("out-of-service");
+        IN_SERVICE("in-service", "在职"),
+        OUT_OF_SERVICE("out-of-service", "退出");
 
         private final String value;
+        private final String name;
 
-        Status(String value) {
+        Status(String value, String name) {
             this.value = value;
+            this.name = name;
         }
     }
+
 }

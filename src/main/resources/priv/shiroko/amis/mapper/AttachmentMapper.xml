@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.shiroko.amis.mapper.AttachmentMapper">
+    <insert id="createNewFile" parameterType="Attachment">
+        INSERT INTO attachment (uuid, filename)
+        VALUES (#{uuid}, #{filename});
+    </insert>
+    <select id="getFilename" resultType="java.lang.String">
+        SELECT filename
+        FROM attachment
+        WHERE uuid = #{uuid}
+    </select>
+</mapper>

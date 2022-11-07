@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="../../css/style.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/utils.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            let id = new URLSearchParams(window.location.search).get("id");
+            $.ajax({
+                url: "/api/manager/get",
+                method: "GET",
+                data: {
+                    id
+                }
+            }).done((resp) => {
+                if (resp.status === "OK") {
+                    let manager = resp.data[0];
+                    for (let cite of $("ul.forminfo").find('cite')) {
+                        if (cite.id.toString().endsWith("date") || cite.id === 'birthday')
+                            $(cite).text(timestamp_to_date_string(manager[cite.id]));
+                        else
+                            $(cite).text(manager[cite.id]);
+                    }
+                    $("#id").text(manager.id.toString().padStart(6, '0'));
+                    if (manager.photo !== null) {
+                        $("#photo").prop("src", "data:;base64," + manager.photo);
+                    }
+                } else {
+                    window.top.promptAlert("客户经理信息查询失败！");
+                    setTimeout(() => {
+                        window.location.replace("clientMgr.html");
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+    <style>
+        img#photo {
+            max-width: 150px;
+        }
+    </style>
+</head>
+
+
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="clientMgr.html">客户经理信息综合管理维护</a></li>
+        <li><a href="clientMgrInfoDetail.html">查看</a></li>
+    </ul>
+</div>
+
+<form action="" method="post">
+    <div class="formbody">
+        <div class="formtitle"><span>客户经理基本信息</span></div>
+
+        <ul class="forminfo">
+            <li><label>员工号</label><cite id="id"></cite></li>
+            <li><label>姓名</label><cite id="name"></cite></li>
+            <li><label>性别</label><cite id="sex"></cite></li>
+            <li><label>身份证号</label><cite id="ic_num"></cite></li>
+            <li><label>出生年月</label><cite id="birthday"></cite></li>
+            <li><label>年龄</label><cite id="age"></cite></li>
+            <li><label>民族</label><cite id="ethnic"></cite></li>
+            <li><label>政治面貌</label><cite id="political_status"></cite></li>
+            <li><label>籍贯</label><cite id="native_place"></cite></li>
+            <li><label>照片</label><img id="photo" src=""></img></li>
+            <li><label>学历</label><cite id="education"></cite></li>
+            <li><label>学位</label><cite id="graduated"></cite></li>
+            <li><label>毕业院校及专业</label><cite id="school"></cite></li>
+            <li><label>专业技术职称</label><cite id="professional_title"></cite></li>
+            <li><label>客户经理等级</label><cite id="manager_level"></cite></li>
+
+            <li><label>所在单位</label><cite id="dept"></cite></li>
+            <li><label>部门</label><cite id="unit"></cite></li>
+            <li><label>职务</label><cite id="job"></cite></li>
+
+            <li><label>业务条线</label><cite id="business_line"></cite></li>
+            <li><label>参加工作时间</label><cite id="hired_date"></cite></li>
+            <li><label>入行时间</label><cite id="entered_date"></cite></li>
+            <li><label>从事金融工作年限</label><cite id="financial_age_limit"></cite></li>
+            <li><label>客户经理从业年限</label><cite id="manager_age_limit"></cite></li>
+            <li><label>退出时间</label><cite id="exit_date"></cite></li>
+            <li><label>办公电话</label><cite id="office_tel"></cite></li>
+            <li><label>手机</label><cite id="mobile"></cite></li>
+
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+        </ul>
+
+    </div>
+</form>
+</body>
+
+</html>
