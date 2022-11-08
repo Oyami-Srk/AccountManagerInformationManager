@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class User implements Serializable {
+public class User implements Serializable, BasicEntity {
     private Integer id;
 
     @NonNull

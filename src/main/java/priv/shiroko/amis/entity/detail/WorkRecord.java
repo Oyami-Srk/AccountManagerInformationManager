@@ -9,7 +9,7 @@ import java.util.Date;
  * @TableName work_record
  */
 @Data
-public class WorkRecord implements Serializable, BasicEntity {
+public class WorkRecord implements Serializable, DetailBasicEntity {
     private String updateUsername;
 
     private String name;

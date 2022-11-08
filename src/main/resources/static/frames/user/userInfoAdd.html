@@ -41,25 +41,25 @@
                 let cp = $("[name='cpassword']").val();
                 let p = $("[name='password']").val();
                 if (cp !== p) {
-                    $("#passwd_ready").prop('style', '');
+                    $("#passwd_ready").css('display', '');
                 } else {
-                    $("#passwd_ready").prop('style', 'display: none;');
+                    $("#passwd_ready").css('display', 'none');
                 }
             });
             $("[name='idcard']").change(() => {
                 let ic = $("[name='idcard']").val();
                 if (ic.length === 0 || idcard.validator(ic)) {
-                    $("#idcard_ready").prop('style', 'display: none;');
+                    $("#idcard_ready").css('display', 'none');
                 } else {
-                    $("#idcard_ready").prop('style', '');
+                    $("#idcard_ready").css('display', '');
                 }
             });
             $("[name='email']").change(() => {
                 let email = $("[name='email']").val();
                 if (email.length === 0 || checkEmail(email)) {
-                    $("#email_ready").prop('style', 'display: none;');
+                    $("#email_ready").css('display', 'none');
                 } else {
-                    $("#email_ready").prop('style', '');
+                    $("#email_ready").css('display', '');
                 }
             });
 
@@ -136,14 +136,14 @@
             <li><label>用户名*</label><input name="username" type="text" class="dfinput" value=""/></li>
             <li><label>初始密码*</label><input name="password" type="password" class="dfinput" value=""/>
             </li>
-            <li><label>确认初始密码*</label><input name="cpassword" type="password" class="dfinput" value=""/>
-                <span id="passwd_ready" style="display: none;"><span style="color: red">两次密码不一致</span></span>
+            <li><label>确认初始密码*</label><input name="cpassword" type="password" class="dfinput" value=""/><i
+                    id="passwd_ready" style="display: none;color: red !important; font-weight: bold;">两次密码不一致</i>
             </li>
-            <li><label>身份证号</label><input name="idcard" type="text" class="dfinput" value=""/>
-                <span id="idcard_ready" style="display: none;"><span style="color: red">身份证号有误</span></span>
+            <li><label>身份证号</label><input name="idcard" type="text" class="dfinput" value=""/><i id="idcard_ready"
+                                                                                                     style="display: none;color: red !important; font-weight: bold;">身份证号格式错误</i>
             </li>
-            <li><label>邮箱</label><input name="email" type="text" class="dfinput" value="">
-                <span id="email_ready" style="display: none;"><span style="color: red">邮箱格式错误</span></span>
+            <li><label>邮箱</label><input name="email" type="text" class="dfinput" value=""><i id="email_ready"
+                                                                                               style="display: none;color: red !important; font-weight: bold;">邮箱格式错误</i>
             </li>
             <li><label>是否启用*</label><input name="enabled" type="checkbox" checked></li>
             <li><label>角色*</label><cite><select name="role" class="dfselect">

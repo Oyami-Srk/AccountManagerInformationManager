@@ -16,13 +16,18 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 mybatis:
   type-aliases-package: priv.shiroko.amis.entity
   configuration:
     map-underscore-to-camel-case: true
     default-enum-type-handler: priv.shiroko.amis.utils.EnumTypeHandler
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 amis:
   cache-folder: data/cache

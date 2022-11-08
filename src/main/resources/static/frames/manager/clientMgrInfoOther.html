@@ -6,13 +6,6 @@
     <title>无标题文档</title>
     <link href="../../css/style.css" rel="stylesheet" type="text/css"/>
     <link href="../../css/select.css" rel="stylesheet" type="text/css"/>
-    <style type="text/css">
-        tbody#data td a {
-            color: blue;
-            text-underline: blue;
-            text-decoration: underline;
-        }
-    </style>
     <script type="text/javascript" src="../../js/jquery.js"></script>
     <script type="text/javascript" src="../../js/jquery.idTabs.min.js"></script>
     <script type="text/javascript" src="../../js/select-ui.min.js"></script>
@@ -181,6 +174,7 @@
                 popup.css('display', 'block');
                 let title = popup.find('div.formtitle span');
                 title.text('添加' + popup.attr('name'));
+                popup.find("input[type='submit']").val("添加");
                 popup.find("input[name='managerId']").prop('readonly', false);
                 popup.find("input[name='attachment']").val('');
                 let form = popup.find(".forminfo");
@@ -204,6 +198,7 @@
                 popup.css('display', 'block');
                 let title = popup.find('div.formtitle span');
                 title.text('修改' + popup.attr('name'));
+                popup.find("input[type='submit']").val("修改");
                 popup.find("input[name='attachment']").val('');
                 /*
                 popup.find("input[name='managerId']").prop('readonly', true).val(id).css({
@@ -668,10 +663,9 @@
                         </li>
                         <li><label>工作年度</label><input name="year" type="text" class="dfinput" value=""/></li>
                         <li><label>工作业绩</label><input name="performance" type="text" class="dfinput" value=""/></li>
-                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
-                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
-                                                                                            class="btn close-window-btn"
-                                                                                            value="关闭"
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                                         class="btn close-window-btn"
+                                                                                                         value="关闭"
                         />
                         </li>
                     </ul>
@@ -701,10 +695,9 @@
                         <li><label>失效时间</label><input name="endDate" type="date" class="dfinput" value=""/></li>
                         <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
                         <input name="attachment" type="hidden"/>
-                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
-                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
-                                                                                            class="btn close-window-btn"
-                                                                                            value="关闭"
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                                         class="btn close-window-btn"
+                                                                                                         value="关闭"
                         />
                         </li>
                     </ul>
@@ -731,10 +724,9 @@
                         </li>
                         <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
                         <input name="attachment" type="hidden"/>
-                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
-                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
-                                                                                            class="btn close-window-btn"
-                                                                                            value="关闭"
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                                         class="btn close-window-btn"
+                                                                                                         value="关闭"
                         />
                         </li>
                     </ul>
@@ -755,10 +747,9 @@
                         <li><label>考核结果</label><input name="result" type="text" class="dfinput" value=""/></li>
                         <li><label>考核评价</label><input name="evaluation" type="text" class="dfinput" value=""/></li>
                         <li><label>考核单位</label><input name="unit" type="text" class="dfinput" value=""/></li>
-                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
-                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
-                                                                                            class="btn close-window-btn"
-                                                                                            value="关闭"
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                                         class="btn close-window-btn"
+                                                                                                         value="关闭"
                         />
                         </li>
                     </ul>
@@ -784,10 +775,9 @@
                         <li><label>成绩</label><input name="score" type="number" class="dfinput" value=""/></li>
                         <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
                         <input name="attachment" type="hidden"/>
-                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
-                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
-                                                                                            class="btn close-window-btn"
-                                                                                            value="关闭"
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                                         class="btn close-window-btn"
+                                                                                                         value="关闭"
                         />
                         </li>
                     </ul>
@@ -808,8 +798,7 @@
                         <li><label>认定类型</label><input name="type" type="text" class="dfinput" value=""/></li>
                         <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
                         <input name="attachment" type="hidden"/>
-                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
-                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn" value=""/>&nbsp;&nbsp;&nbsp;&nbsp;
                             <input type="reset" class="btn close-window-btn" value="关闭"/>
                         </li>
                     </ul>
@@ -831,10 +820,9 @@
                         <li><label>工作经历</label><input name="workDetail" type="text" class="dfinput" value=""/></li>
                         <li><label>附件上传</label><input name="attachmentFile" type="file" class="dfselect1"/></li>
                         <input name="attachment" type="hidden"/>
-                        <li>&nbsp;&nbsp;<input type="submit" class="btn"
-                                               value="添加"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
-                                                                                            class="btn close-window-btn"
-                                                                                            value="关闭"
+                        <li>&nbsp;&nbsp;<input type="submit" class="btn"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset"
+                                                                                                         class="btn close-window-btn"
+                                                                                                         value="关闭"
                         />
                         </li>
                     </ul>

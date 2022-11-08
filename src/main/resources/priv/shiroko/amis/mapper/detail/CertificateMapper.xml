@@ -44,18 +44,18 @@
     <update id="update">
         UPDATE certificate
         <set>
-            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
-            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
-            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId},</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser},</if>
+            <if test="param.attachment != null">attachment = #{param.attachment},</if>
 
-            <if test="param.certName != null">cert_name = #{param.certName}</if>
-            <if test="param.certId != null">cert_id = #{param.certId}</if>
-            <if test="param.type != null">type = #{param.type}</if>
-            <if test="param.issuer != null">issuer = #{param.issuer}</if>
-            <if test="param.issueDate != null">issue_date = #{param.issueDate}</if>
-            <if test="param.startDate != null">start_date = #{param.startDate}</if>
-            <if test="param.endDate != null">end_date = #{param.endDate}</if>
-            <if test="param.valid != null">valid = #{param.valid}</if>
+            <if test="param.certName != null">cert_name = #{param.certName},</if>
+            <if test="param.certId != null">cert_id = #{param.certId},</if>
+            <if test="param.type != null">type = #{param.type},</if>
+            <if test="param.issuer != null">issuer = #{param.issuer},</if>
+            <if test="param.issueDate != null">issue_date = #{param.issueDate},</if>
+            <if test="param.startDate != null">start_date = #{param.startDate},</if>
+            <if test="param.endDate != null">end_date = #{param.endDate},</if>
+            <if test="param.valid != null">valid = #{param.valid},</if>
             <if test="param.invalidMark != null">invalid_mark = #{param.invalidMark}</if>
         </set>
         WHERE id=#{param.id}

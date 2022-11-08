@@ -13,7 +13,7 @@
     <script type="text/javascript">
         function updateTotal() {
             $.ajax({
-                    url: "/api/manager/count_by",
+                    url: "/api/manager/count",
                     method: "GET",
                     data: query_params
                 }
@@ -54,6 +54,7 @@
                     t--;
                     if (t === 0) {
                         window.top.promptAlert("成功。");
+                        updateTotal();
                         fetch_page(page, count);
                     }
                 })
@@ -152,11 +153,11 @@
                 let dept = data.get("dept");
                 let id = data.get("id");
                 let name = data.get("name");
-                let status = data.get("status");
+                let status = data.get("managerStatus");
                 let my_query_params = {};
                 if (dept.length !== 0) my_query_params["dept"] = dept;
                 if (name.length !== 0) my_query_params["name"] = name;
-                if (status.length !== 0) my_query_params["status"] = status;
+                if (status.length !== 0) my_query_params["managerStatus"] = status;
                 if (id.length !== 0) {
                     if (!isNaN(id = parseInt(id))) {
                         my_query_params["id"] = id;
@@ -168,7 +169,7 @@
                 }
                 query_params = my_query_params;
                 $.ajax({
-                        url: "/api/manager/count_by",
+                        url: "/api/manager/count",
                         method: "GET",
                         data: my_query_params
                     }
@@ -199,6 +200,7 @@
                 }
             ).done((resp) => {
                 $("#page").text(page);
+                $("#allsel").prop('checked', false);
                 if (resp.status === "OK") {
                     $("#datatable").empty();
                     for (let manager of resp.data) {
@@ -318,7 +320,7 @@
             <li><label>姓名</label><input name="name" type="text" class="scinput"/></li>
             <li><label>状态</label>
                 <div class="vocation">
-                    <select name="status" class="select1">
+                    <select name="managerStatus" class="select1">
                         <option value="">请选择</option>
                         <option value="IN_SERVICE">在职</option>
                         <option value="OUT_OF_SERVICE">退出</option>

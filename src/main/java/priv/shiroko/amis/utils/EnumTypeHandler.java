@@ -20,10 +20,11 @@ public class EnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
     }
 
     public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
+        String value = parameter.name().replace("_", "-").toLowerCase();
         if (jdbcType == null) {
-            ps.setString(i, parameter.name());
+            ps.setString(i, value);
         } else {
-            ps.setObject(i, parameter.name(), jdbcType.TYPE_CODE);
+            ps.setObject(i, value, jdbcType.TYPE_CODE);
         }
 
     }

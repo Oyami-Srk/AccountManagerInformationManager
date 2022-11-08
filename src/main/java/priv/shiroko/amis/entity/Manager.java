@@ -2,11 +2,14 @@ package priv.shiroko.amis.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.Getter;
+import priv.shiroko.amis.utils.BasicEnum;
 import priv.shiroko.amis.utils.ExcelEnumNameConverter;
 import priv.shiroko.amis.utils.JsonEnumNameSerializer;
 
@@ -19,7 +22,7 @@ import java.util.Date;
  */
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class Manager implements Serializable {
+public class Manager implements Serializable, BasicEntity {
     @ExcelProperty("编号")
     private Integer id;
 
@@ -34,6 +37,7 @@ public class Manager implements Serializable {
     private Sex sex;
 
     @ExcelProperty("出生日期")
+    @DateTimeFormat("yyyy-MM-dd")
     private Date birthday;
 
     @ExcelProperty("年龄")
@@ -83,9 +87,11 @@ public class Manager implements Serializable {
     private String job;
 
     @ExcelProperty("参加工作时间")
+    @DateTimeFormat("yyyy-MM-dd")
     private Date hiredDate;
 
     @ExcelProperty("入行时间")
+    @DateTimeFormat("yyyy-MM-dd")
     private Date enteredDate;
 
     @ExcelProperty("金融工作年限")
@@ -101,6 +107,7 @@ public class Manager implements Serializable {
     private Double yearCredits;
 
     @ExcelProperty("退出时间")
+    @DateTimeFormat("yyyy-MM-dd")
     private Date exitDate;
 
     @ExcelProperty("上年度考核结果")
@@ -110,12 +117,14 @@ public class Manager implements Serializable {
     private String qualificationCertId;
 
     @ExcelProperty("从业资格证发放日期")
+    @DateTimeFormat("yyyy-MM-dd")
     private Date qualificationCertDate;
 
     @ExcelProperty("岗位证书编号")
     private String jobCertId;
 
     @ExcelProperty("岗位证书日期")
+    @DateTimeFormat("yyyy-MM-dd")
     private Date jobCertDate;
 
     @ExcelProperty("手机")
@@ -129,10 +138,12 @@ public class Manager implements Serializable {
     private Status managerStatus;
 
     @ExcelProperty("上次更新时间")
+    @DateTimeFormat("yyyy-MM-dd HH:MM:SS")
     private Date lastUpdate;
 
 
     @ExcelIgnore
+    @JsonIgnore
     private static final long serialVersionUID = 1L;
 
     public void setBirthday(Date birthday) {
@@ -152,7 +163,7 @@ public class Manager implements Serializable {
     }
 
     @Getter
-    public enum Sex {
+    public enum Sex implements BasicEnum {
         MALE("male", "男"),
         FEMALE("female", "女");
 
@@ -166,7 +177,7 @@ public class Manager implements Serializable {
     }
 
     @Getter
-    public enum BusinessLine {
+    public enum BusinessLine implements BasicEnum {
         BUSINESS("business", "对公"),
         PERSONAL("personal", "个人");
 
@@ -180,7 +191,7 @@ public class Manager implements Serializable {
     }
 
     @Getter
-    public enum Status {
+    public enum Status implements BasicEnum {
         IN_SERVICE("in-service", "在职"),
         OUT_OF_SERVICE("out-of-service", "退出");
 

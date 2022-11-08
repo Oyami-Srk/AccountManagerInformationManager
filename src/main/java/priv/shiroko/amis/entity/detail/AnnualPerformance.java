@@ -9,7 +9,7 @@ import java.util.Date;
  * @TableName annual_performance
  */
 @Data
-public class AnnualPerformance implements Serializable, BasicEntity {
+public class AnnualPerformance implements Serializable, DetailBasicEntity {
     private String updateUsername;
 
     private String name;

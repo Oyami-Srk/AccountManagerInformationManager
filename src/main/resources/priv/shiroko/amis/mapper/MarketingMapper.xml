@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.shiroko.amis.mapper.MarketingMapper">
+    <sql id="where">
+        <where>
+            <if test="param.id != null">id = #{param.id}</if>
+            <if test="param.name != null">AND name = #{param.name}</if>
+            <if test="param.status != null">AND status = #{param.status}</if>
+            <if test="param.requirement != null">AND requirement = #{param.requirement}</if>
+            <if test="param.report != null">AND report = #{param.report}</if>
+            <if test="param.recommend != null">AND recommend = #{param.recommend}</if>
+            <if test="param.evaluation != null">AND evaluation = #{param.evaluation}</if>
+            <if test="param.date != null">AND date = #{param.date}</if>
+        </where>
+    </sql>
+
+    <insert id="add" parameterType="priv.shiroko.amis.entity.Marketing" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO marketing
+            (name, status, requirement, report, recommend, evaluation, date) VALUE
+            (#{param.name}, #{param.status}, #{param.requirement}, #{param.report}, #{param.recommend},
+             #{param.evaluation}, #{param.date});
+    </insert>
+    <select id="get" resultType="priv.shiroko.amis.entity.Marketing">
+        SELECT * FROM marketing
+        <include refid="where"/>
+        LIMIT #{last}, #{count};
+    </select>
+    <select id="getById" resultType="priv.shiroko.amis.entity.Marketing">
+        SELECT *
+        FROM marketing
+        WHERE id = #{id};
+    </select>
+    <select id="hasId" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT 1 FROM marketing WHERE id = #{id});
+    </select>
+    <select id="count" resultType="integer">
+        SELECT count(*) FROM marketing
+        <include refid="where"/>
+    </select>
+    <update id="update">
+        UPDATE marketing
+        <set>
+            <if test="param.name != null">name = #{param.name},</if>
+            <if test="param.status != null">status = #{param.status},</if>
+            <if test="param.requirement != null">requirement = #{param.requirement},</if>
+            <if test="param.report != null">report = #{param.report},</if>
+            <if test="param.recommend != null">recommend = #{param.recommend},</if>
+            <if test="param.evaluation != null">evaluation = #{param.evaluation},</if>
+            <if test="param.date != null">date = #{param.date}</if>
+        </set>
+        WHERE id=#{param.id}
+    </update>
+    <delete id="deleteById">
+        DELETE
+        FROM marketing
+        WHERE id = #{id};
+    </delete>
+
+</mapper>

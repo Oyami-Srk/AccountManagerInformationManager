@@ -39,16 +39,16 @@
     <update id="update">
         UPDATE reward_punishment_record
         <set>
-            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
-            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
-            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId},</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser},</if>
+            <if test="param.attachment != null">attachment = #{param.attachment},</if>
 
-            <if test="param.date != null">date = #{param.date}</if>
-            <if test="param.type != null">type = #{param.type}</if>
-            <if test="param.context != null">context = #{param.context}</if>
-            <if test="param.unit != null">unit = #{param.unit}</if>
-            <if test="param.person != null">person = #{param.person}</if>
-            <if test="param.withdrawDate != null">withdraw_date = #{param.withdrawDate}</if>
+            <if test="param.date != null">date = #{param.date},</if>
+            <if test="param.type != null">type = #{param.type},</if>
+            <if test="param.context != null">context = #{param.context},</if>
+            <if test="param.unit != null">unit = #{param.unit},</if>
+            <if test="param.person != null">person = #{param.person},</if>
+            <if test="param.withdrawDate != null">withdraw_date = #{param.withdrawDate},</if>
             <if test="param.withdrawReason != null">withdraw_reason = #{param.withdrawReason}</if>
         </set>
         WHERE id=#{param.id}

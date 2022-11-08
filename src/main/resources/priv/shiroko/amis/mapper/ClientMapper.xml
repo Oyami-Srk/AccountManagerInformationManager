@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.shiroko.amis.mapper.ClientMapper">
+    <sql id="where">
+        <where>
+            <if test="param.id != null">id = #{param.id}</if>
+            <if test="param.name != null">AND name = #{param.name}</if>
+            <if test="param.icNum != null">AND ic_num = #{param.icNum}</if>
+            <if test="param.mobile != null">AND mobile = #{param.mobile}</if>
+            <if test="param.incomePerYear != null">AND income_per_year = #{param.incomePerYear}</if>
+            <if test="param.asset != null">AND asset = #{param.asset}</if>
+            <if test="param.debt != null">AND debt = #{param.debt}</if>
+            <if test="param.company != null">AND company = #{param.company}</if>
+            <if test="param.address != null">AND address = #{param.address}</if>
+            <if test="param.business != null">AND business = #{param.business}</if>
+            <if test="param.managerId != null">AND manager_id = #{param.managerId}</if>
+        </where>
+    </sql>
+
+    <insert id="add" parameterType="priv.shiroko.amis.entity.Client" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO client
+        (name, ic_num, mobile, income_per_year, asset, debt, company, address, business, manager_id) VALUE
+            (#{param.name}, #{param.icNum}, #{param.mobile}, #{param.incomePerYear}, #{param.asset}, #{param.debt},
+             #{param.company}, #{param.address}, #{param.business}, #{param.managerId});
+    </insert>
+    <select id="get" resultType="priv.shiroko.amis.entity.Client">
+        SELECT * FROM client
+        <include refid="where"/>
+        LIMIT #{last}, #{count};
+    </select>
+    <select id="getById" resultType="priv.shiroko.amis.entity.Client">
+        SELECT *
+        FROM client
+        WHERE id = #{id};
+    </select>
+    <select id="hasId" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT 1 FROM client WHERE id = #{id});
+    </select>
+    <select id="count" resultType="integer">
+        SELECT count(*) FROM client
+        <include refid="where"/>
+    </select>
+    <update id="update">
+        UPDATE client
+        <set>
+            <if test="param.name != null">name = #{param.name},</if>
+            <if test="param.icNum != null">ic_num = #{param.icNum},</if>
+            <if test="param.mobile != null">mobile = #{param.mobile},</if>
+            <if test="param.incomePerYear != null">income_per_year = #{param.incomePerYear},</if>
+            <if test="param.asset != null">asset = #{param.asset},</if>
+            <if test="param.debt != null">debt = #{param.debt},</if>
+            <if test="param.company != null">company = #{param.company},</if>
+            <if test="param.address != null">address = #{param.address},</if>
+            <if test="param.business != null">business = #{param.business},</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
+        </set>
+        WHERE id=#{param.id}
+    </update>
+    <delete id="deleteById">
+        DELETE
+        FROM client
+        WHERE id = #{id};
+    </delete>
+</mapper>

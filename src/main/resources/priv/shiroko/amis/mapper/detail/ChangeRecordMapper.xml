@@ -38,15 +38,15 @@
     <update id="update">
         UPDATE change_record
         <set>
-            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
-            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
-            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId},</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser},</if>
+            <if test="param.attachment != null">attachment = #{param.attachment},</if>
 
-            <if test="param.date != null">date = #{param.date}</if>
-            <if test="param.unitFrom != null">unitFrom = #{param.unit_from}</if>
-            <if test="param.unitTo != null">unitTo = #{param.unit_to}</if>
-            <if test="param.deptFrom != null">deptFrom = #{param.dept_from}</if>
-            <if test="param.deptTo != null">deptTo = #{param.dept_to}</if>
+            <if test="param.date != null">date = #{param.date},</if>
+            <if test="param.unitFrom != null">unitFrom = #{param.unit_from},</if>
+            <if test="param.unitTo != null">unitTo = #{param.unit_to},</if>
+            <if test="param.deptFrom != null">deptFrom = #{param.dept_from},</if>
+            <if test="param.deptTo != null">deptTo = #{param.dept_to},</if>
             <if test="param.comment != null">comment = #{param.comment}</if>
         </set>
         WHERE id=#{param.id}

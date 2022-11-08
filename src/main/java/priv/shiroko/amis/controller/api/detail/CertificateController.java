@@ -5,28 +5,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.shiroko.amis.entity.detail.Certificate;
 import priv.shiroko.amis.mapper.detail.CertificateMapper;
-import priv.shiroko.amis.utils.exception.AlreadyExistsException;
-import priv.shiroko.amis.utils.exception.NotFoundException;
 
 import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/api/manager/detail/certificate")
 @Slf4j
-public class CertificateController extends BasicController<Certificate, CertificateMapper> {
+public class CertificateController extends DetailBasicController<Certificate, CertificateMapper> {
     @Resource
     CertificateMapper mapper;
 
     @Override
-    CertificateMapper getMapper() {
+    protected CertificateMapper getMapper() {
         return mapper;
     }
 
-    protected NotFoundException getNotFoundException() {
-        return new NotFoundException("证照未找到。");
-    }
-
-    protected AlreadyExistsException getAlreadyExistsException() {
-        return new AlreadyExistsException("证照已存在。");
+    protected String getEntityName() {
+        return "证照";
     }
 }

@@ -9,7 +9,7 @@ import java.util.UUID;
  * @TableName attachment
  */
 @Data
-public class Attachment implements Serializable {
+public class Attachment implements Serializable, BasicEntity {
     private Integer id;
 
     private String uuid;

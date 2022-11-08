@@ -1660,3 +1660,9 @@ h2 {
     font-size: 12px;
     padding: 3px;
 }
+
+tbody#data td a {
+    color: blue;
+    text-underline: blue;
+    text-decoration: underline;
+}

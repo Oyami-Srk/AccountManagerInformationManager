@@ -29,14 +29,15 @@
     </script>
     <script type="text/javascript">
         $(document).ready(() => {
-            $("[name='icNum']").change(() => {
-                let ic = $("[name='icNum']").val();
+            $("[name='icNum']").change((e) => {
+                let ic = $(e.target).val();
                 if (ic.length === 0 || idcard.validator(ic)) {
-                    $("#idcard_ready").prop('style', 'display: none;');
+                    $("#idcard_ready").css('display', 'none');
                 } else {
-                    $("#idcard_ready").prop('style', '');
+                    $("#idcard_ready").css('display', '');
                 }
             });
+
 
             $("#addform").submit((e) => {
                 let olddata = new FormData($("#addform")[0]);
@@ -126,8 +127,8 @@
             <li><label>姓名*</label><input name="name" type="text" class="dfinput" value=""/></li>
             <li><label>性别*</label><cite><input name="sex" type="radio" value="MALE" checked="checked"/>男&nbsp;&nbsp;&nbsp;&nbsp;<input
                     name="sex" type="radio" value="FEMALE"/>女</cite></li>
-            <li><label>身份证号*</label><input name="icNum" type="text" class="dfinput" value=""/>
-                <span id="idcard_ready" style="display: none;"><span style="color: red">身份证号有误</span></span>
+            <li><label>身份证号*</label><input name="icNum" type="text" class="dfinput" value=""/><i id="idcard_ready"
+                                                                                                     style="display: none;color: red !important; font-weight: bold;">身份证号格式错误</i>
             </li>
             <li><label>出生年月*</label><input name="birthday" type="date" class="dfinput" value=""/></li>
             <li><label>民族</label><cite><select name="ethnic" class="dfselect">

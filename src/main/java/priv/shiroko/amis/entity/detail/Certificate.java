@@ -9,7 +9,7 @@ import java.util.Date;
  * @TableName certificate
  */
 @Data
-public class Certificate implements Serializable, BasicEntity {
+public class Certificate implements Serializable, DetailBasicEntity {
     private String updateUsername;
 
     private String name;

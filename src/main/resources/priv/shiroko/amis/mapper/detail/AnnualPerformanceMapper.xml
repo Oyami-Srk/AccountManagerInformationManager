@@ -32,10 +32,10 @@
     <update id="update">
         UPDATE annual_performance
         <set>
-            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
-            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
-            <if test="param.year != null">year = #{param.year}</if>
-            <if test="param.performance != null">performance = #{param.performance}</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId},</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser},</if>
+            <if test="param.year != null">year = #{param.year},</if>
+            <if test="param.performance != null">performance = #{param.performance},</if>
             <if test="param.attachment != null">attachment = #{param.attachment}</if>
         </set>
         WHERE id=#{param.id}

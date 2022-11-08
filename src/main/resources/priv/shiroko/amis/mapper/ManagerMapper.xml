@@ -3,43 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.shiroko.amis.mapper.ManagerMapper">
-
-    <resultMap id="BaseResultMap" type="priv.shiroko.amis.entity.Manager">
-        <id property="id" column="id" jdbcType="INTEGER"/>
-        <result property="userId" column="user_id" jdbcType="INTEGER"/>
-        <result property="name" column="name" jdbcType="VARCHAR"/>
-        <result property="sex" column="sex" jdbcType="OTHER"/>
-        <result property="birthday" column="birthday" jdbcType="DATE"/>
-        <result property="ethnic" column="ethnic" jdbcType="VARCHAR"/>
-        <result property="politicalStatus" column="political_status" jdbcType="VARCHAR"/>
-        <result property="nativePlace" column="native_place" jdbcType="VARCHAR"/>
-        <result property="photo" column="photo" jdbcType="CHAR"/>
-        <result property="education" column="education" jdbcType="VARCHAR"/>
-        <result property="graduated" column="graduated" jdbcType="VARCHAR"/>
-        <result property="professionalTitle" column="professional_title" jdbcType="VARCHAR"/>
-        <result property="managerLevel" column="manager_level" jdbcType="VARCHAR"/>
-        <result property="unit" column="unit" jdbcType="VARCHAR"/>
-        <result property="dept" column="dept" jdbcType="VARCHAR"/>
-        <result property="businessLine" column="business_line" jdbcType="OTHER"/>
-        <result property="job" column="job" jdbcType="VARCHAR"/>
-        <result property="hiredDate" column="hired_date" jdbcType="DATE"/>
-        <result property="enteredDate" column="entered_date" jdbcType="DATE"/>
-        <result property="financialAgeLimit" column="financial_age_limit" jdbcType="INTEGER"/>
-        <result property="managerAgeLimit" column="manager_age_limit" jdbcType="INTEGER"/>
-        <result property="totalCredits" column="total_credits" jdbcType="DOUBLE"/>
-        <result property="yearCredits" column="year_credits" jdbcType="DOUBLE"/>
-        <result property="exitDate" column="exit_date" jdbcType="DATE"/>
-        <result property="lastYearAssessment" column="last_year_assessment" jdbcType="VARCHAR"/>
-        <result property="qualificationCertId" column="qualification_cert_id" jdbcType="VARCHAR"/>
-        <result property="qualificationCertDate" column="qualification_cert_date" jdbcType="DATE"/>
-        <result property="jobCertId" column="job_cert_id" jdbcType="VARCHAR"/>
-        <result property="jobCertDate" column="job_cert_date" jdbcType="DATE"/>
-        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
-        <result property="officeTel" column="office_tel" jdbcType="VARCHAR"/>
-        <result property="managerStatus" column="manager_status" jdbcType="OTHER"/>
-        <result property="lastUpdate" column="last_update" jdbcType="TIMESTAMP"/>
+    <resultMap id="BaseResultMap" type="Manager" autoMapping="true">
+        <id property="id" column="id"/>
+        <association property="yearCredits" column="id"
+                     select="priv.shiroko.amis.mapper.LearnMapper.getYearCreditByManagerId"/>
+        <association property="totalCredits" column="id"
+                     select="priv.shiroko.amis.mapper.LearnMapper.getTotalCreditByManagerId"/>
     </resultMap>
-
     <!-- @formatter:off -->
     <sql id="BaseColumnNames">
         user_id,
@@ -62,8 +32,6 @@
         entered_date,
         financial_age_limit,
         manager_age_limit,
-        total_credits,
-        year_credits,
         exit_date,
         last_year_assessment,
         qualification_cert_id,
@@ -72,116 +40,150 @@
         job_cert_date,
         mobile,
         office_tel,
-        <if test="managerStatus != null">manager_status,</if>
-        <if test="professionalTitle != null">professional_title,</if>
-        <if test="managerLevel != null">manager_level,</if>
+        <if test="param.managerStatus != null">manager_status,</if>
+        <if test="param.professionalTitle != null">professional_title,</if>
+        <if test="param.managerLevel != null">manager_level,</if>
         id
     </sql>
     <sql id="BaseColumnValues">
-        #{userId},
-        #{name},
-        #{sex},
-        #{birthday},
-        #{icNum},
-        #{ethnic},
-        #{politicalStatus},
-        #{nativePlace},
-        #{photo},
-        #{education},
-        #{graduated},
-        #{school},
-        #{unit},
-        #{dept},
-        #{businessLine},
-        #{job},
-        #{hiredDate},
-        #{enteredDate},
-        #{financialAgeLimit},
-        #{managerAgeLimit},
-        #{totalCredits},
-        #{yearCredits},
-        #{exitDate},
-        #{lastYearAssessment},
-        #{qualificationCertId},
-        #{qualificationCertDate},
-        #{jobCertId},
-        #{jobCertDate},
-        #{mobile},
-        #{officeTel},
-        <if test="managerStatus != null">#{managerStatus},</if>
-        <if test="professionalTitle != null">#{professionalTitle},</if>
-        <if test="managerLevel != null">#{managerLevel},</if>
-        #{id}
+        #{param.userId},
+        #{param.name},
+        #{param.sex},
+        #{param.birthday},
+        #{param.icNum},
+        #{param.ethnic},
+        #{param.politicalStatus},
+        #{param.nativePlace},
+        #{param.photo},
+        #{param.education},
+        #{param.graduated},
+        #{param.school},
+        #{param.unit},
+        #{param.dept},
+        #{param.businessLine},
+        #{param.job},
+        #{param.hiredDate},
+        #{param.enteredDate},
+        #{param.financialAgeLimit},
+        #{param.managerAgeLimit},
+        #{param.exitDate},
+        #{param.lastYearAssessment},
+        #{param.qualificationCertId},
+        #{param.qualificationCertDate},
+        #{param.jobCertId},
+        #{param.jobCertDate},
+        #{param.mobile},
+        #{param.officeTel},
+        <if test="param.managerStatus != null">#{param.managerStatus},</if>
+        <if test="param.professionalTitle != null">#{param.professionalTitle},</if>
+        <if test="param.managerLevel != null">#{param.managerLevel},</if>
+        #{param.id}
     </sql>
     <!-- @formatter:on -->
-    <sql id="getManagersWhere">
+    <sql id="where">
         <where>
-            <if test="params.dept != null">
-                dept = #{params.dept}
+            <if test="param.id != null">id = #{param.id}</if>
+            <if test="param.userId != null">AND user_id = #{param.userId}</if>
+            <if test="param.name != null">AND name = #{param.name}</if>
+            <if test="param.sex != null">AND sex = #{param.sex}</if>
+            <if test="param.birthday != null">AND birthday = #{param.birthday}</if>
+            <if test="param.icNum != null">AND ic_num = #{param.icNum}</if>
+            <if test="param.ethnic != null">AND ethnic = #{param.ethnic}</if>
+            <if test="param.politicalStatus != null">AND political_status = #{param.politicalStatus}</if>
+            <if test="param.nativePlace != null">AND native_place = #{param.nativePlace}</if>
+            <if test="param.photo != null">AND photo = #{param.photo}</if>
+            <if test="param.education != null">AND education = #{param.education}</if>
+            <if test="param.graduated != null">AND graduated = #{param.graduated}</if>
+            <if test="param.school != null">AND school = #{param.school}</if>
+            <if test="param.unit != null">AND unit = #{param.unit}</if>
+            <if test="param.dept != null">AND dept = #{param.dept}</if>
+            <if test="param.businessLine != null">AND business_line = #{param.businessLine}</if>
+            <if test="param.job != null">AND job = #{param.job}</if>
+            <if test="param.hiredDate != null">AND hired_date = #{param.hiredDate}</if>
+            <if test="param.enteredDate != null">AND entered_date = #{param.enteredDate}</if>
+            <if test="param.financialAgeLimit != null">AND financial_age_limit = #{param.financialAgeLimit}</if>
+            <if test="param.managerAgeLimit != null">AND manager_age_limit = #{param.managerAgeLimit}</if>
+            <if test="param.exitDate != null">AND exit_date = #{param.exitDate}</if>
+            <if test="param.lastYearAssessment != null">AND last_year_assessment = #{param.lastYearAssessment}</if>
+            <if test="param.qualificationCertId != null">AND qualification_cert_id = #{param.qualificationCertId}
             </if>
-            <if test="params.id != null">
-                AND id = #{params.id}
+            <if test="param.qualificationCertDate != null">AND qualification_cert_date =
+                #{param.qualificationCertDate}
             </if>
-            <if test="params.name != null">
-                AND name = #{params.name}
-            </if>
-            <if test="params.status != null">
-                AND manager_status = #{params.status.value}
-            </if>
+            <if test="param.jobCertId != null">AND job_cert_id = #{param.jobCertId}</if>
+            <if test="param.jobCertDate != null">AND job_cert_date = #{param.jobCertDate}</if>
+            <if test="param.mobile != null">AND mobile = #{param.mobile}</if>
+            <if test="param.officeTel != null">AND office_tel = #{param.officeTel}</if>
+            <if test="param.managerStatus != null">AND manager_status = #{param.managerStatus}</if>
+            <if test="param.professionalTitle != null">AND professional_title = #{param.professionalTitle}</if>
+            <if test="param.managerLevel != null">AND manager_level = #{param.managerLevel}</if>
         </where>
     </sql>
-    <select id="getManagersBy" resultType="priv.shiroko.amis.entity.Manager">
+
+    <select id="get" resultType="priv.shiroko.amis.entity.Manager" resultMap="BaseResultMap">
         SELECT * FROM manager
-        <include refid="getManagersWhere"/>
-        LIMIT #{last}, #{count};
+        <include refid="where"/>
+        <if test="count != null">LIMIT #{count}</if>
+        <if test="last != null">OFFSET #{last}</if>
     </select>
-    <select id="getManagersCountBy" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM manager
-        <include refid="getManagersWhere"/>
+    <select id="getById" resultType="Manager" resultMap="BaseResultMap">
+        SELECT *
+        FROM manager
+        WHERE id = #{id};
     </select>
-    <insert id="insertManager" parameterType="Manager">
+    <insert id="add" parameterType="Manager">
         INSERT INTO manager (
         <include refid="BaseColumnNames"/>
         ) VALUES (
         <include refid="BaseColumnValues"/>
         );
     </insert>
-    <update id="updateManager" parameterType="Manager">
+    <update id="update" parameterType="Manager">
         UPDATE manager
         <set>
-            <if test="userId != null">user_id=#{userId},</if>
-            <if test="name != null">name=#{name},</if>
-            <if test="sex != null">sex=#{sex},</if>
-            <if test="birthday != null">birthday=#{birthday},</if>
-            <if test="icNum != null">ic_num=#{icNum},</if>
-            <if test="ethnic != null">ethnic=#{ethnic},</if>
-            <if test="politicalStatus != null">political_status=#{politicalStatus},</if>
-            <if test="nativePlace != null">native_place=#{nativePlace},</if>
-            <if test="photo != null">photo=#{photo},</if>
-            <if test="education != null">education=#{education},</if>
-            <if test="graduated != null">graduated=#{graduated},</if>
-            <if test="school != null">school=#{school},</if>
-            <if test="unit != null">unit=#{unit},</if>
-            <if test="dept != null">dept=#{dept},</if>
-            <if test="businessLine != null">business_line=#{businessLine},</if>
-            <if test="job != null">job=#{job},</if>
-            <if test="hiredDate != null">hired_date=#{hiredDate},</if>
-            <if test="enteredDate != null">entered_date=#{enteredDate},</if>
-            <if test="financialAgeLimit != null">financial_age_limit=#{financialAgeLimit},</if>
-            <if test="managerAgeLimit != null">manager_age_limit=#{managerAgeLimit},</if>
-            <if test="totalCredits != null">total_credits=#{totalCredits},</if>
-            <if test="yearCredits != null">year_credits=#{yearCredits},</if>
-            <if test="exitDate != null">exit_date=#{exitDate},</if>
-            <if test="lastYearAssessment != null">last_year_assessment=#{lastYearAssessment},</if>
-            <if test="qualificationCertId != null">qualification_cert_id=#{qualificationCertId},</if>
-            <if test="qualificationCertDate != null">qualification_cert_date=#{qualificationCertDate},</if>
-            <if test="jobCertId != null">job_cert_id=#{jobCertId},</if>
-            <if test="jobCertDate != null">job_cert_date=#{jobCertDate},</if>
-            <if test="mobile != null">mobile=#{mobile},</if>
-            <if test="officeTel != null">office_tel=#{officeTel},</if>
-            <if test="professionalTitle != null">professional_title=#{professionalTitle},</if>
-            <if test="managerLevel != null">manager_level=#{managerLevel}</if>
+            <if test="param.userId != null">user_id=#{param.userId},</if>
+            <if test="param.name != null">name=#{param.name},</if>
+            <if test="param.sex != null">sex=#{param.sex},</if>
+            <if test="param.birthday != null">birthday=#{param.birthday},</if>
+            <if test="param.icNum != null">ic_num=#{param.icNum},</if>
+            <if test="param.ethnic != null">ethnic=#{param.ethnic},</if>
+            <if test="param.politicalStatus != null">political_status=#{param.politicalStatus},</if>
+            <if test="param.nativePlace != null">native_place=#{param.nativePlace},</if>
+            <if test="param.photo != null">photo=#{param.photo},</if>
+            <if test="param.education != null">education=#{param.education},</if>
+            <if test="param.graduated != null">graduated=#{param.graduated},</if>
+            <if test="param.school != null">school=#{param.school},</if>
+            <if test="param.unit != null">unit=#{param.unit},</if>
+            <if test="param.dept != null">dept=#{param.dept},</if>
+            <if test="param.businessLine != null">business_line=#{param.businessLine},</if>
+            <if test="param.job != null">job=#{param.job},</if>
+            <if test="param.hiredDate != null">hired_date=#{param.hiredDate},</if>
+            <if test="param.enteredDate != null">entered_date=#{param.enteredDate},</if>
+            <if test="param.financialAgeLimit != null">financial_age_limit=#{param.financialAgeLimit},</if>
+            <if test="param.managerAgeLimit != null">manager_age_limit=#{param.managerAgeLimit},</if>
+            <if test="param.exitDate != null">exit_date=#{param.exitDate},</if>
+            <if test="param.lastYearAssessment != null">last_year_assessment=#{param.lastYearAssessment},</if>
+            <if test="param.qualificationCertId != null">qualification_cert_id=#{param.qualificationCertId},</if>
+            <if test="param.qualificationCertDate != null">qualification_cert_date=#{param.qualificationCertDate},</if>
+            <if test="param.jobCertId != null">job_cert_id=#{param.jobCertId},</if>
+            <if test="param.jobCertDate != null">job_cert_date=#{param.jobCertDate},</if>
+            <if test="param.mobile != null">mobile=#{param.mobile},</if>
+            <if test="param.officeTel != null">office_tel=#{param.officeTel},</if>
+            <if test="param.professionalTitle != null">professional_title=#{param.professionalTitle},</if>
+            <if test="param.managerLevel != null">manager_level=#{param.managerLevel}</if>
         </set>
-        WHERE id = #{id}
+        WHERE id = #{param.id}
     </update>
+    <delete id="deleteById">
+        DELETE
+        FROM manager
+        WHERE id = #{id};
+    </delete>
+    <select id="hasId" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM manager WHERE id = #{id} LIMIT 1);
+    </select>
+    <select id="count" resultType="integer">
+        SELECT count(*) FROM manager
+        <include refid="where"/>
+    </select>
 </mapper>

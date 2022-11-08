@@ -38,15 +38,15 @@
     <update id="update">
         UPDATE assessment_record
         <set>
-            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
-            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
-            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId},</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser},</if>
+            <if test="param.attachment != null">attachment = #{param.attachment},</if>
 
-            <if test="param.date != null">year = #{param.date}</if>
-            <if test="param.context != null">context = #{param.context}</if>
-            <if test="param.period != null">period = #{param.period}</if>
-            <if test="param.result != null">result = #{param.result}</if>
-            <if test="param.evaluation != null">evaluation = #{param.evaluation}</if>
+            <if test="param.date != null">year = #{param.date},</if>
+            <if test="param.context != null">context = #{param.context},</if>
+            <if test="param.period != null">period = #{param.period},</if>
+            <if test="param.result != null">result = #{param.result},</if>
+            <if test="param.evaluation != null">evaluation = #{param.evaluation},</if>
             <if test="param.unit != null">unit = #{param.unit}</if>
         </set>
         WHERE id=#{param.id}

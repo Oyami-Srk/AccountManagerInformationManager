@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.shiroko.amis.mapper.WorkMapper">
+
+    <sql id="where">
+        <where>
+            <if test="param.id != null">id = #{param.id}</if>
+            <if test="param.date != null">AND date = #{param.date}</if>
+            <if test="param.client != null">AND work = #{param.client}</if>
+            <if test="param.info != null">AND info = #{param.info}</if>
+            <if test="param.after != null">AND after = #{param.after}</if>
+            <if test="param.risk != null">AND risk = #{param.risk}</if>
+            <if test="param.problem != null">AND problem = #{param.problem}</if>
+            <if test="param.suggestion != null">AND suggestion = #{param.suggestion}</if>
+        </where>
+    </sql>
+
+    <insert id="add" parameterType="priv.shiroko.amis.entity.Work" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO work
+            (date, client, info, after, risk, problem, suggestion) VALUE
+            (#{param.date}, #{param.client}, #{param.info}, #{param.after}, #{param.risk}, #{param.problem},
+             #{param.suggestion});
+    </insert>
+    <select id="get" resultType="priv.shiroko.amis.entity.Work">
+        SELECT * FROM work
+        <include refid="where"/>
+        LIMIT #{last}, #{count};
+    </select>
+    <select id="getById" resultType="priv.shiroko.amis.entity.Work">
+        SELECT *
+        FROM work
+        WHERE id = #{id};
+    </select>
+    <select id="hasId" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT 1 FROM work WHERE id = #{id});
+    </select>
+    <select id="count" resultType="integer">
+        SELECT count(*) FROM work
+        <include refid="where"/>
+    </select>
+    <update id="update">
+        UPDATE work
+        <set>
+            <if test="param.date != null">date = #{param.date},</if>
+            <if test="param.client != null">work = #{param.client},</if>
+            <if test="param.info != null">info = #{param.info},</if>
+            <if test="param.after != null">after = #{param.after},</if>
+            <if test="param.risk != null">risk = #{param.risk},</if>
+            <if test="param.problem != null">problem = #{param.problem},</if>
+            <if test="param.suggestion != null">suggestion = #{param.suggestion}</if>
+        </set>
+        WHERE id=#{param.id}
+    </update>
+    <delete id="deleteById">
+        DELETE
+        FROM work
+        WHERE id = #{id};
+    </delete>
+
+</mapper>

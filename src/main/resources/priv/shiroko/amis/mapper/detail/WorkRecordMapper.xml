@@ -36,13 +36,13 @@
     <update id="update">
         UPDATE work_record
         <set>
-            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
-            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
-            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId},</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser},</if>
+            <if test="param.attachment != null">attachment = #{param.attachment},</if>
 
-            <if test="param.officeDate != null">office_date = #{param.officeDate}</if>
-            <if test="param.position != null">position = #{param.position}</if>
-            <if test="param.unit != null">unit = #{param.unit}</if>
+            <if test="param.officeDate != null">office_date = #{param.officeDate},</if>
+            <if test="param.position != null">position = #{param.position},</if>
+            <if test="param.unit != null">unit = #{param.unit},</if>
             <if test="param.workDetail != null">work_detail = #{param.workDetail}</if>
         </set>
         WHERE id=#{param.id}

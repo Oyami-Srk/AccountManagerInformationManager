@@ -41,17 +41,17 @@
     <update id="update">
         UPDATE train_record
         <set>
-            <if test="param.managerId != null">manager_id = #{param.managerId}</if>
-            <if test="param.updateUser != null">update_user = #{param.updateUser}</if>
-            <if test="param.attachment != null">attachment = #{param.attachment}</if>
+            <if test="param.managerId != null">manager_id = #{param.managerId},</if>
+            <if test="param.updateUser != null">update_user = #{param.updateUser},</if>
+            <if test="param.attachment != null">attachment = #{param.attachment},</if>
 
-            <if test="param.date != null">date = #{param.date}</if>
-            <if test="param.subject != null">subject = #{param.subject}</if>
-            <if test="param.unit != null">unit = #{param.unit}</if>
-            <if test="param.startDate != null">start_date = #{param.startDate}</if>
-            <if test="param.endDate != null">end_date = #{param.endDate}</if>
-            <if test="param.hours != null">hours = #{param.hours}</if>
-            <if test="param.credit != null">credit = #{param.credit}</if>
+            <if test="param.date != null">date = #{param.date},</if>
+            <if test="param.subject != null">subject = #{param.subject},</if>
+            <if test="param.unit != null">unit = #{param.unit},</if>
+            <if test="param.startDate != null">start_date = #{param.startDate},</if>
+            <if test="param.endDate != null">end_date = #{param.endDate},</if>
+            <if test="param.hours != null">hours = #{param.hours},</if>
+            <if test="param.credit != null">credit = #{param.credit},</if>
             <if test="param.score != null">score = #{param.score}</if>
         </set>
         WHERE id=#{param.id}

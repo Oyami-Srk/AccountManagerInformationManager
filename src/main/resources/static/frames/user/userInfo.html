@@ -150,6 +150,7 @@
                 $("#page").text(page);
                 if (resp.status === "OK") {
                     $("#datatable").empty();
+                    $("#allsel").prop('checked', false);
                     for (let user of resp.data) {
                         build_record(user.id, user.username, user.enabled, user.registration_time, user.last_login_time);
                     }

@@ -5,6 +5,43 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>无标题文档</title>
     <link href="../../css/style.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript">
+        function downloadTemplate() {
+            window.open("/api/manager/template");
+        }
+
+        $(document).ready(() => {
+            $("#upload").submit((e) => {
+                e.preventDefault();
+                let data = new FormData(e.target);
+                if (data.get("file").size <= 0) {
+                    window.top.promptAlert("请选择要导入的文件。");
+                    return false;
+                }
+                $.ajax({
+                    url: "/api/manager/import",
+                    data,
+                    method: "POST",
+                    processData: false,
+                    contentType: false
+                }).done((resp) => {
+                    window.top.promptAlert(resp.message);
+                    $("#success").text('');
+                    $("#failed").text('');
+                    $("#result").css('display', 'none');
+                    if (resp.status === "OK") {
+                        $("#result").css('display', '');
+                        let success = resp.data['succeed'];
+                        let failed = resp.data['failed'];
+                        $("#success").text(success.join(', '));
+                        $("#failed").text(failed.join(', '));
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -19,13 +56,21 @@
 <div class="formbody">
 
     <div class="formtitle"><span>导入客户经理数据</span></div>
-    <form action="">
+    <form action="" id="upload">
         <ul class="forminfo">
-            <li><label>选择文件路径:</label><input name="" type="file" class="dfinputfile"/></li>
-            <li><label>&nbsp;</label><input name="" type="button" class="btn" value="导入"/></li>
+            <li>
+                <input type="button" class="scbtn" value="下载模板" onclick="downloadTemplate();"/>
+            </li>
+            <li><label>选择文件路径:</label><input name="file" type="file" class="dfinputfile"/></li>
+            <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="导入"/></li>
         </ul>
     </form>
-
+    <ul id="result" style="display: none;">
+        <li><p>导入成功的列：</p></li>
+        <li><p id="success"></p></li>
+        <li><p>导入失败的列：</p></li>
+        <li><p id="failed"></p></li>
+    </ul>
 </div>
 
 
