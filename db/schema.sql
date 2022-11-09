@@ -20,18 +20,18 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`
 (
-    id                INTEGER                NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
-    username          VARCHAR(64)            NOT NULL UNIQUE,
-    password          BINARY(60)             NOT NULL, -- We chose bcrypt here
+    id                INTEGER                       NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
+    username          VARCHAR(64)                   NOT NULL UNIQUE,
+    password          BINARY(60)                    NOT NULL, -- We chose bcrypt here
     password_question TEXT,
     password_answer   TEXT,
     ic_num            VARCHAR(18) UNIQUE,
     nickname          NVARCHAR(64),
     email             VARCHAR(64),
     last_login_time   DATETIME,
-    enabled           BOOLEAN                NOT NULL DEFAULT TRUE,
-    registration_time DATETIME               NOT NULL DEFAULT NOW(),
-    role              ENUM ('admin', 'user') NOT NULL DEFAULT 'user'
+    enabled           ENUM ('enabled', 'suspended') NOT NULL DEFAULT 'enabled',
+    registration_time DATETIME                      NOT NULL DEFAULT NOW(),
+    role              ENUM ('admin', 'user')        NOT NULL DEFAULT 'user'
 );
 
 CREATE TABLE `manager`

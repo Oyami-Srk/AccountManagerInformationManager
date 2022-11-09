@@ -1,11 +1,11 @@
 package priv.shiroko.amis.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NonNull;
+import priv.shiroko.amis.utils.BasicEnum;
+import priv.shiroko.amis.utils.JsonEnumNameSerializer;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,18 +14,17 @@ import java.util.Date;
  * @TableName user
  */
 @Data
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class User implements Serializable, BasicEntity {
     private Integer id;
 
-    @NonNull
     private String username;
 
-    @NonNull
+    @JsonIgnore
     private byte[] password;
 
     private String passwordQuestion;
 
+    @JsonIgnore
     private String passwordAnswer;
 
     private String icNum;
@@ -38,8 +37,10 @@ public class User implements Serializable, BasicEntity {
 
     private Date lastLoginTime;
 
-    private boolean enabled;
+    @JsonSerialize(using = JsonEnumNameSerializer.class)
+    private Enabled enabled;
 
+    @JsonSerialize(using = JsonEnumNameSerializer.class)
     private Role role;
 
     private static final long serialVersionUID = 1L;
@@ -50,10 +51,8 @@ public class User implements Serializable, BasicEntity {
     }
 
     @Getter
-    public enum Role {
-        @JsonProperty("admin")
+    public enum Role implements BasicEnum {
         ADMIN("admin", "管理员"),
-        @JsonProperty("user")
         USER("user", "用户");
         private final String value;
         private final String name;
@@ -62,10 +61,19 @@ public class User implements Serializable, BasicEntity {
             this.value = value;
             this.name = name;
         }
+    }
 
-        @Override
-        public String toString() {
-            return this.value;
+    @Getter
+    public enum Enabled implements BasicEnum {
+        SUSPENDED("suspended", "停用"),
+        ENABLED("enabled", "启用");
+
+        private final String value;
+        private final String name;
+
+        Enabled(String value, String name) {
+            this.value = value;
+            this.name = name;
         }
     }
 }

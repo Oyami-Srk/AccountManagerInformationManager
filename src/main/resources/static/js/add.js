@@ -28,12 +28,14 @@ $(document).ready(() => {
                 contentType: false
             }).done((resp) => {
                 if (resp.status === "OK") {
-                    window.parent.promptAlert("添加记录成功！");
+                    window.top.promptAlert("添加记录成功！");
                     setTimeout(() => {
-                        window.location.replace(window.location.pathname.replace("Add", ""));
+                        // window.location.replace(window.location.pathname.replace("Add", ""));
+                        window.parent.need_refresh = true;
+                        window.parent.popWin.close();
                     }, 1000);
                 } else {
-                    window.parent.promptAlert("添加记录失败！" + resp.message);
+                    window.top.promptAlert("添加记录失败！" + resp.message);
                 }
             });
         };

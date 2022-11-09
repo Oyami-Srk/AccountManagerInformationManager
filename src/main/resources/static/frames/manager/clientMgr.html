@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../../js/jquery.idTabs.min.js"></script>
     <script type="text/javascript" src="../../js/select-ui.min.js"></script>
     <script type="text/javascript" src="../../editor/kindeditor.js"></script>
+    <script type="text/javascript" src="../../js/popWin.js"></script>
     <script type="text/javascript" src="../../js/utils.js"></script>
     <script type="text/javascript" src="../../js/base_table.js"></script>
 
@@ -60,7 +61,11 @@
                 last_td = $("<td/>").appendTo(tr);
                 let id = data.id;
                 $("<a/>", {
-                    href: "clientMgrInfoDetail.html?id=" + id.toString(),
+                    // href: "clientMgrInfoDetail.html?id=" + id.toString(),
+                    href: "#",
+                    click: () => {
+                        window.popWin.showWin("clientMgrInfoDetail.html?id=" + id.toString(), 1000, 600);
+                    },
                     class: "tablelink",
                     text: "查看"
                 }).appendTo(last_td);

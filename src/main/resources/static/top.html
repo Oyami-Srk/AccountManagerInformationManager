@@ -8,7 +8,6 @@
     <link href="css/animate.min.css" rel="stylesheet" type="text/css"/>
     <link href="css/syalert.min.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/syalert.min.js"></script>
     <script type="text/javascript" src="js/jquery.cookie.min.js"></script>
 
     <script type="text/javascript">
@@ -62,6 +61,8 @@
         <li><span><img src="images/i07.png" title="论坛" class="helpimg" height="16" width="16"/></span><a
                 href="#">论坛</a></li>
         <li><span><img src="images/help.png" title="帮助" class="helpimg"/></span><a href="#">帮助</a></li> -->
+        <li><span><a href="javascript:void(0);"
+                     onclick="window.top.syalert.syopen('password-alert');">修改密码</a></span></li>
         <li><span><img src="images/i10.png" title="注销" class="helpimg" height="16" width="16"/></span><a
                 href="javascript:void(0);" onclick="logout()" target="_parent">注销</a></li>
     </ul>

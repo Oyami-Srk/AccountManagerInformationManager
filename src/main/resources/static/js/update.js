@@ -5,7 +5,9 @@ $(document).ready(() => {
     let api_name = form.attr('name');
 
     let go_back = () => {
-        window.location.replace(window.location.pathname.replace("Update", ""));
+        // window.location.replace(window.location.pathname.replace("Update", ""));
+        window.parent.need_refresh = true;
+        window.parent.popWin.close();
     }
 
     let reset = () => {
@@ -64,10 +66,10 @@ $(document).ready(() => {
                 contentType: false
             }).done((resp) => {
                 if (resp.status === "OK") {
-                    window.parent.promptAlert("修改记录成功！");
+                    window.top.promptAlert("修改记录成功！");
                     setTimeout(go_back, 1000);
                 } else {
-                    window.parent.promptAlert("修改记录失败！" + resp.message);
+                    window.top.promptAlert("修改记录失败！" + resp.message);
                 }
             });
         };

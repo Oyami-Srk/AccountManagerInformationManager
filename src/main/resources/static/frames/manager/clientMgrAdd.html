@@ -96,7 +96,8 @@
                     if (resp.status === "OK") {
                         window.top.promptAlert(resp.message);
                         setTimeout(() => {
-                            window.location.replace("clientMgr.html");
+                            window.parent.need_refresh = true;
+                            window.parent.popWin.close();
                         }, 1000);
                     } else {
                         window.top.promptAlert(resp.message);

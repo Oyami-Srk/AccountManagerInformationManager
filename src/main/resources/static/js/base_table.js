@@ -7,6 +7,7 @@ let query_params = {};
 let fields = null;
 let api_name = null;
 let no_select = false;
+let need_refresh = false;
 
 let paging_div = `
 <div class="pagin">
@@ -53,7 +54,14 @@ $(document).ready(() => {
     fetch_page(page, count);
 
     $("#add-btn").click(() => {
-        window.location.replace(window.location.pathname.replace('.html', 'Add.html'));
+        // window.location.replace(window.location.pathname.replace('.html', 'Add.html'));
+        let uri = window.location.pathname.replace('.html', 'Add.html');
+        popWin.showWin(uri, 1000, 600, function () {
+            if (need_refresh) {
+                updateTotal();
+                fetch_page(total_pages, count);
+            }
+        });
     });
     $("#update-btn").click(() => {
         let ids = getSelectedIds();
@@ -88,26 +96,37 @@ $(document).ready(() => {
         fetch_page(page, count);
         return false;
     });
-    $("#all-sel").click((e) => {
-        let checked = $(e.target).prop('checked');
-        for (let input of $("#data").find("input")) {
-            $(input).prop('checked', checked);
-        }
-    });
+    let all_sel = $("#all-sel");
+    if (all_sel.length > 0) {
+        all_sel.parent().click((e) => {
+            let checked = all_sel.prop('checked');
+            if (e.target.getAttribute('type') === "checkbox") {
+                checked = !checked;
+            }
+            all_sel.prop('checked', !checked);
+            for (let input of $("#data").find("input")) {
+                $(input).prop('checked', !checked);
+            }
+        });
+    }
     $(".rightinfo").append(paging_div);
 });
 
-function doPostForIds(ids, api, what) {
+function doPostForIds(ids, api, what, ext_data = null) {
     let t = ids.length;
     let s = 0;
     let f = 0;
     let err = [];
+    data = {};
+    if (ext_data !== null) {
+        data = ext_data;
+    }
     for (let id of ids) {
+        data['id'] = id;
+        console.log(data);
         $.ajax({
             url: `/api/${api_name}/${api}`,
-            data: {
-                id
-            },
+            data,
             method: "POST"
         }).done((resp) => {
             t--;
@@ -155,10 +174,17 @@ function appendRecord(data) {
         id: data.id
     }).appendTo(table);
 
-    if (!no_select)
+    if (!no_select) {
         $("<input/>", {
             type: "checkbox"
         }).wrap("<td/>").parent().appendTo(tr);
+        tr.click((e) => {
+            if (e.target.getAttribute('type') === "checkbox")
+                return;
+            let cb = tr.find("input[type='checkbox']");
+            cb.prop('checked', !cb.prop('checked'));
+        });
+    }
     for (let field of fields) {
         if (data[field] === null) {
             $("<td/>", {}).appendTo(tr);
@@ -166,7 +192,10 @@ function appendRecord(data) {
         }
         let text = data[field].toString();
         // special case
-        if (field.match(/[Dd]ate$/) !== null || field === "lastUpdate" || field === "birthday")
+        if (field.match(/[Tt]ime$/) !== null
+            || field.match(/[Dd]ate$/) !== null
+            || field === "lastUpdate"
+            || field === "birthday")
             text = timestamp_to_date_string(data[field]);
         else if ((field === "attachment"
             || $(`table.tablelist th[name=${field}]`).prop('class') === "attachment"

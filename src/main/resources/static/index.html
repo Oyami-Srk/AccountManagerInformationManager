@@ -74,8 +74,65 @@
             text-align: left;
         }
     </style>
+    <script type="text/javascript">
+        function closeAlert() {
+            syalert.syhide("password-alert");
+            setTimeout(() => {
+                $("#password-alert input").val('');
+            }, 300);
+        }
+
+        $(document).ready(() => {
+            $("input[name^='new']").change(() => {
+                let v = Array.from($("input[name^='new']").map((_, e) => e.value));
+                if (v[0] !== v[1])
+                    $("#password-ready").css('display', '');
+                else
+                    $("#password-ready").css('display', 'none');
+            });
+            $("#password-alert #cancel").click(closeAlert);
+            $("#password-alert #confirm").click(() => {
+                let v = Array.from($("input[name^='new']").map((_, e) => e.value));
+                if (v[0] !== v[1]) {
+                    promptAlert("两次输入的密码不一致！");
+                    return;
+                }
+                $.ajax({
+                    url: "/api/change_password",
+                    method: "POST",
+                    data: {
+                        old_password: $("input[name='old']").val(),
+                        new_password: v[0]
+                    }
+                }).done((resp) => {
+                    promptAlert(resp.message);
+                    if (resp.status === "OK")
+                        closeAlert();
+                });
+            });
+        });
+    </script>
 </head>
 <body>
+
+<div class="sy-alert sy-alert-model animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+     id="password-alert" style="top: 50%; margin-top: -213.5px; display: none; width: 400px;">
+    <div class="sy-title">修改密码</div>
+    <div class="sy-content">
+        <div class="form">
+            <p class="input-item"><input name="old" type="password" placeholder="旧密码" style="width: 90%"></p>
+            <p class="input-item"><input name="new" type="password" placeholder="新密码" style="width: 90%"></p>
+            <p class="input-item"><input name="new-confirm" type="password" placeholder="确认新密码" style="width: 90%">
+            </p>
+            <p id="password-ready" style="color: red; display: none;">两次输入的密码不一致。</p>
+        </div>
+    </div>
+    <div class="sy-btn">
+        <button id="cancel">取消</button>
+        <button id="confirm">确定</button>
+    </div>
+</div>
+
 <div class="sy-alert sy-alert-tips animated my-alert" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="tips"
      sy-mask="false"
      id="alert">

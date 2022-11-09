@@ -53,7 +53,7 @@
                     } else {
                         window.top.promptAlert("用户查询失败！");
                         setTimeout(() => {
-                            window.location.replace("userInfo.html");
+                            window.parent.popWin.close();
                         }, 1000);
                     }
                 });
@@ -110,12 +110,13 @@
                     contentType: false
                 }).done((resp) => {
                     if (resp.status === "OK") {
-                        window.parent.promptAlert("修改用户成功！");
+                        window.top.promptAlert("修改用户成功！");
                         setTimeout(() => {
-                            window.location.replace("userInfo.html");
+                            window.parent.need_refresh = true;
+                            window.parent.popWin.close();
                         }, 1000);
                     } else {
-                        window.parent.promptAlert("修改用户失败！" + resp.message);
+                        window.top.promptAlert("修改用户失败！" + resp.message);
                     }
                 })
                 return false;

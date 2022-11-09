@@ -2,6 +2,7 @@ package priv.shiroko.amis.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface BasicMapper<DO> {
 
     public void update(@Param("param") DO param);
 
-    public void add(@Param("param") DO param);
+    public void add(@Param("param") DO param) throws DuplicateKeyException;
 }

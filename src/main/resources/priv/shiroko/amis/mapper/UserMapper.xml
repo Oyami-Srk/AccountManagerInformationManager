@@ -3,21 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.shiroko.amis.mapper.UserMapper">
-
-    <resultMap id="user" type="User">
-        <id property="id" column="id" jdbcType="INTEGER"/>
-        <result property="username" column="username" jdbcType="VARCHAR"/>
-        <result property="passwordQuestion" column="password_question" jdbcType="VARCHAR"/>
-        <result property="passwordAnswer" column="password_answer" jdbcType="VARCHAR"/>
-        <result property="icNum" column="ic_num" jdbcType="VARCHAR"/>
-        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-        <result property="email" column="email" jdbcType="VARCHAR"/>
-        <result property="registrationTime" column="registration_time" jdbcType="TIMESTAMP"/>
-        <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
-        <result property="enabled" column="enabled" jdbcType="TINYINT"/>
-        <result property="role" column="role" typeHandler="priv.shiroko.amis.utils.EnumTypeHandler"/>
-    </resultMap>
-
     <sql id="BaseColumnNames">
         password,
         password_question,
@@ -25,39 +10,29 @@
         ic_num,
         nickname,
         email,
-        <if test="enabled != null">enabled,</if>
-        <if test="role != null">role,</if>
+        <if test="param.enabled != null">enabled,</if>
+        <if test="param.role != null">role,</if>
         username
     </sql>
     <sql id="BaseColumnValues">
-        #{password},
-        #{passwordQuestion},
-        #{passwordAnswer},
-        #{icNum},
-        #{nickname},
-        #{email},
-        <if test="enabled != null">#{enabled},</if>
-        <if test="role != null">#{role},</if>
-        #{username}
+        #{param.password},
+        #{param.passwordQuestion},
+        #{param.passwordAnswer},
+        #{param.icNum},
+        #{param.nickname},
+        #{param.email},
+        <if test="param.enabled != null">#{param.enabled},</if>
+        <if test="param.role != null">#{param.role},</if>
+        #{param.username}
     </sql>
-    <insert id="createNewUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user (
         <include refid="BaseColumnNames"/>
         ) VALUES (
         <include refid="BaseColumnValues"/>
         );
     </insert>
-    <update id="updateUser">
-        UPDATE user
-        <set>
-            <if test="username != null">username=#{username},</if>
-            <if test="icNum != null">ic_num=#{icNum},</if>
-            <if test="email != null">email=#{email},</if>
-            <if test="enabled != null">enabled=#{enabled},</if>
-            <if test="role != null">role=#{role}</if>
-        </set>
-        WHERE id = #{id};
-    </update>
+
     <select id="hasUsersWithNameAndId" resultType="java.lang.Boolean">
         SELECT EXISTS(SELECT 1 FROM user
         <where>
@@ -69,5 +44,60 @@
             </if>
         </where>
         );
+    </select>
+
+    <sql id="where">
+        <where>
+            <if test="param.id != null">id = #{param.id}</if>
+            <if test="param.password != null">AND password = #{param.password}</if>
+            <if test="param.passwordQuestion != null">AND password_question = #{param.passwordQuestion}</if>
+            <if test="param.passwordAnswer != null">AND password_answer = #{param.passwordAnswer}</if>
+            <if test="param.icNum != null">AND ic_num = #{param.icNum}</if>
+            <if test="param.nickname != null">AND nickname = #{param.nickname}</if>
+            <if test="param.email != null">AND email = #{param.email}</if>
+            <if test="param.enabled != null">AND enabled = #{param.enabled}</if>
+            <if test="param.role != null">AND role = #{param.role}</if>
+            <if test="param.username != null">AND username = #{param.username}</if>
+        </where>
+    </sql>
+
+    <select id="get" resultType="priv.shiroko.amis.entity.User">
+        SELECT * FROM user
+        <include refid="where"/>
+        <if test="count != null">LIMIT #{count}</if>
+        <if test="last != null">OFFSET #{last}</if>
+    </select>
+    <select id="getById" resultType="User">
+        SELECT *
+        FROM user
+        WHERE id = #{id};
+    </select>
+
+    <update id="update" parameterType="User">
+        UPDATE user
+        <set>
+            <if test="param.password != null">password = #{param.password},</if>
+            <if test="param.passwordQuestion != null">password_question = #{param.passwordQuestion},</if>
+            <if test="param.passwordAnswer != null">password_answer = #{param.passwordAnswer},</if>
+            <if test="param.icNum != null">ic_num = #{param.icNum},</if>
+            <if test="param.nickname != null">nickname = #{param.nickname},</if>
+            <if test="param.email != null">email = #{param.email},</if>
+            <if test="param.enabled != null">enabled = #{param.enabled},</if>
+            <if test="param.role != null">role = #{param.role},</if>
+            <if test="param.username != null">username = #{param.username}</if>
+        </set>
+        WHERE id = #{param.id}
+    </update>
+    <delete id="deleteById">
+        DELETE
+        FROM user
+        WHERE id = #{id};
+    </delete>
+    <select id="hasId" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM user WHERE id = #{id} LIMIT 1);
+    </select>
+    <select id="count" resultType="integer">
+        SELECT count(*) FROM user
+        <include refid="where"/>
     </select>
 </mapper>

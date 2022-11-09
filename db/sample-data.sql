@@ -2,20 +2,20 @@
 
 -- Users
 INSERT INTO `user` (username, password, enabled, role)
-VALUES ('user1', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', FALSE, 'user'),
-       ('user2', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user3', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user4', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user5', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user6', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', FALSE, 'user'),
-       ('user7', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user8', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user9', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user10', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user11', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user12', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user'),
-       ('user13', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', FALSE, 'user'),
-       ('user14', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', TRUE, 'user');
+VALUES ('user1', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'suspended', 'user'),
+       ('user2', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user3', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user4', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user5', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user6', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'suspended', 'user'),
+       ('user7', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user8', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user9', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user10', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user11', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user12', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user'),
+       ('user13', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'suspended', 'user'),
+       ('user14', '$2a$12$DBi99zlMN2wm1sUHUAV7hey.4L0vnvhyIS9SXWftHcjjHmYxDs6pi', 'enabled', 'user');
 
 -- Managers
 INSERT INTO `manager` (id, name, sex, birthday, manager_level, dept, unit, office_tel, ic_num)
