@@ -78,7 +78,13 @@ public abstract class BasicController<DO extends BasicEntity, MO extends BasicMa
         if (!mapper.hasId(id)) {
             throw getNotFoundException();
         } else {
-            mapper.deleteById(id);
+            try {
+                mapper.deleteById(id);
+            } catch (Exception ignore) {
+                result.setStatus(ApiResult.Status.FAILED);
+                result.setMessage("删除" + getEntityName() + "记录失败！\n该" + getEntityName() + "记录与其他信息有关联。");
+                return result;
+            }
             result.setStatus(ApiResult.Status.OK);
         }
         return result;

@@ -45,7 +45,7 @@ CREATE TABLE `manager`
     ethnic                  NVARCHAR(8),
     political_status        NVARCHAR(8),
     native_place            NVARCHAR(256),
-    photo                   BLOB,
+    photo                   MEDIUMBLOB, -- Possible Performance Impact. TODO: Use CDN/Static/Separated Table
     education               NVARCHAR(8),
     graduated               NVARCHAR(4),
     school                  NVARCHAR(64),
@@ -55,13 +55,13 @@ CREATE TABLE `manager`
     dept                    NVARCHAR(32),
     business_line           ENUM ("business","personal"),
     job                     NVARCHAR(32),
-    hired_date              DATE, -- 参加工作时间
-    entered_date            DATE, -- 入行时间
+    hired_date              DATE,       -- 参加工作时间
+    entered_date            DATE,       -- 入行时间
     financial_age_limit     INTEGER,
     manager_age_limit       INTEGER,
-    -- total_credits           REAL,
-    -- year_credits            REAL,
-    exit_date               DATE, -- 退出时间
+    -- total_credits           REAL, -- Runtime query
+    -- year_credits            REAL, -- Runtime query
+    exit_date               DATE,       -- 退出时间
     last_year_assessment    NVARCHAR(32),
     qualification_cert_id   VARCHAR(32),
     qualification_cert_date DATE,
@@ -215,6 +215,7 @@ CREATE TABLE `attachment`
 (
     id       INTEGER      NOT NULL AUTO_INCREMENT PRIMARY KEY UNIQUE,
     -- Actually it should be hash... But I'm tired
+    -- Using hash also required uuid to allow existence of different filenames
     uuid     CHAR(36)     NOT NULL UNIQUE,
     filename NVARCHAR(64) NOT NULL
 );

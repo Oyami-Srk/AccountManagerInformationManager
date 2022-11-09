@@ -32,11 +32,11 @@ public class Interceptors implements WebMvcConfigurer {
                 .excludePathPatterns("/src/*")
         ;
         registry.addInterceptor(permissionInterceptor())
-                .addPathPatterns("/api/user/add")
-                .addPathPatterns("/api/user/update")
-                .addPathPatterns("/api/user/delete")
                 .addPathPatterns("/api/user/set_status")
                 .addPathPatterns("/api/user/reset_password")
+                .addPathPatterns("/api/**/add")
+                .addPathPatterns("/api/**/update")
+                .addPathPatterns("/api/**/delete")
         ;
     }
 }

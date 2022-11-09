@@ -8,6 +8,7 @@
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/syalert.min.js"></script>
     <script type="text/javascript" src="js/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -56,13 +57,27 @@
         }
 
         function promptAlert(text) {
-            $("#alert_text").text(text);
+            const min_px = 150;
+            // $(".sy-alert-tips").css('width', 'fit-content');
+            $("#alert_text").html(text.replace(/\n/g, '<br/>'));
             syalert.syopen("alert");
         }
     </script>
+    <style type="text/css">
+        .my-alert {
+            width: fit-content !important;
+            padding-left: 2em;
+            padding-right: 2em;
+        }
+
+        #alert_text {
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-<div class="sy-alert sy-alert-tips animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="tips" sy-mask="false"
+<div class="sy-alert sy-alert-tips animated my-alert" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="tips"
+     sy-mask="false"
      id="alert">
     <div class="sy-content" id="alert_text"></div>
 </div>
