@@ -25,6 +25,9 @@ function timestamp_to_date_string(timestamp) {
                 if (resp.reason === "Permission denied") {
                     window.top.promptAlert(resp.message);
                     return;
+                } else if (resp.reason === "Need login") {
+                    window.top.promptAlert(resp.message);
+                    return;
                 }
             }
             if (my_callback)

@@ -8,6 +8,41 @@ let fields = null;
 let api_name = null;
 let no_select = false;
 
+let paging_div = `
+<div class="pagin">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+             <td class="STYLE4">
+                 <div class="message">共<i class="blue" id="count"></i>条记录，当前显示第<i class="blue"
+                                                                                           id="page"></i>页
+                 </div>
+             </td>
+             <td>
+                 <table border="0" align="right" cellpadding="0" cellspacing="0">
+                     <tr>
+                         <td width="45"><img src="../../images/first.gif" width="33" height="20"
+                                             style="cursor:hand" onclick="firstPage()"/></td>
+                         <td width="50"><img src="../../images/back.gif" width="43" height="20"
+                                             style="cursor:hand" onclick="previousPage()"/></td>
+                         <td width="50"><img src="../../images/next.gif" width="43" height="20"
+                                             style="cursor:hand" onclick="nextPage()"/></td>
+                         <td width="40"><img src="../../images/last.gif" width="33" height="20"
+                                             style="cursor:hand" onclick="lastPage()"/></td>
+                         <td width="100">
+                             <div align="center"><span class="STYLE1">转到第
+	             <input name="textfield" type="text" size="4"
+                        style="height:16px; width:35px; border:1px solid #999999;" id="go-page"/>
+	             页 </span></div>
+                         </td>
+                         <td width="40"><img src="../../images/go.gif" width="33" height="17" style="cursor:hand"
+                                             onclick="goPage()"/></td>
+                     </tr>
+                 </table>
+             </td>
+        </tr>
+    </table>
+</div>`;
+
 $(document).ready(() => {
     api_name = $("form#search-form").attr('name');
     fields =
@@ -18,7 +53,7 @@ $(document).ready(() => {
     fetch_page(page, count);
 
     $("#add-btn").click(() => {
-        window.location.replace(window.location.pathname.replace('.html', 'Add.html'))
+        window.location.replace(window.location.pathname.replace('.html', 'Add.html'));
     });
     $("#update-btn").click(() => {
         let ids = getSelectedIds();
@@ -29,7 +64,7 @@ $(document).ready(() => {
             window.top.promptAlert("请选择需要修改的条目。");
             return;
         }
-        window.location.replace(window.location.pathname.replace('.html', 'Update.html?id=' + 1))
+        window.location.replace(window.location.pathname.replace('.html', 'Update.html?id=' + ids[0]));
     });
     $("#delete-btn").click(() => {
         let ids = getSelectedIds();
@@ -37,23 +72,7 @@ $(document).ready(() => {
             window.top.promptAlert("请选择需要删除的条目。");
             return;
         }
-        let t = ids.length;
-        for (let id of ids) {
-            $.ajax({
-                url: `/api/${api_name}/delete`,
-                data: {
-                    id
-                },
-                method: "POST"
-            }).done((resp) => {
-                t--;
-                if (t === 0) {
-                    window.top.promptAlert("删除成功。");
-                    updateTotal();
-                    fetch_page(page, count);
-                }
-            });
-        }
+        doPostForIds(ids, "delete", "删除");
     });
     $("#search-form").submit((e) => {
         e.preventDefault();
@@ -75,7 +94,43 @@ $(document).ready(() => {
             $(input).prop('checked', checked);
         }
     });
+    $(".rightinfo").append(paging_div);
 });
+
+function doPostForIds(ids, api, what) {
+    let t = ids.length;
+    let s = 0;
+    let f = 0;
+    let err = [];
+    for (let id of ids) {
+        $.ajax({
+            url: `/api/${api_name}/${api}`,
+            data: {
+                id
+            },
+            method: "POST"
+        }).done((resp) => {
+            t--;
+            if (resp.status === "FAILED") {
+                f++;
+                err.push(resp.message);
+            } else {
+                s++;
+            }
+            if (t === 0) {
+                if (f !== 0 && s === 0)
+                    window.top.promptAlert(what + "失败。" + [...new Set(err)].join('，'));
+                else if (f === 0) {
+                    window.top.promptAlert(what + "成功。");
+                } else {
+                    window.top.promptAlert(what + "成功" + s.toString() + "个条目。错误原因：" + [...new Set(err)].join('，'));
+                }
+                updateTotal();
+                fetch_page(page, count);
+            }
+        });
+    }
+}
 
 function getAttachment(uuid) {
     let a = $("<a/>");
@@ -111,7 +166,7 @@ function appendRecord(data) {
         }
         let text = data[field].toString();
         // special case
-        if (field.match(/[Dd]ate$/) !== null || field === "lastUpdate")
+        if (field.match(/[Dd]ate$/) !== null || field === "lastUpdate" || field === "birthday")
             text = timestamp_to_date_string(data[field]);
         else if ((field === "attachment"
             || $(`table.tablelist th[name=${field}]`).prop('class') === "attachment"
@@ -124,6 +179,10 @@ function appendRecord(data) {
             text
         }).appendTo(tr);
     }
+    return {
+        tbody: table,
+        tr: tr
+    };
 }
 
 function fetch_page(page, count) {

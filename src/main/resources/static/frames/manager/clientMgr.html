@@ -10,80 +10,8 @@
     <script type="text/javascript" src="../../js/select-ui.min.js"></script>
     <script type="text/javascript" src="../../editor/kindeditor.js"></script>
     <script type="text/javascript" src="../../js/utils.js"></script>
-    <script type="text/javascript">
-        function updateTotal() {
-            $.ajax({
-                    url: "/api/manager/count",
-                    method: "GET",
-                    data: query_params
-                }
-            ).done((resp) => {
-                if (resp.status === "OK") {
-                    total = resp.data;
-                    total_pages = Math.floor(total / count) + ((total % count) === 0 ? 0 : 1);
-                    $("#count").text(total)
-                }
-            });
-        }
+    <script type="text/javascript" src="../../js/base_table.js"></script>
 
-        function deleteManagerById(id) {
-            $.ajax({
-                url: "/api/manager/delete",
-                data: {
-                    id
-                },
-                method: "POST"
-            }).done((resp) => {
-                window.top.promptAlert("成功。");
-                updateTotal();
-                fetch_page(page, count);
-            });
-        }
-
-        function PostForSelectedUsers(url, data) {
-            let ids = getSelectedIds();
-            let t = ids.length;
-            ids.forEach((id) => {
-                data["id"] = id;
-                $.ajax({
-                    url,
-                    data,
-                    method: "POST"
-                }).done((resp) => {
-                    // TODO: check resp
-                    t--;
-                    if (t === 0) {
-                        window.top.promptAlert("成功。");
-                        updateTotal();
-                        fetch_page(page, count);
-                    }
-                })
-            });
-        }
-
-        function confirmMsgDel() {
-            if (confirm("删除选中的客户经理信息,您确定要删除吗?")) {
-                PostForSelectedUsers("/api/manager/delete", {});
-                updateTotal();
-            }
-        }
-
-        function exportMsg() {
-            if (confirm("您确定要导出吗?")) {
-                window.open("/api/manager/export");
-            }
-        }
-
-        function managerUpdate() {
-            if (getSelectedIds().length === 0) {
-                window.top.promptAlert("请选择要修改的客户经理。");
-            } else if (getSelectedIds().length > 1) {
-                window.top.promptAlert("一次只能修改一个客户经理。");
-            } else {
-                window.location.replace("clientMgrUpdate.html?id=" + getSelectedIds()[0].toString());
-            }
-        }
-    </script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".click").click(function () {
@@ -111,7 +39,6 @@
             cssPath: './index.css'
         }); */
     </script>
-
     <script type="text/javascript">
         $(document).ready(function (e) {
             $(".select1").uedSelect({
@@ -126,180 +53,34 @@
         });
     </script>
     <script type="text/javascript">
-        let total = null;
-        let total_pages = null;
-        let count = 5;
-        let page = 1;
-        let query_params = {};
-
-        updateTotal();
-
-        // Get total count
         $(document).ready(() => {
-
-            fetch_page(page, count);
-
-            $("#allsel").click(() => {
-                let checked = $("#allsel").prop('checked');
-                for (let input of $("#datatable").find("input")) {
-                    $(input).prop('checked', checked);
-                }
-            });
-
-
-            $("#search-form").submit((e) => {
-                e.preventDefault();
-                let data = new FormData($("#search-form")[0]);
-                let dept = data.get("dept");
-                let id = data.get("id");
-                let name = data.get("name");
-                let status = data.get("managerStatus");
-                let my_query_params = {};
-                if (dept.length !== 0) my_query_params["dept"] = dept;
-                if (name.length !== 0) my_query_params["name"] = name;
-                if (status.length !== 0) my_query_params["managerStatus"] = status;
-                if (id.length !== 0) {
-                    if (!isNaN(id = parseInt(id))) {
-                        my_query_params["id"] = id;
-                    } else {
-                        window.top.promptAlert("客户经理编号格式错误。");
-                        $("input[name='id']").val('');
-                        return false;
+            let _appendRecord = appendRecord;
+            appendRecord = function (data) {
+                let tr = _appendRecord(data)["tr"];
+                last_td = $("<td/>").appendTo(tr);
+                let id = data.id;
+                $("<a/>", {
+                    href: "clientMgrInfoDetail.html?id=" + id.toString(),
+                    class: "tablelink",
+                    text: "查看"
+                }).appendTo(last_td);
+                last_td.append(" ");
+                $("<a/>", {
+                    href: "#",
+                    class: "tablelink",
+                    text: "删除",
+                    click: () => {
+                        if (confirm("删除该客户经理信息,您确定要删除吗?"))
+                            doPostForIds([id], "delete", "删除");
                     }
-                }
-                query_params = my_query_params;
-                $.ajax({
-                        url: "/api/manager/count",
-                        method: "GET",
-                        data: my_query_params
-                    }
-                ).done((resp) => {
-                    if (resp.status === "OK") {
-                        total = resp.data;
-                        total_pages = Math.floor(total / count) + ((total % count) === 0 ? 0 : 1);
-                        $("#count").text(total)
-                    }
-                });
-                page = 1;
-                fetch_page(page, count);
-                return false;
-            })
+                }).appendTo(last_td);
+            };
         });
 
-        // First pages
-        function fetch_page(page, count) {
-            let data = {
-                last: (page - 1) * count,
-                count: count
-            };
-            data = Object.assign({}, data, query_params);
-            $.ajax({
-                    url: "/api/manager/get",
-                    method: "GET",
-                    data,
-                }
-            ).done((resp) => {
-                $("#page").text(page);
-                $("#allsel").prop('checked', false);
-                if (resp.status === "OK") {
-                    $("#datatable").empty();
-                    for (let manager of resp.data) {
-                        build_record(manager.id, manager.name, manager.sex, manager.ic_num, manager.birthday, manager.manager_level, manager.dept, manager.unit);
-                    }
-                }
-            });
-        }
-
-        function build_record(id, name, sex, idcard, birthday, level, dept, unit) {
-            let tr = $("<tr/>", {
-                id: id
-            }).appendTo("#datatable");
-            $("<input/>", {
-                type: "checkbox"
-            }).wrap("<td/>").parent().appendTo(tr);
-            $("<td/>", {
-                text: id.toString().padStart(6, '0')
-            }).appendTo(tr);
-            $("<td/>", {
-                text: name
-            }).appendTo(tr);
-            $("<td/>", {
-                text: sex
-            }).appendTo(tr);
-            $("<td/>", {
-                text: idcard
-            }).appendTo(tr);
-            $("<td/>", {
-                text: timestamp_to_date_string(birthday)
-            }).appendTo(tr);
-            $("<td/>", {
-                text: level
-            }).appendTo(tr);
-            $("<td/>", {
-                text: dept
-            }).appendTo(tr);
-            $("<td/>", {
-                text: unit
-            }).appendTo(tr);
-            let last_td = $("<td/>").appendTo(tr);
-            $("<a/>", {
-                href: "clientMgrInfoDetail.html?id=" + id.toString(),
-                class: "tablelink",
-                text: "查看"
-            }).appendTo(last_td);
-            last_td.append(" ");
-            $("<a/>", {
-                href: "#",
-                class: "tablelink",
-                text: "删除",
-                click: () => {
-                    if (confirm("删除该客户经理信息,您确定要删除吗?"))
-                        deleteManagerById(id);
-                }
-            }).appendTo(last_td);
-        }
-
-        function firstPage() {
-            page = 1;
-            fetch_page(page, count);
-        }
-
-        function lastPage() {
-            if (total != null) {
-                page = total_pages;
-                fetch_page(page, count);
+        function exportMsg() {
+            if (confirm("您确定要导出吗?")) {
+                window.open("/api/manager/export");
             }
-        }
-
-        function nextPage() {
-            if (total != null) {
-                if (page !== total_pages) {
-                    page += 1;
-                    fetch_page(page, count);
-                }
-            }
-        }
-
-        function previousPage() {
-            if (page !== 1) {
-                page--;
-                fetch_page(page, count);
-            }
-        }
-
-        function goPage() {
-            let p = parseInt($("#textfield").val());
-            if (p > 0 && p <= total_pages) {
-                page = p;
-                fetch_page(page, count);
-            }
-        }
-
-        function getSelectedIds() {
-            return Array.from($("#datatable")
-                .find("input[type='checkbox']:checked")
-                .map((_, b) =>
-                    parseInt($(b).parent().parent().prop('id'))));
         }
     </script>
 </head>
@@ -312,7 +93,7 @@
         <li><a href="#">客户经理信息综合管理维护</a></li>
     </ul>
 </div>
-<form id="search-form">
+<form id="search-form" name="manager">
     <div class="formbody">
         <ul class="searchform">
             <li><label>机构</label><input name="dept" type="text" class="scinput"/></li>
@@ -335,9 +116,9 @@
 <div class="rightinfo">
     <div class="tools">
         <ul class="toolbar1">
-            <li><a href="clientMgrAdd.html"><span><img src="../../images/t01.png"/></span>添加</a></li>
-            <li><a href="javascript:managerUpdate()"><span><img src="../../images/t02.png"/></span>修改</a></li>
-            <li><a href="javascript:confirmMsgDel()"><span><img src="../../images/t03.png"/></span>删除</a></li>
+            <li><a id="add-btn"><span><img src="../../images/t01.png"/></span>添加</a></li>
+            <li><a id="update-btn"><span><img src="../../images/t02.png"/></span>修改</a></li>
+            <li><a id="delete-btn"><span><img src="../../images/t03.png"/></span>删除</a></li>
             <li><a href="javascript:exportMsg()"><span><img src="../../images/t06.png" height="24"
                                                             width="20"/></span>导出</a></li>
         </ul>
@@ -349,57 +130,23 @@
         </tr>
         </thead>
         <thead>
-        <tr>
-            <th><input name="" type="checkbox" value="" id="allsel"/></th>
-            <th>员工号</th>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>身份证号</th>
-            <th>出生日期</th>
-            <th>客户经理等级</th>
-            <th>机构</th>
-            <th>部门</th>
+        <tr id="fields">
+            <th><input id="all-sel" type="checkbox" value=""/></th>
+            <th name="id">员工号</th>
+            <th name="name">姓名</th>
+            <th name="sex">性别</th>
+            <th name="icNum">身份证号</th>
+            <th name="birthday">出生日期</th>
+            <th name="managerLevel">客户经理等级</th>
+            <th name="dept">机构</th>
+            <th name="unit">部门</th>
             <th></th>
         </tr>
         </thead>
 
-        <tbody id="datatable">
+        <tbody id="data">
         </tbody>
     </table>
-    <div class="pagin">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="STYLE4">
-                    <div class="message">
-                        共<i class="blue" id="count"></i>条记录，当前显示第<i class="blue" id="page"></i>页
-                    </div>
-                </td>
-
-                <td>
-                    <table border="0" align="right" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td width="45"><img src="../../images/first.gif" width="33" height="20"
-                                                style="cursor:hand" onclick="firstPage()"/></td>
-                            <td width="50"><img src="../../images/back.gif" width="43" height="20"
-                                                style="cursor:hand" onclick="previousPage()"/></td>
-                            <td width="50"><img src="../../images/next.gif" width="43" height="20"
-                                                style="cursor:hand" onclick="nextPage()"/></td>
-                            <td width="40"><img src="../../images/last.gif" width="33" height="20"
-                                                style="cursor:hand" onclick="lastPage()"/></td>
-                            <td width="100">
-                                <div align="center"><span class="STYLE1">转到第
-	                    <input name="textfield" type="text" size="4"
-                               style="height:16px; width:35px; border:1px solid #999999;"/>
-	                    页 </span></div>
-                            </td>
-                            <td width="40"><img src="../../images/go.gif" width="33" height="17" style="cursor:hand"
-                                                onclick="goPage()"/></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
 </div>
 
 <script type="text/javascript">
