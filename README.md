@@ -29,3 +29,11 @@ I give up my copyright to all modified part to `.html` files but keep copyright 
 Also, this project contains some codes from internet which released under their licenses.
 
 **All code I declared copyright is released under GPL-3 License.**
+
+### 3. TODO List (Will never be done)
+
+- Using CDN to store attachment.
+- Implement password retrieving using Q/A.
+- Using Redis to share sessions across cluster.
+- Improve Database performance and transaction.
+- Improve UI logic.
