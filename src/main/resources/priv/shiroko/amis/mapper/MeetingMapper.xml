@@ -39,10 +39,10 @@
     <update id="update">
         UPDATE meeting
         <set>
-            <if test="param.date != null">AND date = #{param.date},</if>
-            <if test="param.context != null">AND context = #{param.context},</if>
-            <if test="param.participants != null">AND participants = #{param.participants},</if>
-            <if test="param.attachment != null">AND attachment = #{param.attachment}</if>
+            <if test="param.date != null">date = #{param.date},</if>
+            <if test="param.context != null">context = #{param.context},</if>
+            <if test="param.participants != null">participants = #{param.participants},</if>
+            <if test="param.attachment != null">attachment = #{param.attachment}</if>
         </set>
         WHERE id=#{param.id}
     </update>

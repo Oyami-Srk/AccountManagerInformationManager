@@ -44,7 +44,8 @@ class ManagerExcelListener implements ReadListener<Manager> {
         try {
             mapper.add(manager);
             succeedRows.add(analysisContext.readRowHolder().getRowIndex());
-        } catch (Exception ignore) {
+        } catch (Exception e) {
+            e.printStackTrace();
             failedRows.add(analysisContext.readRowHolder().getRowIndex());
         }
     }
@@ -54,6 +55,7 @@ class ManagerExcelListener implements ReadListener<Manager> {
     }
 
     public void onException(Exception exception, AnalysisContext context) throws Exception {
+        exception.printStackTrace();
         failedRows.add(context.readRowHolder().getRowIndex());
     }
 }

@@ -45,7 +45,7 @@
         UPDATE work
         <set>
             <if test="param.date != null">date = #{param.date},</if>
-            <if test="param.client != null">work = #{param.client},</if>
+            <if test="param.client != null">client = #{param.client},</if>
             <if test="param.info != null">info = #{param.info},</if>
             <if test="param.after != null">after = #{param.after},</if>
             <if test="param.risk != null">risk = #{param.risk},</if>

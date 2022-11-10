@@ -91,9 +91,9 @@
                 }
                 data.delete("cpassword");
                 if (data.has("enabled"))
-                    data.set("enabled", "true");
+                    data.set("enabled", "ENABLED");
                 else
-                    data.set("enabled", "false");
+                    data.set("enabled", "SUSPENDED");
 
                 $.ajax({
                     url: "/api/user/add",

@@ -12,6 +12,7 @@ import priv.shiroko.amis.utils.ApiResult;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.UUID;
 
@@ -68,7 +69,7 @@ public class FileController {
         response.setContentType("application/octet-stream");
         response.setCharacterEncoding("UTF-8");
         response.setContentLength((int) file.length());
-        response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes(), StandardCharsets.ISO_8859_1));
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
             byte[] buff = new byte[1024];
             OutputStream os = response.getOutputStream();
