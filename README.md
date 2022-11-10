@@ -17,7 +17,7 @@
 
 ### 2. About Front-end resources
 
-The Front-end webpages of this project is provided by others. This Project is RESTful style and
+The Front-end webpages of this project is provided by others. This Project is based on HTTP API and
 DO NOT require any of template engine like `jsp` or `thymeleaf`.
 
 I'm not very into modifying look and logic of Front-end, so I just fit the provided mock pages to be
@@ -33,6 +33,7 @@ Also, this project contains some codes from internet which released under their 
 ### 3. TODO List (Will never be done)
 
 - Using CDN to store attachment.
+- Attachment recycling.
 - Implement password retrieving using Q/A.
 - Using Redis to share sessions across cluster.
 - Improve Database performance and transaction.
