@@ -17,7 +17,7 @@ public interface BasicMapper<DO> {
 
     public void deleteById(@Param("id") int id) throws DataIntegrityViolationException;
 
-    public void update(@Param("param") DO param);
+    public void update(@Param("param") DO param) throws DataIntegrityViolationException, DuplicateKeyException;
 
-    public void add(@Param("param") DO param) throws DuplicateKeyException;
+    public void add(@Param("param") DO param) throws DuplicateKeyException, DataIntegrityViolationException;
 }

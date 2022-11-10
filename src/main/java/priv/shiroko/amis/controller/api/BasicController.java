@@ -1,5 +1,7 @@
 package priv.shiroko.amis.controller.api;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -116,7 +118,17 @@ public abstract class BasicController<DO extends BasicEntity, MO extends BasicMa
             throw getAlreadyExistsException();
         else {
             updateObjectBeforeUpdate(object);
-            mapper.add(object);
+            try {
+                mapper.add(object);
+            } catch (DuplicateKeyException ignore) {
+                result.setStatus(ApiResult.Status.FAILED);
+                result.setMessage("无法添加" + getEntityName() + "，有重复的条目。");
+                return result;
+            } catch (DataIntegrityViolationException ignore) {
+                result.setStatus(ApiResult.Status.FAILED);
+                result.setMessage("无法添加" + getEntityName() + "，数据校验错误，请检查数据。");
+                return result;
+            }
             result.setStatus(ApiResult.Status.OK);
             result.setMessage(getAddSuccessMessage());
         }

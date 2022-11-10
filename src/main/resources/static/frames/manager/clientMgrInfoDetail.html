@@ -40,7 +40,7 @@
                 if (resp.status === "OK") {
                     let manager = resp.data[0];
                     for (let cite of $("ul.forminfo").find('cite')) {
-                        if (cite.id.toString().endsWith("date") || cite.id === 'birthday')
+                        if (cite.id.toString().endsWith("Date") || cite.id === 'birthday')
                             $(cite).text(timestamp_to_date_string(manager[cite.id]));
                         else
                             $(cite).text(manager[cite.id]);

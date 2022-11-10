@@ -59,7 +59,8 @@ $(document).ready(() => {
         popWin.showWin(uri, 1000, 600, function () {
             if (need_refresh) {
                 updateTotal();
-                fetch_page(total_pages, count);
+                fetch_page(page, count);
+                need_refresh = false;
             }
         });
     });
@@ -72,7 +73,14 @@ $(document).ready(() => {
             window.top.promptAlert("请选择需要修改的条目。");
             return;
         }
-        window.location.replace(window.location.pathname.replace('.html', 'Update.html?id=' + ids[0]));
+        let uri = window.location.pathname.replace('.html', 'Update.html?id=' + ids[0]);
+        popWin.showWin(uri, 1000, 600, function () {
+            if (need_refresh) {
+                updateTotal();
+                fetch_page(page, count);
+                need_refresh = false;
+            }
+        });
     });
     $("#delete-btn").click(() => {
         let ids = getSelectedIds();
@@ -81,6 +89,8 @@ $(document).ready(() => {
             return;
         }
         doPostForIds(ids, "delete", "删除");
+        updateTotal();
+        fetch_page(page, count);
     });
     $("#search-form").submit((e) => {
         e.preventDefault();
@@ -111,6 +121,10 @@ $(document).ready(() => {
     }
     $(".rightinfo").append(paging_div);
 });
+
+function setRefresh(r) {
+    need_refresh = r;
+}
 
 function doPostForIds(ids, api, what, ext_data = null) {
     let t = ids.length;
@@ -175,10 +189,10 @@ function appendRecord(data) {
     }).appendTo(table);
 
     if (!no_select) {
-        $("<input/>", {
+        let td = $("<input/>", {
             type: "checkbox"
         }).wrap("<td/>").parent().appendTo(tr);
-        tr.click((e) => {
+        td.click((e) => {
             if (e.target.getAttribute('type') === "checkbox")
                 return;
             let cb = tr.find("input[type='checkbox']");

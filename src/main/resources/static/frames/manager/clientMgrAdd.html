@@ -28,11 +28,32 @@
         });
     </script>
     <script type="text/javascript">
+        function setInfoFromIdcard(id) {
+            let [_, dist, birthday, sex] = id.match(/(\d{6})(\d{8})\d{2}(\d)/);
+            birthday = birthday.match(/(\d{4})(\d{2})(\d{2})/).slice(1).join('-');
+            $("input[name='birthday']").val(birthday);
+            $(`[data-toggle='distpicker'] option[data-code='${dist.slice(0, 2).padEnd(6, '0')}']`).prop('selected', true);
+            $("select[name='province']").change();
+            $(`[data-toggle='distpicker'] option[data-code='${dist.slice(0, 4).padEnd(6, '0')}']`).prop('selected', true);
+            $("select[name='city']").change();
+            $(`[data-toggle='distpicker'] option[data-code='${dist}']`).prop('selected', true);
+            if (sex % 2 === 0) {
+                $("input[value='MALE']").prop('checked', false);
+                $("input[value='FEMALE']").prop('checked', true);
+            } else {
+                $("input[value='MALE']").prop('checked', true);
+                $("input[value='FEMALE']").prop('checked', false);
+            }
+        }
+
         $(document).ready(() => {
             $("[name='icNum']").change((e) => {
                 let ic = $(e.target).val();
                 if (ic.length === 0 || idcard.validator(ic)) {
                     $("#idcard_ready").css('display', 'none');
+                    if (ic.length !== 0) {
+                        setInfoFromIdcard(ic);
+                    }
                 } else {
                     $("#idcard_ready").css('display', '');
                 }
@@ -96,7 +117,7 @@
                     if (resp.status === "OK") {
                         window.top.promptAlert(resp.message);
                         setTimeout(() => {
-                            window.parent.need_refresh = true;
+                            window.parent.setRefresh(true);
                             window.parent.popWin.close();
                         }, 1000);
                     } else {

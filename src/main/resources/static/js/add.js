@@ -31,7 +31,7 @@ $(document).ready(() => {
                     window.top.promptAlert("添加记录成功！");
                     setTimeout(() => {
                         // window.location.replace(window.location.pathname.replace("Add", ""));
-                        window.parent.need_refresh = true;
+                        window.parent.setRefresh(true);
                         window.parent.popWin.close();
                     }, 1000);
                 } else {

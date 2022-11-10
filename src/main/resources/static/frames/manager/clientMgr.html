@@ -72,11 +72,30 @@
                 last_td.append(" ");
                 $("<a/>", {
                     href: "#",
+                    click: () => {
+                        let uri = window.location.pathname.replace('.html', 'Update.html?id=' + id.toString());
+                        popWin.showWin(uri, 1000, 600, function () {
+                            if (need_refresh) {
+                                updateTotal();
+                                fetch_page(page, count);
+                                need_refresh = false;
+                            }
+                        });
+                    },
+                    class: "tablelink",
+                    text: "修改"
+                }).appendTo(last_td);
+                last_td.append(" ");
+                $("<a/>", {
+                    href: "#",
                     class: "tablelink",
                     text: "删除",
                     click: () => {
-                        if (confirm("删除该客户经理信息,您确定要删除吗?"))
+                        if (confirm("删除该客户经理信息,您确定要删除吗?")) {
                             doPostForIds([id], "delete", "删除");
+                            updateTotal();
+                            fetch_page(page, count);
+                        }
                     }
                 }).appendTo(last_td);
             };

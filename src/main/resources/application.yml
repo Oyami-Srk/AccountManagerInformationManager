@@ -8,7 +8,7 @@ spring:
     init:
       schema-locations: classpath:resources/db/schema.sql
       data-locations: classpath:resources/db/sample-data.sql
-      mode: always
+      mode: never
   web:
     resources:
       cache:

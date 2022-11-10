@@ -112,7 +112,7 @@
                     if (resp.status === "OK") {
                         window.top.promptAlert("修改用户成功！");
                         setTimeout(() => {
-                            window.parent.need_refresh = true;
+                            window.parent.setRefresh(true);
                             window.parent.popWin.close();
                         }, 1000);
                     } else {

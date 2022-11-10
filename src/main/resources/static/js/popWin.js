@@ -49,7 +49,7 @@ var popWin = {
             $("#mask,#maskTop").fadeOut(function () {
                 $(this).remove();
             });
-            if (typeof closeCallBack != undefined && closeCallBack != null) {
+            if (typeof closeCallBack !== "undefined" && closeCallBack != null) {
                 closeCallBack();
             }
         });

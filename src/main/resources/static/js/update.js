@@ -6,7 +6,7 @@ $(document).ready(() => {
 
     let go_back = () => {
         // window.location.replace(window.location.pathname.replace("Update", ""));
-        window.parent.need_refresh = true;
+        window.parent.setRefresh(true);
         window.parent.popWin.close();
     }
 
